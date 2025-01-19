@@ -1,0 +1,365 @@
+﻿@model IEnumerable<sams.Models.CustomerViewModel>
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <script>
+    function showCustomerDetails(customerId) {
+
+
+        var baseUrl = "@Url.Action("GetCustomer", "CStoreRegisteredCustomer")?CustomerId=" + customerId;
+        location.href = baseUrl;
+
+        /*
+        siteDetails = {
+            customerId: customerId
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: 'GetCustomer',
+            data: siteDetails,
+            success: function (data) {
+
+                var obj = JSON.parse(data);
+
+                $("#divFirstName").html(obj.FirstName);
+                $("#divLastName").html(obj.LastName);
+                $("#divEmailAddress").html(obj.EmailAddress);
+                $("#divContactNumber").html(obj.ContactNumber);
+                $("#divUserName").html(obj.UserName);
+                $("#divCompany").html(obj.Company);
+                $("#divGivenTitle").html(obj.GivenTitle);
+                $("#divAddress").html(obj.Address);
+                $("#divZipcode").html(obj.Zipcode);
+                $("#divCity").html(obj.City);
+                $("#divStateName").html(obj.StateName);
+                $("#divCellNumber").html(obj.CellNumber);
+                $("#divSignedStatus").html(obj.SignedStatus);
+            },
+            error: function (xhr, textStatus, error) {
+                alert(error);
+            }
+        });
+
+        $('#modal-lg').modal('show');
+        */
+        }
+
+        function deleteCustomerDetails(customerId) {
+            if (confirm("Do you want to delete this customer?")) {
+                var baseUrl = "@Url.Action("DeleteCustomer", "CStoreRegisteredCustomer")?customerId=" + customerId;
+                location.href = baseUrl;
+            }
+        }
+
+        function exportExcel() {
+            var baseUrl = "@Url.Action("ExportExcel", "CStoreRegisteredCustomer")";
+            location.href = baseUrl;
+        }
+
+        function goDashboard() {
+            var baseUrl = "@Url.Action("Index", "Admin")?propertyType=all";
+            location.href = baseUrl;
+        }
+
+        function createNewCustomer(customerId) {
+            var baseUrl = "@Url.Action("EditCustomer", "CStoreRegisteredCustomer")?customerId=" + customerId;
+            location.href = baseUrl;
+        }
+        
+
+    </script>
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Signed Up Customer List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:goDashboard()">Home</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email Address</th>
+                                    <th>Contact Number</th>
+
+                                    <th>State</th>
+                                    <th>City</th>
+                                    <th>Zipcode</th>
+                                    <th>Signature Id</th>
+                                    <th>Status</th>
+
+                                    <th>Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.FirstName</td>
+                                        <td>@item.LastName</td>
+                                        <td>@item.EmailAddress</td>
+                                        <td>@item.ContactNumber</td>
+                                        <td>@item.StateName</td>
+                                        <td>@item.City</td>
+                                        <td>@item.Zipcode</td>
+                                        <td>@item.SignedStatus</td>
+                                        <td>@item.SignedStatus</td>
+                                        <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="showCustomerDetails(@item.CustomerId)"><i class="fas fa-edit"></i></button>
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 8).CanCreate)
+                                            {
+                                                <button type="button" class="btn btn-danger" onclick="deleteCustomerDetails(@item.CustomerId)"><i class="fas fa-minus-square"></i></button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+
+                </div>
+                <button type="button" class="btn btn-success" onclick="createNewCustomer(0)">Create New Customer</button>
+                <button type="button" class="btn btn-info" onclick="exportExcel()">Export to Excel</button>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+
+
+<div class="modal fade" id="modal-lg" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Customer Details</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+
+                    <div class="col-6">
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label class="control-label">First Name : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divFirstName"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label class="control-label">LastName : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divLastName"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Email Address : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divEmailAddress"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Contact Number : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divContactNumber"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">User Name : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divUserName"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Organization : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divCompany"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Given Title : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divGivenTitle"></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="col-6">
+                        
+
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Address : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divAddress"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Zipcode : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divZipcode"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">City : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divCity"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">State : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divStateName"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Cell : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divCellNumber"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Signed Status : </label>
+                                </div>
+                                <div class="col-8">
+                                    <div id="divSignedStatus"></div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                
+
+                
+
+
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                
+                <button type="button" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

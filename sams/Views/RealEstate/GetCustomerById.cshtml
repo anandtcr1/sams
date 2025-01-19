@@ -1,0 +1,149 @@
+﻿@model sams.Models.CustomerViewModel
+
+@{
+    ViewData["Title"] = "GetCustomerById";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_7">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3 style="text-transform: uppercase;">Details</h3>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="popular_places_area">
+    <div class="container">
+
+        <form id="RegisterCustomer" name="RegisterCustomer" action="RegisterCustomer" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h3 class="footer_title" style="color:#ffffff;">
+                                Personal Information
+                            </h3>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+                                        <label asp-for="FirstName" class="control-label">First Name : </label> @Model.FirstName
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="LastName" class="control-label">Last Name : </label> @Model.LastName
+                                        
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="EmailAddress" class="control-label">Email Address : </label> @Model.EmailAddress
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="ContactNumber" class="control-label">Contact Number : </label> @Model.ContactNumber
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Company" class="control-label">Organization Name : </label> @Model.Company
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="GivenTitle" class="control-label">Title : </label> @Model.GivenTitle
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+                <div class="col-lg-6">
+
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h3 class="footer_title" style="color:#ffffff;">
+                                Other Details
+                            </h3>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+                                        <label asp-for="Address" class="control-label">Address : </label> @Model.Address
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Zipcode" class="control-label">ZIP Code : </label> @Model.Zipcode
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="City" class="control-label">City : </label> @Model.City
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="StateName" class="control-label">State Name : </label> @Model.StateName
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="UserName" class="control-label">User Name : </label> @Model.UserName
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <button type="button" class="button button-contactForm boxed-btn" onclick="viewSignedAgreement()">View Signed Agreement</button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    function viewSignedAgreement() {
+        location.href ="GetCustomerAgreement?CustomerId="+@Model.CustomerId;
+    }
+</script>

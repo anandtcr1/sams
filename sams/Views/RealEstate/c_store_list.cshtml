@@ -1,0 +1,347 @@
+﻿@model sams.Models.CStoreRealEstateViewModel
+@using sams.Common;
+@{
+    ViewData["Title"] = "c_store_list";
+}
+
+
+    <script>
+    function loadPropertiesSatewise() {
+        var stateId = $("#selState").val();
+        var regionId = $("#selRegion").val();
+
+        location.href = "c_store_list?stateId=" + stateId + "&regionId=" + regionId;
+        return false;
+        }
+
+        function getRegionList() {
+            var stateId = $("#selState").val();
+
+            $("#selRegion").empty();
+            $.getJSON(`@Url.Action("GetRegionByStateId", "Region")?stateId=${stateId}`, function (data) {
+                $("#selRegion").append('<option value="0"> --- City/ Region --- </option>');
+                $.each(data, function (i, item) {
+
+                    $("#selRegion").append(`<option value="${item.id}">${item.name}</option>`);
+                });
+            });
+        }
+    </script>
+
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_surplus">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3 style="text-transform: uppercase;">C-Store List</h3>
+                    <p>Gasoline Stations</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area  -->
+<!-- where_togo_area_start  -->
+<div class="where_togo_area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4">
+                <div class="form_area">
+                    <h3 style="text-align:right; ">Find Your Perfect Location</h3>
+                </div>
+            </div>
+
+            <div class="col-lg-2">
+                <div class="form_area" style="text-align:right; ">
+                    <font color="#ffffff">FILTER BY</font>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="search_wrap">
+                    <div class="search_form">
+                        <div class="input_field" style="text-align:center;">
+                            <select id="selState" class="select2 form-control" style="height:30px;" onchange="getRegionList()">
+                                <option value="0"> --- State --- </option>
+                                @foreach (var stateItem in Model.StateList)
+                                {
+                                    @if (stateItem.StateId.ToString() == Context.Request.Query["stateId"])
+                                    {
+                                        <option value="@stateItem.StateId" selected>@stateItem.StateName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@stateItem.StateId">@stateItem.StateName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="input_field1" style="text-align:center; margin-left: 3px;">
+                            <select id="selRegion" class="select2 form-control" style="height:30px;">
+                                <option value="0"> --- City/ Region --- </option>
+                                @foreach (var regionItem in Model.RegionList)
+                                {
+                                    @if (regionItem.RegionId.ToString() == Context.Request.Query["regionId"])
+                                    {
+                                        <option value="@regionItem.RegionId" selected>@regionItem.RegionName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@regionItem.RegionId">@regionItem.RegionName</option>
+                                    }
+                                }
+
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-lg-2">
+                <div class="search_wrap">
+
+                    <div class="search_btn">
+                        <button class="boxed-btn4 " onclick="loadPropertiesSatewise()">Property Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+<!-- where_togo_area_end  -->
+
+
+
+<div class="popular_places_area">
+    <div class="container">
+
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div>
+                    <h3 class="footer_title text-center">
+                        <b>Become a Convenience Store or Gasoline Station Owner!</b>
+                    </h3>
+
+                    <p>
+                        Looking to open a convenience store or gasoline station of your own?  Check out our list of properties below that
+                        are set in ideal locations and already available for purchase!
+                    </p>
+                    <p>
+                        <i>*These sites are sold subject to a 20-year fuel supply contract with our subsidiary company LSAA, LLC.</i>
+                    </p>
+                </div>
+
+                
+
+            </div>
+        </div>
+
+        <hr />
+
+
+        <div class="row">
+
+            <div class="col-lg-12">
+
+                <div class="row">
+
+
+                    @if (Model.CStoreList.Count == 0)
+                    {
+                        <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c; margin-top:8px;">
+                            <div class="gridheader">
+
+                                <h5 class="footer_title" style="color:#ffffff;">
+                                    Notice
+                                </h5>
+
+                            </div>
+                            <div class="boxcontent_list" style="">
+
+                                <div class="single_place" style="border:1px solid #dcd3d3; text-align:center; padding:20px;">
+                                    No Data Found
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                    @foreach (var sProperties in Model.CStoreList)
+                    {
+                        string numericAskingPrice = "";
+                        if (sProperties.AssetTypeId != (int)SamAssetType.Lease)
+                        {
+                            numericAskingPrice = new String(sProperties.AskingPrice.Where(Char.IsDigit).ToArray());
+                        }
+
+                        if (sProperties.AskingPrice.Length > 12)
+                        {
+                            sProperties.AskingPrice = sProperties.AskingPrice.Substring(0, 12) + "..";
+                        }
+
+                        if (sProperties.AssetTypeId == (int)SamAssetType.Lease)
+                        {
+                            numericAskingPrice = "Asking Price/Goodwill : " + sProperties.AskingPrice;
+                        }
+                        else
+                        {
+                            numericAskingPrice = "Asking Price : " + sProperties.AskingPrice;
+                        }
+
+                        IList<string> addressArray = sProperties.Address.Split(',').ToList<string>();
+                        string firstLine = "";
+                        string secondLine = "";
+                        if (addressArray.Count > 0)
+                        {
+                            firstLine = addressArray[0];
+                            for (int i = 1; i < addressArray.Count; i++)
+                            {
+                                secondLine = secondLine + addressArray[i] + ", ";
+                            }
+                        }
+
+                        if (secondLine.Length > 0)
+                        {
+                            int index = secondLine.LastIndexOf(',');
+                            secondLine = secondLine.Remove(index, 1);
+                        }
+
+                        if (sProperties.PropertyHeaderLine2.Trim().Length == 0)
+                        {
+                            sProperties.PropertyHeaderLine2 = "\u00a0";
+                        }
+
+                        <div class="col-lg-4 col-md-6">
+                            <div class="single_place" style="border:1px solid #f1eeee; min-height:350px; margin-top:5px; margin-bottom:5px; ">
+                                <div class="thumb">
+                                    <a href="@Url.Action("ViewCStore", "RealEstate")?propertyId=@sProperties.CStoreId">
+                                        <img src="~/@sProperties.ImageList[0].ImageName" alt="@sProperties.PropertyHeader" style="height:200px; ">
+                                    </a>
+
+                                    <a href="@Url.Action("ViewCStore", "RealEstate")?propertyId=@sProperties.CStoreId" class="prise">@numericAskingPrice</a>
+                                </div>
+                                <div class="place_info" style="text-align:center; ">
+                                    <a href="@Url.Action("ViewCStore", "RealEstate")?propertyId=@sProperties.CStoreId"><h4>@sProperties.PropertyHeader</h4></a>
+                                    <a href="@Url.Action("ViewCStore", "RealEstate")?propertyId=@sProperties.CStoreId"><h4>@sProperties.PropertyHeaderLine2</h4></a>
+                                    <p>
+                                        @firstLine <br />
+                                        @secondLine.TrimEnd(',')
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--
+        <div class="col-lg-3 col-md-4">
+
+            <a style="text-decoration:none" href="ViewCStore?propertyId=@sProperties.CStoreId">
+
+
+
+                <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c; margin-top:8px;">
+                    <div class="gridheader">
+
+                        <h5 class="footer_title" style="color:#ffffff; text-transform: uppercase; ">
+                            @sProperties.PropertyHeader
+
+                        </h5>
+
+                    </div>
+                    <div class="boxcontent_list" style="">
+
+                        <div class="single_place" style="border:1px solid #dcd3d3; min-height:520px;">
+                            <div class="thumb">
+
+                                <img src="~/@sProperties.ImageList[0].ImageName" alt="@sProperties.PropertyHeader" style="height:150px;">
+
+                            </div>
+                            <div class="place_info">
+                                @{
+                                    if (sProperties.AskingPrice.Length > 12)
+                                    {
+                                        sProperties.AskingPrice = sProperties.AskingPrice.Substring(0, 12) + "..";
+                                    }
+                                    if (sProperties.Address.Length > 12)
+                                    {
+                                        sProperties.Address = sProperties.Address.Substring(0, 12) + "..";
+                                    }
+                                    if (sProperties.AssetTypeId == (int)SamAssetType.Lease)
+                                    {
+                                        <p><b>Asking Price/Goodwill : </b>@sProperties.AskingPrice </p>
+                                    }
+                                    else
+                                    {
+                                        <p><b>Asking Price: </b>@sProperties.AskingPrice </p>
+                                    }
+                                }
+
+
+                                <p><b>Asset Type: </b>@sProperties.AssetTypeName</p>
+                                <p><b>SH Asset # : </b>@sProperties.AssetId</p>
+                                <p><b>Address: </b>@sProperties.Address</p>
+                                <p><b>City: </b>@sProperties.City</p>
+                                <p><b>State: </b>@sProperties.StateName</p>
+                                <p><b>ZIP Code: </b>@sProperties.Zipcode</p>
+                                <p><b>Status: </b>@sProperties.SelectedPropertyStatus</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </a>
+
+        </div>
+        -->
+
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

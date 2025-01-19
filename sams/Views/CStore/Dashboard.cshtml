@@ -1,0 +1,807 @@
+﻿@model sams.Models.SurplusPropertiesDashboard
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var isCriticalItemReadOnly = "readonly";
+    if (loggedInUser.RolePermission.SamsRole.RoleName == "Admin")
+    {
+        isCriticalItemReadOnly = "";
+    }
+
+    string qry = Context.Request.Query["s"];
+    if (qry == "all")
+    {
+        qry = "";
+    }
+}
+
+
+<script>
+        function exportAcquisitionToExcel() {
+            location.href = "ExportDueDiligenceAcquisition";
+        }
+
+        function exportDispositionsToExcel() {
+            location.href = "ExportDueDiligenceDisposition";
+        }
+
+        function exportLeaseToExcel() {
+            location.href = "ExportDueDiligenceLease";
+        }
+
+        function exportClosedAcquisitionToExcel() {
+            location.href = "ExportDueDiligenceClosedAcquisition";
+        }
+
+        function exportTerminatedAcquisitionToExcel() {
+            location.href = "ExportDueDiligenceTerminatedAcquisition";
+        }
+
+        function exportClosedDispositionToExcel() {
+            location.href = "ExportDueDiligenceClosedDisposition";
+        }
+
+        function exportTerminatedDispositionToExcel() {
+            location.href = "ExportDueDiligenceTerminatedDisposition";
+        }
+
+
+
+        function getAcquisition(acquisitionStatus) {
+            location.href = "GetAcquisitions?acquisitionStatus=" + acquisitionStatus;
+        }
+
+        function getDisposition(dispositionStatus) {
+            location.href = "GetDispositions?dispositionStatus=" + dispositionStatus;
+        }
+
+        function searchByAssetId() {
+            var assetId = $("#txtAssetId").val();
+
+            if (assetId.trim() == '') {
+                $("#errMsg").html("<font color='red'>Please Enter Asset ID</font>");
+            }
+            else {
+                $("#errMsg").html("");
+
+                searchData = {
+                    assetId: assetId
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'GetPropertyIdByAssetId',
+                    data: searchData,
+                    success: function (data) {
+                        if (data == "0") {
+                            var baseUrl = "@Url.Action("Dashboard", "CStore")?s=" + assetId;
+                            location.href = baseUrl;
+                        }
+                        else {
+                            $("#errMsg").html("");
+
+                            var baseUrl = "@Url.Action("ViewCStore", "CStore")?propertyId=" + data;
+                            location.href = baseUrl;
+                        }
+                    },
+                    error: function (xhr, textStatus, error) {
+                        alert(error);
+                    }
+                });
+
+            }
+
+
+
+    }
+
+        function goDashboard() {
+            var baseUrl = "@Url.Action("Index", "Admin")?propertyType=all";
+            location.href = baseUrl;
+        }
+
+        function allList() {
+            var baseUrl = "@Url.Action("Index", "CStore")";
+            location.href = baseUrl;
+        }
+
+        function editProperty(siteDetailsId) {
+            var baseUrl = "@Url.Action("ViewCStore", "CStore")?propertyId=" + siteDetailsId;
+            location.href = baseUrl;
+        }
+
+        function deleteProperty(propertyId) {
+        if (confirm("Do you want to delete the property?")) {
+            var baseUrl = "@Url.Action("DeleteProperty", "CStore")?propertyId=" + propertyId;
+            //location.href = "../CStore/DeleteProperty/?propertyId=" + propertyId;
+            location.href = baseUrl;
+        }
+        }
+
+
+        function viewPropertyDetails(propertyId, propertyType) {
+            var baseUrl = "";
+            if (propertyType == 'surplus') {
+                baseUrl = "@Url.Action("ViewSurplusProperty", "SurplusProperties")/?propertyId=" + propertyId;
+            }
+            else if (propertyType == 'net_lease') {
+                baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + propertyId;
+            }
+            else if (propertyType == 'c_store') {
+                baseUrl = "@Url.Action("ViewCStore", "CStore")?propertyId=" + propertyId;
+            }
+            location.href = baseUrl;
+        }
+
+        function removeNotification(periodId) {
+            if (confirm("Do You want to remove this?")) {
+                baseUrl = "@Url.Action("HideNotification", "CStore")?periodId=" + periodId;
+                location.href = baseUrl;
+            }
+        }
+
+        function removePropertyNotification(propertyId) {
+            if (confirm("Do You want to remove this?")) {
+                baseUrl = "@Url.Action("HidePropertyNotification", "CStore")?propertyId=" + propertyId;
+                location.href = baseUrl;
+            }
+        }
+
+        function showListByTransactionStatus(transactionStatusId) {
+            baseUrl = "@Url.Action("ShowListByTransactionStatus", "CStore")?transactionStatusId=" + transactionStatusId;
+            location.href = baseUrl;
+        }
+
+</script>
+
+
+<div class="content-wrapper" style="background-image:~/img/back_ground.jpg">
+    <!-- Content Header (Page header) -->
+    <section class="content-header ">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+
+                    <h1>Property Dashboard</h1>
+
+
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+
+                        <li class="breadcrumb-item"><a href="javascript:goDashboard()">Home</a></li>
+                        <li class="breadcrumb-item active">C-Store Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+
+
+                <div class="col-sm-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-purple">
+                        <div class="inner1" style="padding-left:10px;">
+                            <h3>@Model.TotalLoi</h3>
+
+                            <p>Under LOI</p>
+                        </div>
+                        <div class="icon">
+                            <i class="nav-icon fas fa-map-marked"></i>
+                        </div>
+                        <a href="javascript:showListByTransactionStatus(1)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <!-- ./col -->
+
+
+                <div class="col-sm-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner1" style="padding-left:10px;">
+                            <h3>@Model.TotalUnderContract</h3>
+
+                            <p>Under Contract</p>
+                        </div>
+                        <div class="icon">
+                            <i class="nav-icon fas fa-building"></i>
+
+                        </div>
+                        <a href="javascript:showListByTransactionStatus(2)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-sm-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner1" style="padding-left:10px;">
+                            <h3>@Model.TotalTerminated</h3>
+
+                            <p>Terminated Dispositions</p>
+                        </div>
+                        <div class="icon">
+
+                            <i class="nav-icon fas fa-snowflake"></i>
+                        </div>
+                        <a href="javascript:showListByTransactionStatus(4)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-sm-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner1" style="padding-left:10px;">
+                            <h3>@Model.TotalClosed</h3>
+
+                            <p>Closed</p>
+                        </div>
+                        <div class="icon">
+                            <i class="nav-icon fas fa-bars"></i>
+                        </div>
+                        <a href="javascript:showListByTransactionStatus(3)" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <!-- /.row -->
+            <!-- Main row -->
+
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header @sams.Common.Helper.PrimaryColor">
+                <h3 class="card-title">C-Store Details</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-6 order-2 order-md-1">
+
+                        <div class="card-footer">
+                            <form id="searchAssetId" name="searchAssetId" action="#" method="post">
+                                <div class="input-group">
+                                    <input type="text" id="txtAssetId" name="txtAssetId" placeholder="Type Asset Id" class="form-control" value="@qry">
+                                    <span class="input-group-append">
+                                        <button type="button" class="btn btn-primary" onclick="searchByAssetId()">Search</button>
+                                    </span>
+
+                                </div>
+                            </form>
+                            <div id="errMsg"></div>
+
+                            <div class="info-box mb-3 bg-white">
+                                <span class="info-box-icon"><i class="far fa-check-square"></i></span>
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Total C-Store</span>
+                                    <span class="info-box-number">@Model.TotalProperties</span>
+
+                                    <a href="javascript:allList()" class="btn btn-sm btn-primary">View List</a>
+                                    <a href="javascript:exportExcel()" class="btn btn-sm btn-primary">Export To Excel</a>
+
+
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+                @{
+                    if (qry != "" && Model.SearchedCStoreList.Count == 0)
+                    {
+                        <!--
+                        <div><font color='red'>No data found</font></div>
+                        -->
+                    }
+
+                    if (Model.SearchedCStoreList.Count > 0)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <table id="example1" class="table table-sm text-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Asset Id</th>
+                                                    <th>State</th>
+                                                    <th>City</th>
+                                                    <th data-orderable="false">Property Tax</th>
+                                                    <th data-orderable="false">Land Size</th>
+                                                    <th data-orderable="false">Asking Price</th>
+                                                    <th>Created</th>
+                                                    <th data-orderable="false">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.SearchedCStoreList)
+                                                {
+                                                    <tr>
+                                                        <td>@item.AssetId</td>
+                                                        <td>@item.StateName</td>
+                                                        <td>@item.City</td>
+                                                        <td>@item.PropertyTaxes</td>
+                                                        <td>@item.LandSize</td>
+                                                        <td>@item.AskingPrice</td>
+                                                        <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-success" onclick="editProperty(@item.CStoreId)"><i class="fas fa-edit"></i></button>
+                                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 4).CanDelete)
+                                                            {
+                                                                <button type="button" class="btn btn-danger" onclick="deleteProperty(@item.CStoreId)"><i class="fas fa-minus-square"></i></button>
+                                                            }
+
+                                                        </td>
+                                                    </tr>
+                                                }
+
+
+
+                                            </tbody>
+
+                                        </table>
+
+                                        <div class="form-group">
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 4).CanCreate)
+                                            {
+                                                <button type="button" class="btn btn-success" onclick="addProperty()">Add New Property</button>
+                                            }
+
+                                            <button type="button" class="btn btn-success" onclick="exportExcel()">Export</button>
+                                        </div>
+
+                                    </div>
+                                    <!-- /.card-body -->
+
+
+
+                                </div>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                    }
+                }
+
+
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="card">
+                            <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                <h3 class="card-title">Critical Item Alerts</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example1" class="table table-sm text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Asset Id</th>
+
+                                            <th>Critical Item</th>
+
+                                            <th>Address</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+                                            <th>Expiry Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.SurplusNotificationList)
+                                        {
+                                            var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                            <tr>
+                                                <td>@item.AssetId</td>
+
+                                                <td>@item.PeriodMaster</td>
+                                                <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+                                                <td>@item.StartDate.ToString("MM/dd/yyyy")</td>
+                                                <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+                                                <td>@item.Duration</td>
+                                                <td>
+                                                    @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                                    {
+                                                        <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                                    }
+                                                    else if (item.DaysToExpire < 0)
+                                                    {
+                                                        <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <!--
+                                                        <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'c_store')"><i class="fas fa-eye"></i></button>
+    -->
+                                                    <button type="button" class="btn btn-success" onclick="viewPeriod(@item.SitePropertyId, @item.PeriodId, '@item.PeriodMaster', '@item.StartDate.ToString("MM-dd-yyyy")', @item.Duration, '@item.PeriodNotes', '@dtAlertDate', '@item.NotificationEmailAddress', 'net_lease')"><i class="fas fa-eye"></i></button>
+
+                                                    @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 4).CanEdit)
+                                                    {
+                                                        <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+
+
+
+                                    </tbody>
+
+                                </table>
+
+
+                            </div>
+                            <!-- /.card-body -->
+
+
+
+                        </div>
+                        <!-- /.card -->
+
+
+
+
+                        <div class="card">
+                            <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                <h3 class="card-title">Listing Expiration Alerts</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example1" class="table table-sm text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Asset Id</th>
+
+                                            <th>Address</th>
+
+                                            <th>End Date</th>
+                                            <th>Duration</th>
+
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.SurplusListingExpiryList)
+                                        {
+                                            <tr>
+                                                <td>@item.AssetId</td>
+
+                                                <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+
+                                                <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+
+                                                <td>
+                                                    @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                                    {
+                                                        <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                                    }
+                                                    else if (item.DaysToExpire < 0)
+                                                    {
+                                                        <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                                    }
+                                                </td>
+                                                <td>
+
+                                                    <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'c_store')"><i class="fas fa-eye"></i></button>
+                                                    @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 4).CanEdit)
+                                                    {
+                                                        <button type="button" class="btn btn-danger" onclick="removePropertyNotification(@item.SitePropertyId)"><i class="fas fa-minus-square"></i></button>
+                                                    }
+
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                            <!-- /.card-body -->
+
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                </div>
+
+
+
+
+
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+    </section>
+    <!-- /.content -->
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="modal-new-period">
+
+    <script>
+        function submitPeriod() {
+
+            var periodMaster = $("#p_PeriodMaster").val().trim();
+            var sDate = $("#p_StartDate").val().trim();
+            //var eDate = $("#p_EndDate").val().trim();
+            var duration = $("#txtDuration").val().trim();
+            var nTes = $("#p_PeriodNotes").val().trim();
+
+            $("#errPeriodMaster").html("");
+            $("#errStartDate").html("");
+            $("#errDuration").html("");
+            $("#errPeriodNotes").html("");
+            $("#errOtherEmailAddress").html("");
+
+            if (periodMaster == "") {
+                $("#errPeriodMaster").html("<font color='red'>Please Enter Critical Item</font>");
+                return;
+            }
+            else {
+                $("#errPeriodMaster").html("");
+            }
+
+            if (sDate == '') {
+                $("#errStartDate").html("<font color='red'>Please Enter Start Date</font>");
+                return;
+            }
+            else {
+                $("#errStartDate").html("");
+            }
+
+            /*
+            if (eDate == '') {
+                $("#errEndDate").html("<font color='red'>Please Enter End Date</font>");
+                return;
+            }
+            else {
+                $("#errEndDate").html("");
+            }
+            */
+
+            if (duration == '') {
+                $("#errDuration").html("<font color='red'>Please Enter Duration</font>");
+                return;
+            }
+            else {
+                $("#errDuration").html("");
+            }
+
+            if (nTes == '') {
+                $("#errPeriodNotes").html("<font color='red'>Please Enter Notes</font>");
+                return;
+            }
+            else {
+                $("#errPeriodNotes").html("");
+            }
+
+            var otherEmailAddress = $("#OtherEmailAddress").val().trim();
+            /*
+            if (otherEmailAddress != '') {
+                if (!ValidateEmail(otherEmailAddress)) {
+                    canSave = false;
+                    $("#errOtherEmailAddress").html("<font color='red'>Please enter Valid Email Address</font>");
+                    $("#OtherEmailAddress").focus();
+                    return;
+                }
+                else {
+                    $("#errOtherEmailAddress").html("");
+                }
+            }
+            */
+
+            if (confirm("Continue?")) {
+                $("#SavePeriod").submit();
+            }
+        }
+
+        function calculateEndDate(ctrl) {
+            alerty(ctrl);
+        }
+
+
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+
+        function viewPeriod(propertyId, periodId, periodMaster, startDate, duration, periodNotes, alertDate, emailAddress, itemType) {
+            $("#p_PeriodId").val(periodId);
+            $("#p_PropertyId").val(propertyId);
+            $("#p_PeriodMaster").val(periodMaster);
+            $("#p_StartDate").val(startDate);
+            $("#txtDuration").val(duration);
+            $("#p_PeriodNotes").val(periodNotes);
+
+            $("#p_AlertDate").val(alertDate);
+            $("#OtherEmailAddress").val(emailAddress);
+
+            $("#propertyId").val(propertyId);
+            $("#propertyType").val(itemType);
+
+            $('#modal-new-period').modal('show');
+
+        }
+
+        function deletePeriod(periodId, propertyId) {
+            if (confirm("Confirm Delete?")) {
+                window.location.href = '@Url.Action("DeletePeriod", "CStore")?periodId=' + periodId + '&propertyId=' + propertyId;
+            }
+        }
+
+        function viewPropertyFromNotification() {
+            var propertyId = $("#p_PropertyId").val();
+            var baseUrl = "@Url.Action("ViewCStore", "CStore")?propertyId=" + propertyId;
+            location.href = baseUrl;
+            //location.href = "ViewNewProperty?propertyId=" + propertyId;
+        }
+
+
+    </script>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Critical Item</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("SavePeriodFromDashboard", "CStore")" id="SavePeriod" name="SavePeriod" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="selSiteState" class="control-label">Critical Item </label>
+                                    <input type="text" value="" name="PeriodMaster" id="p_PeriodMaster" class="form-control" @isCriticalItemReadOnly />
+                                    <input type="hidden" value="" id="propertyId" class="form-control" />
+                                    <input type="hidden" value="" id="propertyType" class="form-control" />
+                                    <input type="hidden" value="" id="p_PeriodId" name="PeriodId" class="form-control" />
+                                    <input type="hidden" value="" id="p_PropertyId" class="form-control" />
+                                    <div id="errPeriodMaster"></div>
+                                </div>
+
+
+
+                                <div id="errTodoText"></div>
+                            </div>
+
+
+                            <!-- /.input group -->
+                            <div class="form-group">
+                                <label for="EarnestMoney" class="control-label">Start Date *</label>
+                                <input type="text" value="" name="StartDate" class="form-control" id="p_StartDate" readonly />
+                                <div id="errStartDate"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Duration" class="control-label">Duration *</label>
+                                <input type="text" value="" name="AddedDuration" class="form-control" id="txtDuration" @isCriticalItemReadOnly onkeypress="return isNumberKey(event)" />
+                                <div id="errDuration"></div>
+                            </div>
+
+                            <!--
+                            <div class="form-group">
+                                <label for="EarnestMoney" class="control-label">End Date</label>
+                                <input type="text" value="" name="EndDate" class="form-control" id="p_EndDate" readonly />
+                                <div id="errPurchasePrice"></div>
+                            </div>
+                            -->
+
+                            <div class="form-group">
+                                <label for="PeriodNotes" class="control-label">Notes *</label>
+                                <textarea name="PeriodNotes" class="form-control" rows="5" id="p_PeriodNotes" @isCriticalItemReadOnly></textarea>
+                                <div id="errPeriodNotes"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="p_AlertDate" class="control-label">Alert Date</label>
+                                <input type="text" value="" name="AlertDate" class="form-control" id="p_AlertDate" readonly />
+                                <a href="javascript:clearAlertDate()">Clear Date</a>
+                            </div>
+                            <script>
+                                function clearAlertDate() {
+                                    $("#p_AlertDate").val('');
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label for="OtherEmailAddress" class="control-label">Email Address (If Multiple Emails, Please Seperate By Comma)</label>
+                                <input type="text" value="" name="OtherEmailAddress" class="form-control" id="OtherEmailAddress" @isCriticalItemReadOnly />
+                                <div id="errOtherEmailAddress"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" onclick="viewPropertyFromNotification()">View Property</button>
+                <button type="button" class="btn btn-primary" onclick="submitPeriod()">Save Changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

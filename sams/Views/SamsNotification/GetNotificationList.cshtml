@@ -1,0 +1,1020 @@
+﻿@model sams.Models.NotificationListModel
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "GetNotificationList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <script>
+        function ViewDashboard() {
+            var baseUrl = "@Url.Action("Index", "Home")?s=all";
+            location.href = baseUrl;
+        }
+
+        function viewPropertyDetails(propertyId, propertyType) {
+
+            var baseUrl = "";
+            if (propertyType == 'surplus') {
+                baseUrl = "@Url.Action("ViewSurplusProperty", "SurplusProperties")/?propertyId=" + propertyId;
+            }
+            else if (propertyType == 'net_lease') {
+                baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + propertyId;
+            }
+            else if (propertyType == 'c_store') {
+                baseUrl = "@Url.Action("ViewCStore", "CStore")?propertyId=" + propertyId;
+            }
+            location.href = baseUrl;
+        }
+
+        function viewNewProperty(propertyId) {
+            var baseUrl = "@Url.Action("ViewNewProperty", "NewPropertyDashboard")?propertyId=" + propertyId;
+            location.href = baseUrl;
+            //location.href = "ViewNewProperty?propertyId=" + propertyId;
+        }
+
+        function removeNotification(periodId) {
+            if (confirm("Do You want to remove this?")) {
+                baseUrl = "@Url.Action("HideNotification", "SamsNotification")?periodId=" + periodId;
+                location.href = baseUrl;
+            }
+        }
+
+        function removeNewPropertyNotification(periodId) {
+            if (confirm("Do You want to remove this?")) {
+                baseUrl = "@Url.Action("HideNewPropertyNotification", "SamsNotification")?periodId=" + periodId;
+                location.href = baseUrl;
+            }
+    }
+
+    function viewPropertyDetailsFromNotification() {
+        var propertyId = $("#propertyId").val();
+        var propertyType = $("#propertyType").val();
+            var baseUrl = "";
+            if (propertyType == 'surplus') {
+                baseUrl = "@Url.Action("ViewSurplusProperty", "SurplusProperties")/?propertyId=" + propertyId;
+            }
+            else if (propertyType == 'net_lease') {
+                baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + propertyId;
+            }
+            else if (propertyType == 'c_store') {
+                baseUrl = "@Url.Action("ViewCStore", "CStore")?propertyId=" + propertyId;
+            }
+            location.href = baseUrl;
+        }
+    </script>
+
+
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Critical Date Alerts</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:ViewDashboard()">Home</a></li>
+
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+
+
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">Net Lease Critical Item Alerts </h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Critical Item</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.NetLeaseNotificationList)
+                                {
+                                    var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>@item.PeriodMaster</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+                                        <td>@item.StartDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.Duration</td>
+                                        <td>
+
+                                            <!--
+    <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'net_lease')"><i class="fas fa-eye"></i></button>
+    -->
+                                            <button type="button" class="btn btn-success" onclick="viewPeriod(@item.SitePropertyId, @item.PeriodId, '@item.PeriodMaster', '@item.StartDate.ToString("MM-dd-yyyy")', @item.Duration, '@item.PeriodNotes', '@dtAlertDate', '@item.NotificationEmailAddress', 'net_lease')"><i class="fas fa-eye"></i></button>
+                                            
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">C-Store Critical Item Alerts </h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example3" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Critical Item</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.CStoreNotificationList)
+                                {
+                                    var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>@item.PeriodMaster</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+                                        <td>@item.StartDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.Duration</td>
+                                        <td>
+
+                                            <!--
+                                            <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'c_store')"><i class="fas fa-eye"></i></button>
+                                            -->
+                                            <button type="button" class="btn btn-success" onclick="viewPeriod(@item.SitePropertyId, @item.PeriodId, '@item.PeriodMaster', '@item.StartDate.ToString("MM-dd-yyyy")', @item.Duration, '@item.PeriodNotes', '@dtAlertDate', '@item.NotificationEmailAddress', 'c_store')"><i class="fas fa-eye"></i></button>
+
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">New Property Critical Item Alerts</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example4" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Critical Item</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.NewPropertyNotificationList)
+                                {
+                                    var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>@item.PeriodMaster</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+                                        <td>@item.StartDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.Duration</td>
+                                        <td>
+
+                                            <!--
+                                            <button type="button" class="btn btn-success" onclick="viewNewProperty(@item.SitePropertyId)"><i class="fas fa-eye"></i></button>
+                                            -->
+                                            <button type="button" class="btn btn-success" onclick="viewPeriod(@item.SitePropertyId, @item.PeriodId, '@item.PeriodMaster', '@item.StartDate.ToString("MM-dd-yyyy")', @item.Duration, '@item.PeriodNotes', '@dtAlertDate', '@item.NotificationEmailAddress', '')"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">Surplus Property Critical Item Alerts</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example5" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Critical Item</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.SurplusNotificationList)
+                                {
+                                    var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>@item.PeriodMaster</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+                                        <td>@item.StartDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.Duration</td>
+                                        <td>
+
+                                            <!--
+                                            <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'surplus')"><i class="fas fa-eye"></i></button>
+                                            -->
+                                            <button type="button" class="btn btn-success" onclick="viewPeriod(@item.SitePropertyId, @item.PeriodId, '@item.PeriodMaster', '@item.StartDate.ToString("MM-dd-yyyy")', @item.Duration, '@item.PeriodNotes', '@dtAlertDate', '@item.NotificationEmailAddress', 'surplus')"><i class="fas fa-eye"></i></button>
+
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">Net Lease Property Listing Expiration Alerts</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example6" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.NetLeasePropertyExpiryList)
+                                {
+                                    var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+
+                                        <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.DaysToExpire</td>
+                                        <td>
+
+                                            <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'net_lease')"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">Shopping Center Critical Item Alerts</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example7" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Critical Item</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.ShoppingCenterNotificationList)
+                                {
+                                    var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>@item.PeriodMaster</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+                                        <td>@item.StartDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.Duration</td>
+                                        <td>
+
+                                            <!--
+                                            <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'net_lease')"><i class="fas fa-eye"></i></button>
+                                            -->
+                                            <button type="button" class="btn btn-success" onclick="viewPeriod(@item.SitePropertyId, @item.PeriodId, '@item.PeriodMaster', '@item.StartDate.ToString("MM-dd-yyyy")', @item.Duration, '@item.PeriodNotes', '@dtAlertDate', '@item.NotificationEmailAddress', 'net_lease')"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">Tenant Critical Item Alerts</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example8" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Unit #</th>
+                                    <th>Tenant Name</th>
+                                    <th>Date Rent Changes</th>
+                                    <th>Status</th>
+                                    <th>COI Expires</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.TenantCriticalItemList)
+                                {
+                                    
+                                    <tr>
+                                        <td>@item.UnitSelected</td>
+                                        <td>@item.TenantName</td>
+                                        <td>@item.DateRentChanged.Value.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td>@item.CoiExpire.Value.ToString("MM/dd/yyyy")</td>
+
+                                        <td>
+
+                                            
+                                            <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.ShoppingCenterId, 'net_lease')"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.ShoppingCenterClientId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">C-Store Property Listing Expiration Alerts</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example9" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.CStorePropertyExpiryList)
+                                {
+                                    var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+
+                                        <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.DaysToExpire</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'c_store')"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="card">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                        <h3 class="card-title">Surplus Property Listing Expiration Alerts</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example10" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.SurplusPropertyExpiryList)
+                                {
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>
+                                            @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                            {
+                                                <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                            else if (item.DaysToExpire < 0)
+                                            {
+                                                <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                            }
+                                            else
+                                            {
+                                                <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                            }
+                                        </td>
+                                        <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+
+                                        <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                        <td>@item.DaysToExpire</td>
+                                        <td>
+
+                                            <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, 'surplus')"><i class="fas fa-eye"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+
+
+<div class="modal fade" id="modal-new-period">
+
+    <script>
+        function submitPeriod() {
+
+            var periodMaster = $("#p_PeriodMaster").val().trim();
+            var sDate = $("#p_StartDate").val().trim();
+            //var eDate = $("#p_EndDate").val().trim();
+            var duration = $("#txtDuration").val().trim();
+            var nTes = $("#p_PeriodNotes").val().trim();
+
+            $("#errPeriodMaster").html("");
+            $("#errStartDate").html("");
+            $("#errDuration").html("");
+            $("#errPeriodNotes").html("");
+            $("#errOtherEmailAddress").html("");
+
+            if (periodMaster == "") {
+                $("#errPeriodMaster").html("<font color='red'>Please Enter Critical Item</font>");
+                return;
+            }
+            else {
+                $("#errPeriodMaster").html("");
+            }
+
+            if (sDate == '') {
+                $("#errStartDate").html("<font color='red'>Please Enter Start Date</font>");
+                return;
+            }
+            else {
+                $("#errStartDate").html("");
+            }
+
+            /*
+            if (eDate == '') {
+                $("#errEndDate").html("<font color='red'>Please Enter End Date</font>");
+                return;
+            }
+            else {
+                $("#errEndDate").html("");
+            }
+            */
+
+            if (duration == '') {
+                $("#errDuration").html("<font color='red'>Please Enter Duration</font>");
+                return;
+            }
+            else {
+                $("#errDuration").html("");
+            }
+
+            if (nTes == '') {
+                $("#errPeriodNotes").html("<font color='red'>Please Enter Notes</font>");
+                return;
+            }
+            else {
+                $("#errPeriodNotes").html("");
+            }
+
+            var otherEmailAddress = $("#OtherEmailAddress").val().trim();
+            /*
+            if (otherEmailAddress != '') {
+                if (!ValidateEmail(otherEmailAddress)) {
+                    canSave = false;
+                    $("#errOtherEmailAddress").html("<font color='red'>Please enter Valid Email Address</font>");
+                    $("#OtherEmailAddress").focus();
+                    return;
+                }
+                else {
+                    $("#errOtherEmailAddress").html("");
+                }
+            }
+            */
+
+            $("#SavePeriod").submit();
+        }
+
+        function calculateEndDate(ctrl) {
+            alerty(ctrl);
+        }
+
+
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+
+        function viewPeriod(propertyId, periodId, periodMaster, startDate, duration, periodNotes, alertDate, emailAddress, itemType) {
+            $("#p_PeriodId").val(periodId);
+            $("#p_PropertyId").val(propertyId);
+            $("#p_PeriodMaster").val(periodMaster);
+            $("#p_StartDate_1").val(startDate);
+            $("#txtDuration").val(duration);
+            $("#p_PeriodNotes").val(periodNotes);
+
+            $("#p_AlertDate_1").val(alertDate);
+            $("#OtherEmailAddress").val(emailAddress);
+
+            $("#propertyId").val(propertyId);
+            $("#propertyType").val(itemType);
+
+            $('#modal-new-period').modal('show');
+
+        }
+
+        function deletePeriod(periodId, propertyId) {
+            if (confirm("Confirm Delete?")) {
+                window.location.href = '@Url.Action("DeletePeriod", "NetLeaseProperties")?periodId=' + periodId + '&propertyId=' + propertyId;
+            }
+        }
+
+
+    </script>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Critical Item</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("SavePeriod", "NetLeaseProperties")" id="SavePeriod" name="SavePeriod" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="selSiteState" class="control-label">Critical Item </label>
+                                    <input type="text" value="" name="PeriodMaster" id="p_PeriodMaster" class="form-control" readonly />
+                                    <input type="hidden" value="" id="propertyId" class="form-control" />
+                                    <input type="hidden" value="" id="propertyType" class="form-control" />
+                                    <div id="errPeriodMaster"></div>
+                                </div>
+
+
+                                
+                                <div id="errTodoText"></div>
+                            </div>
+
+
+                            <!-- /.input group -->
+                            <div class="form-group">
+                                <label for="EarnestMoney" class="control-label">Start Date *</label>
+                                <input type="text" value="" name="StartDate" class="form-control" id="p_StartDate_1" readonly />
+                                <div id="errStartDate"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Duration" class="control-label">Duration *</label>
+                                <input type="text" value="" name="AddedDuration" class="form-control" id="txtDuration" readonly />
+                                <div id="errDuration"></div>
+                            </div>
+
+                            <!--
+                            <div class="form-group">
+                                <label for="EarnestMoney" class="control-label">End Date</label>
+                                <input type="text" value="" name="EndDate" class="form-control" id="p_EndDate" readonly />
+                                <div id="errPurchasePrice"></div>
+                            </div>
+                            -->
+
+                            <div class="form-group">
+                                <label for="PeriodNotes" class="control-label">Notes *</label>
+                                <textarea name="PeriodNotes" class="form-control" rows="5" id="p_PeriodNotes" readonly></textarea>
+                                <div id="errPeriodNotes"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="p_AlertDate" class="control-label">Alert Date</label>
+                                <input type="text" value="" name="AlertDate" class="form-control" id="p_AlertDate_1" readonly />
+                                <a href="javascript:clearAlertDate()">Clear Date</a>
+                            </div>
+                            <script>
+                                function clearAlertDate() {
+                                    $("#p_AlertDate").val('');
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label for="OtherEmailAddress" class="control-label">Email Address (If Multiple Emails, Please Seperate By Comma)</label>
+                                <input type="text" value="" name="OtherEmailAddress" class="form-control" id="OtherEmailAddress" readonly />
+                                <div id="errOtherEmailAddress"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="viewPropertyDetailsFromNotification()">View Property</button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

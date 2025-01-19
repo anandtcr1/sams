@@ -1,0 +1,356 @@
+﻿@model sams.Models.CustomerViewModel
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "GetCustomer";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <script>
+        function createNewCustomer(customerId) {
+            var baseUrl = "@Url.Action("EditCustomer", "CStoreRegisteredCustomer")?customerId=" + customerId;
+            location.href = baseUrl;
+        }
+
+        function back() {
+            var baseUrl = "@Url.Action("Index", "CStoreRegisteredCustomer")";
+            location.href = baseUrl;
+        }
+
+        function sendCustomerAgreement() {
+            if (confirm("Do you want to proceed?")) {
+                $("#frmSendCustomerAgreement").submit();
+            }
+        }
+
+        function resetPassword() {
+            if (confirm("Do you want to proceed?")) {
+                $("#SendResetPasswordLink").submit();
+            }
+        }
+    </script>
+
+<div class="content-wrapper">
+
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Signed Up Customer Details</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <section class="content">
+
+
+
+        <form asp-action="SendResetCustomerPasswordLink" method="post" id="SendResetPasswordLink">
+            <input type="hidden" value="@Model.EmailAddress" name="emailAddress" />
+        </form>
+
+        <form asp-action="SendCustomerAgreement" method="post" id="frmSendCustomerAgreement">
+            <input type="hidden" value="@Model.EmailAddress" name="emailAddress" />
+            <input type="hidden" value="@Model.CustomerId" name="customerId" />
+        </form>
+
+        <div class="card card-info">
+            <div class="card-header @sams.Common.Helper.PrimaryColor">
+                <h3 class="card-title">Signed Up Customer Details</h3>
+            </div>
+            <div class="card-body">
+
+
+                <div class="row">
+
+                    <div class="col-6">
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label class="control-label">First Name : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.FirstName
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label class="control-label">Last Name : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.LastName
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Email Address : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.EmailAddress
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Contact Number : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.ContactNumber
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">User Name : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.UserName
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Organization : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.Company
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Given Title : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.GivenTitle
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="col-6">
+
+
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Address : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.Address
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">ZIP Code : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.Zipcode
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">City : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.City
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">State : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.StateName
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Cell : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.CellNumber
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Signed Status : </label>
+                                </div>
+                                <div class="col-8">
+                                    @Model.SignedStatus
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label for="Address" class="control-label">Signed Verification Id : </label>
+
+                                </div>
+                                <div class="col-8">
+                                    @Model.SignatureId
+                                </div>
+                            </div>
+                        </div>
+
+                        @{
+                            if (@Model.SignatureId.Trim().Length > 0)
+                            {
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-4">
+
+                                            <a target="_blank" href="https://samsholdingsdevelopment.azurewebsites.net/RealEstate/ViewSignedAgreement?CustomerId=@Model.CustomerId">View Agreement</a>
+                                        </div>
+                                        <div class="col-8">
+                                            <div id="divSignedStatus"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+
+
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div class="form-group">
+                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 7).CanEdit)
+                            {
+                                <button type="button" class="btn btn-success" onclick="createNewCustomer(@Model.CustomerId)">Edit Customer</button>
+                                <input type="button" id="btnSendResetPassword" value="Set up Password" class="btn btn-info" onclick="resetPassword();" />
+                                <input type="button" id="btnSendAgreement" value="Send Agreement" class="btn btn-danger" onclick="sendCustomerAgreement()" />
+                            }
+
+                            <input type="button" id="btnCancel" value="Back" class="btn btn-info" onclick="back();" />
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Property Visited List</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example1" class="table table-sm text-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Asset Id</th>
+                                            <th>Asset Type</th>
+                                            <th>Header</th>
+                                            <th>On</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model.PageHitList)
+                                        {
+                                        <tr>
+                                            <td>@item.AssetId</td>
+                                            <td>@item.AssetType</td>
+                                            <td>@item.PropertyHeader</td>
+                                            <td>@item.CreatedDate.ToString("MM-dd-yyyy")</td>
+                                        </tr>
+                                        }
+
+
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                            <!-- /.card-body -->
+
+
+
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </section>
+</div>

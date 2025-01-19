@@ -1,0 +1,252 @@
+﻿@model sams.Models.CustomerViewModel
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "EditCustomer";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+    <script>
+    function saveData() {
+        var firstName = $("#FirstName").val().trim();
+        var lastName = $("#LastName").val().trim();
+        var emailAddress = $("#EmailAddress").val().trim();
+        var contactNumber = $("#ContactNumber").val().trim();
+
+        $("#errFirstName").html("");
+        $("#errLastName").html("");
+        $("#errEmailAddress").html("");
+        $("#errContactNumber").html("");
+
+        if (firstName == '') {
+            $("#errFirstName").html("<font color='red'>Please Enter First Name</font>");
+            $("#FirstName").focus();
+            return;
+        }
+
+        if (lastName == '') {
+            $("#errLastName").html("<font color='red'>Please Enter Last Name</font>");
+            $("#LastName").focus();
+            return;
+        }
+
+        if (emailAddress == '') {
+            $("#errEmailAddress").html("<font color='red'>Please Enter Email Address</font>");
+            $("#EmailAddress").focus();
+            return;
+        }
+        else {
+
+            if (!ValidateEmail(emailAddress)) {
+                canSave = false;
+                $("#errEmailAddress").html("<font color='red'>Please Enter Valid Email Address</font>");
+                $("#EmailAddress").focus();
+                return;
+            }
+            else {
+                $("#errEmailAddress").html("");
+            }
+
+
+        }
+
+        if (contactNumber == '') {
+            $("#errContactNumber").html("<font color='red'>Please Enter Contact Number</font>");
+            $("#ContactNumber").focus();
+            return;
+        }
+
+        @if (Model.CustomerId == 0) {
+            @:CheckUserInDb();
+        }
+        else {
+            @:$("#RegisterCustomer").submit();
+        }
+
+    }
+
+
+    function back() {
+            var baseUrl = "@Url.Action("Index", "CStoreRegisteredCustomer")";
+            location.href = baseUrl;
+        }
+
+
+        function CheckUserInDb() {
+            var txt = $("#EmailAddress").val().trim();
+            var baseUrl = "@Url.Action("CheckDuplicateUserName", "RealEstate")";
+
+            siteDetails = {
+                UserName: txt
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: baseUrl,
+                data: siteDetails,
+                success: function (data) {
+                    var emailExists = data;
+                    if (emailExists == true) {
+                        $("#errEmailAddress").html("<font color='red'>Email Already Exists!</font>");
+                        $("#EmailAddress").focus();
+                    }
+                    else {
+                        $("#RegisterCustomer").submit();
+                    }
+
+                },
+                error: function (xhr, textStatus, error) {
+                    alert(error);
+                }
+            });
+        }
+
+    </script>
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Customer Details</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-6">
+
+                <form asp-action="RegisterCustomer" method="post" id="RegisterCustomer">
+
+                    <div class="card card-info">
+                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                            <h3 class="card-title">Customer Details</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <input type="hidden" asp-for="CustomerId" class="form-control" />
+                                <label asp-for="FirstName" class="control-label">First Name *</label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <div id="errFirstName"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="LastName" class="control-label">Last Name *</label>
+                                <input asp-for="LastName" class="form-control" />
+                                <div id="errLastName"></div>
+                            </div>
+
+                            @if (Model.CustomerId == 0)
+                            {
+                                <div class="form-group">
+                                    <label asp-for="EmailAddress" class="control-label">Email Address *</label>
+                                    <input asp-for="EmailAddress" class="form-control" />
+                                    <div id="errEmailAddress"></div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label asp-for="EmailAddress" class="control-label">Email Address : </label> @Model.EmailAddress
+                                    <input asp-for="EmailAddress" class="form-control" type="hidden" />
+                                    <div id="errEmailAddress"></div>
+                                </div>
+                            }
+
+
+                            <div class="form-group">
+                                <label asp-for="ContactNumber" class="control-label">Contact Number *</label>
+                                <input asp-for="ContactNumber" class="form-control" />
+                                <div id="errContactNumber"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="CellNumber" class="control-label">Cell Number</label>
+                                <input asp-for="CellNumber" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Company" class="control-label">Company</label>
+                                <input asp-for="Company" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="GivenTitle" class="control-label">Given Title</label>
+                                <input asp-for="GivenTitle" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Zipcode" class="control-label">Zipcode</label>
+                                <input asp-for="Zipcode" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label">Address</label>
+                                <input asp-for="Address" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="City" class="control-label">City</label>
+                                <input asp-for="City" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label">State</label>
+
+                                <select id="StateId" name="StateId" class="form-select form-control">
+
+                                    @if (Model != null)
+                                    {
+                                        foreach (var itemSel in Model.StateList)
+                                        {
+                                            <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                        }
+                                    }
+
+                                </select>
+
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </form>
+
+                
+
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="form-group">
+                    @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 7).CanEdit)
+                    {
+                        <input type="button" id="btnSave" value="Submit" class="btn btn-primary" onclick="saveData();" />
+                    }
+
+                    <input type="button" id="btnCancel" value="Cancel" class="btn btn-info" onclick="back();" />
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+</div>

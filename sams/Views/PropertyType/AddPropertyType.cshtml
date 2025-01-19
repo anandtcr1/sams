@@ -1,0 +1,77 @@
+﻿@model sams.Models.PropertyTypeViewModel
+
+@{
+    ViewData["Title"] = "AddPropertyType";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <script>
+        function saveData() {
+            var txtAssetTypeName = $("#PropertyTypeName").val();
+            if (txtAssetTypeName == '') {
+                canSave = false;
+                $("#errPropertyTypeName").html("<font color='red'>Please enter Property Type Name</font>");
+                $("#PropertyTypeName").focus();
+                return;
+            }
+            else {
+                $("#errPropertyTypeName").html("");
+            }
+
+            $("#SavePropertyType").submit();
+        }
+    </script>
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Property Type</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form id="SavePropertyType" name="SavePropertyType" action="SavePropertyType" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-6">
+
+
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="PropertyTypeId" class="form-control" />
+                                        <label asp-for="PropertyTypeName" class="control-label">Property Type Name *</label>
+                                        <input asp-for="PropertyTypeName" class="form-control" />
+                                        <div id="errPropertyTypeName"></div>
+                                    </div>
+
+
+
+
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+                                        <input type="button" id="btnSave" value="SUBMIT" class="btn btn-primary" onclick="saveData();" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+</div>

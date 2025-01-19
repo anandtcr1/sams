@@ -1,0 +1,241 @@
+﻿@model sams.Models.ShoppingCenterClients
+
+@{
+    ViewData["Title"] = "GetShoppingCenterClientItem";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <script>
+    function saveTenant() {
+        var tenantName = $("#TenantName").val();
+        var selectedUnit = $("#UnitSelected").val();
+        var monthlyRent = $("#MonthlyRent").val();
+
+        $("#errTenantName").html("");
+        $("#errUnitSelected").html("");
+        $("#errMonthlyRent").html("");
+
+        if (tenantName.trim() == '') {
+            $("#errTenantName").html("<font color='red'>Please Enter Tenant Name</font>");
+            $("#TenantName").focus();
+            return;
+        }
+
+        /*
+        if (selectedUnit.trim() == '') {
+            $("#errUnitSelected").html("<font color='red'>Please Enter Unit Selected</font>");
+            $("#UnitSelected").focus();
+            return;
+        }
+
+        if (monthlyRent.trim() == '') {
+            $("#errMonthlyRent").html("<font color='red'>Please Enter Monthly Rent</font>");
+            $("#MonthlyRent").focus();
+            return;
+        }
+        */
+
+        $("#frmSaveShoppingCenterTenant").submit();
+    }
+
+        function backToList(netleaseId) {
+            var baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + netleaseId;
+            location.href = baseUrl;
+        }
+
+    </script>
+
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>
+                            Tenant Rent & Cam Matrix</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                            <li class="breadcrumb-item active">View Details</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <section class="content">
+            <form asp-action="SaveShoppingCenterTenant" id="frmSaveShoppingCenterTenant" name="frmSaveShoppingCenterTenant" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <!--First column-->
+                    <div class="col-6">
+
+                        <div class="card card-info">
+                            <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                <h3 class="card-title ">&nbsp;</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label asp-for="TenantName" class="control-label">Tenant Name *</label>
+                                    <input asp-for="TenantName" class="form-control" />
+                                    <input type="hidden" name="ShoppingCenterClientId" value="@Model.ShoppingCenterClientId" />
+                                    <input type="hidden" name="CStoreId" value="@Model.CStoreId" />
+                                    <div id="errTenantName"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="UnitSelected" class="control-label">Unit #</label>
+                                    <input asp-for="UnitSelected" class="form-control" />
+                                    <div id="errUnitSelected"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="AnnualRent" class="control-label">Rent Annual *</label>
+                                    <input asp-for="AnnualRent" class="form-control" />
+                                    <div id="errAnnualRent"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="MonthlyRent" class="control-label">Monthly Rent</label>
+                                    <input asp-for="MonthlyRent" class="form-control" />
+                                    <div id="errMonthlyRent"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="CamMonthly" class="control-label">CAM Monthly</label>
+                                    <input asp-for="CamMonthly" class="form-control" />
+                                    <div id="errCamMonthly"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="CamYearly" class="control-label">CAM Yearly</label>
+                                    <input asp-for="CamYearly" class="form-control" />
+                                    <div id="errCamYearly"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="SetOrAdjustAutomatically" class="control-label">Set Or Adjust Automatically</label>
+                                    <input asp-for="SetOrAdjustAutomatically" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="RentAndCamMonthly" class="control-label">Rent And CAM Monthly</label>
+                                    <input asp-for="RentAndCamMonthly" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="RentAndCamYearly" class="control-label">Rent And CAM Yearly</label>
+                                    <input asp-for="RentAndCamYearly" class="form-control" />
+                                </div>
+
+                                @{
+                                    //var dtCoiExpire = Model.CoiExpire == default(DateTime?) ? "" : Model.CoiExpire.Value.ToString("yyyy-MM-dd");
+                                    var dtCoiExpire = Model.CoiExpire == default(DateTime?) ? "" : Model.CoiExpire.Value.ToString("MM-dd-yyyy");
+                                }
+                                <div class="form-group">
+                                    <label asp-for="CoiExpire" class="control-label">COI Expire</label>
+                                    <input type="text" value="@dtCoiExpire" name="CoiExpire" class="form-control" id="p_CoiExpire" readonly />
+                                    <a href="javascript:clearCoi()">Clear Date</a>
+                                </div>
+
+                                <script>
+                                    function clearCoi() {
+                                        $("#p_CoiExpire").val('');
+                                    }
+                                </script>
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+
+                    </div>
+
+                    <!--Second column-->
+                    <div class="col-6">
+
+                        <div class="card card-info">
+                            <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                <h3 class="card-title ">&nbsp;</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label asp-for="PiecePerSquareFoot" class="control-label">Price Per Square Foot</label>
+                                    <input asp-for="PiecePerSquareFoot" class="form-control" />
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label asp-for="LeaseExpaires" class="control-label">Lease Expires</label>
+                                    <input asp-for="LeaseExpaires" class="form-control" />
+                                </div>
+
+                                @{ 
+                                    //var dtRentChanges = Model.DateRentChanges == default(DateTime?) ? "" : Model.DateRentChanges.Value.ToString("yyyy-MM-dd");
+                                    var dtRentChanges = Model.DateRentChanges == default(DateTime?) ? "" : Model.DateRentChanges.Value.ToString("MM-dd-yyyy");
+                                }
+                                <div class="form-group">
+                                    <label asp-for="DateRentChanges" class="control-label">Date Rent Changes</label>
+                                    <input id="p_DateRentChanges" name="DateRentChanges" value="@dtRentChanges" class="form-control" readonly />
+                                    <a href="javascript:clearDateRentChanges()">Clear Date</a>
+                                </div>
+
+                                <script>
+                                    function clearDateRentChanges() {
+                                        $("#p_DateRentChanges").val('');
+                                    }
+                                </script>
+
+                                <div class="form-group">
+                                    <label asp-for="AnnualRentChangeTo" class="control-label">Annual Rent Change To</label>
+                                    <input asp-for="AnnualRentChangeTo" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="RentPerMonthChangeTo" class="control-label">Rent Per Month Change To</label>
+                                    <input asp-for="RentPerMonthChangeTo" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="RentAndCamChangeTo" class="control-label">Rent And CAM Change To</label>
+                                    <input asp-for="RentAndCamChangeTo" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="PiecePerSquareFootChangeTo" class="control-label">Price Per Square Foot Change To</label>
+                                    <input asp-for="PiecePerSquareFootChangeTo" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="SubspaceSquareFootage" class="control-label">Subspace Square Footage</label>
+                                    <input asp-for="SubspaceSquareFootage" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Notes" class="control-label">Notes</label>
+                                    <input asp-for="Notes" class="form-control" />
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="row">
+                <div class="col-12">
+                    <input type="button" id="btnSave" value="Update Tenant" class="btn btn-success" onclick="saveTenant();" />
+                    <input type="button" id="btnCancel" value="Cancel Edit" class="btn btn-danger" onclick="backToList(@Model.CStoreId);" />
+                </div>
+            </div>
+
+        </section>
+    </div>

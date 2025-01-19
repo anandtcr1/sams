@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+    <head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <title>SAMS GROUP || Prime and reliable Real Estate and Properties</title>
+        
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="icon" href="images/favicon.png" type="image/x-icon">
+        
+        <!-- Google Fonts -->	
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i%7CMerriweather:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+        
+        <!-- Bootstrap Stylesheet -->	
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        
+        <!-- Font Awesome Stylesheet -->
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+            
+        <!-- Custom Stylesheets -->	
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" id="cpswitch" href="css/lightblue.css?a=1">
+        <link rel="stylesheet" href="css/responsive.css">
+        
+        <!--Jquery UI Stylesheet-->
+		<link rel="stylesheet" href="css/jquery-ui.min.css">
+    </head>
+    
+    
+    <body>
+    
+        <!--====== LOADER =====-->
+        <div class="loader"></div>
+    
+    
+    	<!--======== SEARCH-OVERLAY =========-->       
+        <div class="overlay">
+            <a href="javascript:void(0)" id="close-button" class="closebtn">&times;</a>
+            <div class="overlay-content">
+                <div class="form-center">
+                    <form>
+                    	<div class="form-group">
+                        	<div class="input-group">
+                        		<input type="text" class="form-control" placeholder="Search..." required />
+                            	<span class="input-group-btn"><button type="submit" class="btn"><span><i class="fa fa-search"></i></span></button></span>
+                            </div><!-- end input-group -->
+                        </div><!-- end form-group -->
+                    </form>
+                </div><!-- end form-center -->
+            </div><!-- end overlay-content -->
+        </div><!-- end overlay -->
+        
+        
+        <!--============= TOP-BAR ===========-->
+		<div id="top-bar" class="tb-text-white">
+            <div class="container">
+                <div class="row">          
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <div id="info">
+                            <ul class="list-unstyled list-inline">
+                               <li><span><i class="fa fa-map-marker"></i></span>7935 Council Place, Matthews, NC 28105</li>
+                                <li><span><i class="fa fa-phone"></i></span>704-819-6919</li>
+                            </ul>
+                        </div><!-- end info -->
+                    </div><!-- end columns -->
+                    
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <div id="links">
+                            <ul class="list-unstyled list-inline">
+                                <li><a href="login.html"><span><i class="fa fa-lock"></i></span>Login</a></li>
+                                <li><a href="registration.html"><span><i class="fa fa-plus"></i></span>Sign Up</a></li>
+                            </ul>
+                        </div><!-- end links -->
+                    </div><!-- end columns -->				
+                </div><!-- end row -->
+            </div><!-- end container -->
+        </div><!-- end top-bar -->
+
+        <nav class="navbar navbar-default main-navbar navbar-custom navbar-white" id="mynavbar-1">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" id="menu-button">
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>                        
+                    </button>
+                    <div class="header-search hidden-lg">
+                    	<a href="javascript:void(0)" class="search-button"><span><i class="fa fa-search"></i></span></a>
+                    </div>
+                    <a href="#" class="navbar-brand">
+                        <img src="images/logo_4.png" class="img-logo-king" alt="logo-img" style="width:130px;" />
+                    </a>
+                </div><!-- end navbar-header -->
+                
+                <div class="collapse navbar-collapse" id="myNavbar1">
+                    <ul class="nav navbar-nav navbar-right navbar-search-link">
+                      <li class="dropdown active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Home<span></i></span></a>
+                            			
+                        </li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">About<span></i></span></a>
+                           		
+                        </li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Submit Site<span></i></span></a>
+                          			
+                        </li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Surplus<span></i></span></a>
+                            			
+                        </li>
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Sales<span><i class="fa fa-angle-down"></i></span></a>
+                            	<ul class="dropdown-menu">
+                                    	<li><a href="flight-homepage.html">Gas Stations</a></li>
+                                        <li><a href="flight-listing-left-sidebar.html">Convenience Stores</a></li>
+                                </ul>		
+                        </li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Contact<span></i></span></a>
+                            	
+                        </li>
+                        <li><a href="javascript:void(0)" class="search-button"><span><i class="fa fa-search"></i></span></a></li>
+                    </ul>
+                </div><!-- end navbar collapse -->
+            </div><!-- end container -->
+        </nav><!-- end navbar -->
+        
+        <div class="sidenav-content">
+            <div id="mySidenav" class="sidenav" >
+                <h2 id="web-name"><span><i class="fa fa-plane"></i></span>Sams Holdings</h2>
+
+                <div id="main-menu">
+                	<div class="closebtn">
+                        <button class="btn btn-default" id="closebtn">&times;</button>
+                    </div><!-- end close-btn -->
+                    
+                    <div class="list-group panel">
+                    
+                        <a href="#home-links" class="list-group-item active" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-home link-icon"></i></span>Home<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#flights-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-plane link-icon"></i></span>About<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#hotels-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-building link-icon"></i></span>Submit Site<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#tours-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-globe link-icon"></i></span>Surplus<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#cruise-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-ship link-icon"></i></span>Sales<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#cars-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-car link-icon"></i></span>Guest<span><i class="fa fa-chevron-down arrow"></i></span></a>
+						
+						<a href="#cars-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-car link-icon"></i></span>Contact<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                    </div><!-- end list-group -->
+                </div><!-- end main-menu -->
+            </div><!-- end mySidenav -->
+        </div><!-- end sidenav-content -->
+        
+        
+        <!--=================== PAGE-COVER =================-->
+        <section class="page-cover" id="cover-hotel-grid-list">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                    	<h1 class="page-title">Please find your dream project</h1>
+                        <ul class="breadcrumb">
+                            <li><a href="#">Home</a></li>
+                            <li class="active">Property Listing</li>
+                        </ul>
+                    </div><!-- end columns -->
+                </div><!-- end row -->
+            </div><!-- end container -->
+        </section><!-- end page-cover -->
+        
+        
+        <!--===== INNERPAGE-WRAPPER ====-->
+        <section class="innerpage-wrapper">
+        	<div id="hotel-grid" class="innerpage-section-padding">
+                <div class="container">
+                    <div class="row">  
+
+						<div class="col-xs-12 col-sm-12 col-md-3 side-bar right-side-bar">
+                                        
+                            <div class="side-bar-block filter-block">
+                                <h3>Sort By Filter</h3>
+                                <p>Find your dream property</p>
+                                
+                                <div class="panels-group">
+                                    
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">					
+                                            <a href="#panel-1" data-toggle="collapse" >Select Category <span><i class="fa fa-angle-down"></i></span></a>
+                                        </div><!-- end panel-heading -->
+                                        
+                                        <div id="panel-1" class="panel-collapse collapse">
+                                            <div class="panel-body text-left">
+                                                <ul class="list-unstyled">
+                                                    <li class="custom-check"><input type="checkbox" id="check01" name="checkbox"/>
+                                                    <label for="check01"><span><i class="fa fa-check"></i></span>Property</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check02" name="checkbox"/>
+                                                    <label for="check02"><span><i class="fa fa-check"></i></span>Gas Stations</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check03" name="checkbox"/>
+                                                    <label for="check03"><span><i class="fa fa-check"></i></span>Store/Super Market</label></li>
+                                                    
+                                                </ul>
+                                            </div><!-- end panel-body -->
+                                        </div><!-- end panel-collapse -->
+                                    </div><!-- end panel-default -->
+                                    
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">					
+                                            <a href="#panel-2" data-toggle="collapse" >States<span><i class="fa fa-angle-down"></i></span></a>
+                                        </div><!-- end panel-heading -->
+                                        
+                                        <div id="panel-2" class="panel-collapse collapse">
+                                            <div class="panel-body text-left">
+                                                <ul class="list-unstyled">
+                                                    <li class="custom-check"><input type="checkbox" id="check08" name="checkbox"/>
+                                                    <label for="check08"><span><i class="fa fa-check"></i></span>Arizona</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check09" name="checkbox"/>
+                                                    <label for="check09"><span><i class="fa fa-check"></i></span>Georgia</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check10" name="checkbox"/>
+                                                    <label for="check10"><span><i class="fa fa-check"></i></span>Iowa</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check11" name="checkbox"/>
+                                                    <label for="check11"><span><i class="fa fa-check"></i></span>Kansas</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check12" name="checkbox"/>
+                                                    <label for="check12"><span><i class="fa fa-check"></i></span>Missouri</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check13" name="checkbox"/>
+                                                    <label for="check13"><span><i class="fa fa-check"></i></span>North Carolina</label></li>
+													
+													<li class="custom-check"><input type="checkbox" id="check13" name="checkbox"/>
+                                                    <label for="check13"><span><i class="fa fa-check"></i></span>Nebraska</label></li>
+													
+													<li class="custom-check"><input type="checkbox" id="check13" name="checkbox"/>
+                                                    <label for="check13"><span><i class="fa fa-check"></i></span>Oklahoma</label></li>
+													
+													<li class="custom-check"><input type="checkbox" id="check13" name="checkbox"/>
+                                                    <label for="check13"><span><i class="fa fa-check"></i></span>South Carolina</label></li>
+													
+													<li class="custom-check"><input type="checkbox" id="check13" name="checkbox"/>
+                                                    <label for="check13"><span><i class="fa fa-check"></i></span>Texas</label></li>
+                                                </ul>
+                                            </div><!-- end panel-body -->
+                                        </div><!-- end panel-collapse -->
+                                    </div><!-- end panel-default -->
+                                    
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">					
+                                            <a href="#panel-3" data-toggle="collapse" >City <span><i class="fa fa-angle-down"></i></span></a>
+                                        </div><!-- end panel-heading -->
+                                        
+                                        <div id="panel-3" class="panel-collapse collapse">
+                                            <div class="panel-body text-left">
+                                                <ul class="list-unstyled">
+                                                    <li class="custom-check"><input type="checkbox" id="check14" name="checkbox"/>
+                                                    <label for="check14"><span><i class="fa fa-check"></i></span>City 1</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check15" name="checkbox"/>
+                                                    <label for="check15"><span><i class="fa fa-check"></i></span>City 2</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check16" name="checkbox"/>
+                                                    <label for="check16"><span><i class="fa fa-check"></i></span>City 3</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check17" name="checkbox"/>
+                                                    <label for="check17"><span><i class="fa fa-check"></i></span>City 4</label></li>
+                                                    <li class="custom-check"><input type="checkbox" id="check18" name="checkbox"/>
+                                                    <label for="check18"><span><i class="fa fa-check"></i></span>City 5</label></li>
+                                                </ul>
+                                            </div><!-- end panel-body -->
+                                        </div><!-- end panel-collapse -->
+                                    </div><!-- end panel-default -->
+                                    
+                                </div><!-- end panel-group -->
+								
+                                <!--
+                                <div class="price-slider">
+                                    <p><input type="text" id="amount" readonly></p>
+                                    <div id="slider-range"></div>
+                                </div> end price-slider -->
+                            </div><!-- end side-bar-block -->
+                            
+                            <div class="row">
+                                
+                                
+                                <div class="col-xs-12 col-sm-6 col-md-12">    
+                                    <div class="side-bar-block support-block">
+                                        <h3>Support</h3>
+                                        <p>Since inception, SAMS has provided Real Estate Support Services to clients involved in real estate transactions from the most basic to the most complex scenarios. We are available 24/7.</p>
+                                        <div class="support-contact">
+                                            <span><i class="fa fa-phone"></i></span>
+                                            <p>704-819-6919</p>
+                                        </div><!-- end support-contact -->
+                                    </div><!-- end side-bar-block -->
+                                </div><!-- end columns -->
+                                
+                            </div><!-- end row -->
+                        </div><!-- end columns -->  
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 content-side">
+                            <div class="row">
+                            
+                                <div class="col-sm-6 col-md-6 col-lg-4">
+                                    <div class="grid-block main-block h-grid-block">
+                                    	<div class="main-img h-grid-img">
+                                        	<a href="#">
+                                    			<img src="images/shop_grid_1.jpg" class="img-responsive" alt="hotel-img" />
+                                            </a>
+                                            <div class="main-mask">
+                                                
+                                            </div><!-- end main-mask -->
+                                    	</div><!-- end h-grid-img -->
+                                        
+                                         <div class="block-info h-grid-info">
+                                         
+                                            
+                                         	<h3 class="block-title"><a href="#">SWC Baseline Road & Lindsay Road</a></h3>
+											<p>Gilbert, AZ 85234<p>
+											<p>Zoning: GC</p>
+											<p>Utilities: All Available</p>
+                                            <p class="block-minor">Unpriced, 84,707 S/F, Vacant Land</p>
+                                            <p>Vacant land located adjacent (west) to the QuikTrip store at 2761 E. Baseline Road.</p>
+                                            <div class="grid-btn">
+                                            	<a href="#" class="btn btn-orange btn-block btn-lg">View More</a>
+                                            </div><!-- end grid-btn -->
+                                         </div><!-- end h-grid-info -->
+                                    </div><!-- end h-grid-block -->
+                                </div><!-- end columns -->
+                                
+                                <div class="col-sm-6 col-md-6 col-lg-4">
+                                    <div class="grid-block main-block h-grid-block">
+                                    	<div class="main-img h-grid-img">
+                                        	<a href="#">
+                                    			<img src="images/shop_grid_2.jpg" class="img-responsive" alt="hotel-img" />
+                                            </a>
+                                            <div class="main-mask">
+                                                
+                                            </div><!-- end main-mask -->
+                                    	</div><!-- end h-grid-img -->
+                                        
+                                         <div class="block-info h-grid-info">
+                                         
+                                            
+                                         	<h3 class="block-title"><a href="#">SWC Baseline Road & Lindsay Road</a></h3>
+											<p>Gilbert, AZ 85234<p>
+											<p>Zoning: GC</p>
+											<p>Utilities: All Available</p>
+                                            <p class="block-minor">Unpriced, 84,707 S/F, Vacant Land</p>
+                                            <p>Vacant land located adjacent (west) to the QuikTrip store at 2761 E. Baseline Road.</p>
+                                            <div class="grid-btn">
+                                            	<a href="#" class="btn btn-orange btn-block btn-lg">View More</a>
+                                            </div><!-- end grid-btn -->
+                                         </div><!-- end h-grid-info -->
+                                    </div><!-- end h-grid-block -->
+                                </div><!-- end columns -->
+                                
+                                <div class="col-sm-6 col-md-6 col-lg-4">
+                                    <div class="grid-block main-block h-grid-block">
+                                    	<div class="main-img h-grid-img">
+                                        	<a href="#">
+                                    			<img src="images/shop_grid_1.jpg" class="img-responsive" alt="hotel-img" />
+                                            </a>
+                                            <div class="main-mask">
+                                                
+                                            </div><!-- end main-mask -->
+                                    	</div><!-- end h-grid-img -->
+                                        
+                                         <div class="block-info h-grid-info">
+                                         
+                                            
+                                         	<h3 class="block-title"><a href="#">SWC Baseline Road & Lindsay Road</a></h3>
+											<p>Gilbert, AZ 85234<p>
+											<p>Zoning: GC</p>
+											<p>Utilities: All Available</p>
+                                            <p class="block-minor">Unpriced, 84,707 S/F, Vacant Land</p>
+                                            <p>Vacant land located adjacent (west) to the QuikTrip store at 2761 E. Baseline Road.</p>
+                                            <div class="grid-btn">
+                                            	<a href="#" class="btn btn-orange btn-block btn-lg">View More</a>
+                                            </div><!-- end grid-btn -->
+                                         </div><!-- end h-grid-info -->
+                                    </div><!-- end h-grid-block -->
+                                </div><!-- end columns -->
+                                
+                                <div class="col-sm-6 col-md-6 col-lg-4">
+                                    <div class="grid-block main-block h-grid-block">
+                                    	<div class="main-img h-grid-img">
+                                        	<a href="#">
+                                    			<img src="images/shop_grid_2.jpg" class="img-responsive" alt="hotel-img" />
+                                            </a>
+                                            <div class="main-mask">
+                                                
+                                            </div><!-- end main-mask -->
+                                    	</div><!-- end h-grid-img -->
+                                        
+                                         <div class="block-info h-grid-info">
+                                         
+                                            
+                                         	<h3 class="block-title"><a href="#">SWC Baseline Road & Lindsay Road</a></h3>
+											<p>Gilbert, AZ 85234<p>
+											<p>Zoning: GC</p>
+											<p>Utilities: All Available</p>
+                                            <p class="block-minor">Unpriced, 84,707 S/F, Vacant Land</p>
+                                            <p>Vacant land located adjacent (west) to the QuikTrip store at 2761 E. Baseline Road.</p>
+                                            <div class="grid-btn">
+                                            	<a href="#" class="btn btn-orange btn-block btn-lg">View More</a>
+                                            </div><!-- end grid-btn -->
+                                         </div><!-- end h-grid-info -->
+                                    </div><!-- end h-grid-block -->
+                                </div><!-- end columns -->
+                                
+                                <div class="col-sm-6 col-md-6 col-lg-4">
+                                    <div class="grid-block main-block h-grid-block">
+                                    	<div class="main-img h-grid-img">
+                                        	<a href="#">
+                                    			<img src="images/shop_grid_1.jpg" class="img-responsive" alt="hotel-img" />
+                                            </a>
+                                            <div class="main-mask">
+                                                
+                                            </div><!-- end main-mask -->
+                                    	</div><!-- end h-grid-img -->
+                                        
+                                         <div class="block-info h-grid-info">
+                                         
+                                            
+                                         	<h3 class="block-title"><a href="#">SWC Baseline Road & Lindsay Road</a></h3>
+											<p>Gilbert, AZ 85234<p>
+											<p>Zoning: GC</p>
+											<p>Utilities: All Available</p>
+                                            <p class="block-minor">Unpriced, 84,707 S/F, Vacant Land</p>
+                                            <p>Vacant land located adjacent (west) to the QuikTrip store at 2761 E. Baseline Road.</p>
+                                            <div class="grid-btn">
+                                            	<a href="#" class="btn btn-orange btn-block btn-lg">View More</a>
+                                            </div><!-- end grid-btn -->
+                                         </div><!-- end h-grid-info -->
+                                    </div><!-- end h-grid-block -->
+                                </div><!-- end columns -->
+                                
+                                <div class="col-sm-6 col-md-6 col-lg-4">
+                                    <div class="grid-block main-block h-grid-block">
+                                    	<div class="main-img h-grid-img">
+                                        	<a href="#">
+                                    			<img src="images/shop_grid_2.jpg" class="img-responsive" alt="hotel-img" />
+                                            </a>
+                                            <div class="main-mask">
+                                                
+                                            </div><!-- end main-mask -->
+                                    	</div><!-- end h-grid-img -->
+                                        
+                                         <div class="block-info h-grid-info">
+                                         
+                                            
+                                         	<h3 class="block-title"><a href="#">SWC Baseline Road & Lindsay Road</a></h3>
+											<p>Gilbert, AZ 85234<p>
+											<p>Zoning: GC</p>
+											<p>Utilities: All Available</p>
+                                            <p class="block-minor">Unpriced, 84,707 S/F, Vacant Land</p>
+                                            <p>Vacant land located adjacent (west) to the QuikTrip store at 2761 E. Baseline Road.</p>
+                                            <div class="grid-btn">
+                                            	<a href="#" class="btn btn-orange btn-block btn-lg">View More</a>
+                                            </div><!-- end grid-btn -->
+                                         </div><!-- end h-grid-info -->
+                                    </div><!-- end h-grid-block -->
+                                </div><!-- end columns -->
+                                
+                            </div><!-- end row -->
+                            
+                            <div class="pages">
+                                <ol class="pagination">
+                                    <li><a href="#" aria-label="Previous"><span aria-hidden="true"><i class="fa fa-angle-left"></i></span></a></li>
+                                    <li class="active"><a href="#">1</a></li>
+                                    <li><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#" aria-label="Next"><span aria-hidden="true"><i class="fa fa-angle-right"></i></span></a></li>
+                                </ol>
+                            </div><!-- end pages -->
+                        </div><!-- end columns -->
+                                                
+                        
+                        
+                    </div><!-- end row -->
+            	</div><!-- end container -->
+            </div><!-- end hotel-grid -->
+        </section><!-- end innerpage-wrapper -->
+        
+        
+        
+        
+        
+        <!--========================= NEWSLETTER-1 ==========================-->
+        <section id="newsletter-1" class="section-padding back-size newsletter"> 
+            <div class="container">
+                <div class="row">
+                	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                        <h2>Subscribe Our Newsletter</h2>
+                        <p>Subscibe to receive our interesting updates</p>	
+                        <form>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="email" class="form-control input-lg" placeholder="Enter your email address" required/>
+                                    <span class="input-group-btn"><button class="btn btn-lg"><i class="fa fa-envelope"></i></button></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!-- end columns -->
+                </div><!-- end row -->
+            </div><!-- end container -->
+        </section><!-- end newsletter-1 -->
+        
+        
+        <!--======================= FOOTER =======================-->
+        <section id="footer" class="ftr-heading-w ftr-heading-mgn-2">
+        
+            <div id="footer-top" class="banner-padding ftr-top-grey">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 footer-widget ftr-about ftr-our-company">
+                            <h3 class="footer-heading">OUR COMPANY</h3>
+                            <p>SAMS is a conglomorate, a privately owned corporation with annual sales in excess of $10 billion.  Founded in 1958, the company directly operates over 800 gasoline/convenience stores in eleven states.</p>
+                            <ul class="social-links list-inline list-unstyled">
+                            	<li><a href="#"><span><i class="fa fa-facebook"></i></span></a></li>
+                            	<li><a href="#"><span><i class="fa fa-twitter"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-google-plus"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-pinterest-p"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-instagram"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-linkedin"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-youtube-play"></i></span></a></li>
+                            </ul>
+                        </div><!-- end columns -->
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 footer-widget ftr-in-touch">
+                            <h3 class="footer-heading">Get in Touch</h3>
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-5 col-lg-5 slide-right-vis">
+                                    
+                                        <div class="form-group">
+                                             <input type="text" class="form-control" placeholder="Name"  required/>
+                                        </div>
+        
+                                        <div class="form-group">
+                                             <input type="text" class="form-control" placeholder="Email"  required/>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                             <input type="text" class="form-control" placeholder="Subject"  required/>
+                                        </div>
+                                        
+                                    </div><!-- end columns -->
+        
+                                    <div class="col-sm-6 col-md-7 col-lg-7 slide-left-vis">
+                                        <div class="form-group">
+                                            <textarea class="form-control" placeholder="Your Message"></textarea>
+                                        </div>
+                                    </div><!-- end columns -->
+                                    
+                                    <div class="col-sm-12 text-center">
+                                        <button class="btn btn-orange">Send</button>
+                                    </div><!-- end butn -->
+                                </div><!-- end row -->
+                            </form>
+                        </div><!-- end columns -->
+                        
+                    </div><!-- end row -->
+                </div><!-- end container -->
+            </div><!-- end footer-top -->
+
+            <div id="footer-bottom" class="ftr-bot-black">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" id="copyright">
+                            <p>© 2019 <a href="#">SAMS LLC</a>. All rights reserved.</p>
+                        </div><!-- end columns -->
+                        
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" id="terms">
+                            <ul class="list-unstyled list-inline">
+                            	<li><a href="#">Terms & Condition</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                            </ul>
+                        </div><!-- end columns -->
+                    </div><!-- end row -->
+                </div><!-- end container -->
+            </div><!-- end footer-bottom -->
+            
+        </section><!-- end footer -->
+        
+        
+        <!-- Page Scripts Starts -->
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery-ui.min.js"></script> 
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/custom-navigation.js"></script>
+		<script src="js/custom-price-slider.js"></script>
+        <!-- Page Scripts Ends -->
+    </body>
+</html>

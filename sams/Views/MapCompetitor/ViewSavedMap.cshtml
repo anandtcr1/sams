@@ -1,0 +1,822 @@
+﻿@model sams.Models.CompetitorViewModel
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "ViewSavedMap";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var latt = sams.Common.Helper.SamsLatitude; // "35.1043081";
+    var lonn = sams.Common.Helper.SamsLongitude; // "-80.7123775";
+}
+
+
+<style>
+    #image-container {
+        /*border-radius: 25px;*/
+        border: 2px solid Black;
+        padding: 15px 15px 15px 15px;
+        margin: 20px 20px 20px 20px;
+        background: #FFFFFF;
+        overflow: visible;
+        box-shadow: 5px 5px 2px #888888;
+        position: relative;
+    }
+
+    #x {
+        position: absolute;
+        background: red;
+        color: white;
+        top: -10px;
+        right: -10px;
+    }
+
+    /* basic positioning */
+    .legend {
+        list-style: none;
+    }
+
+        .legend li {
+            float: left;
+            margin-right: 10px;
+        }
+
+        .legend span {
+            border: 1px solid #ccc;
+            float: left;
+            width: 12px;
+            height: 12px;
+            margin: 2px;
+        }
+
+</style>
+
+<script>
+    
+    var markers = [];
+    var latArray = [];
+    var lngArray = [];
+    var markerList = [];
+    var colorArray = [];
+    var placesArray = [];
+    var allMarkers = [];
+    var selectedColor = "";
+    var selectedPlaceOnClick = "";
+    var selectedMarkersObjectArray = [];
+
+    function markProposedLocations(proposedType) {
+        $("#selectionType").val(proposedType);
+
+    }
+
+    function saveComparison() {
+        var totalObjects = selectedMarkersObjectArray.length;
+
+        /*
+        for (var k = 0; k < totalObjects; k++) {
+            var adrs = selectedMarkersObjectArray[k].MarkedAddress;
+            alert(adrs);
+        }
+        */
+
+        if (totalObjects > 0) {
+            $("#divLoading").hide();
+            $("#modal-map-name").modal();
+        }
+        else {
+            alert("Please mark the points");
+        }
+    }
+
+    function saveMap() {
+
+        
+        
+
+        $("#divLoading").show();
+        $("#btnSaveMap").hide();
+
+        var totalObjects = selectedMarkersObjectArray.length;
+
+        var txtMapTitle = $("#txtMapTitle").val();
+        var headerId = $("#hdnHeaderId").val();
+
+        if (txtMapTitle.trim() == "") {
+            $("#errMapTitle").html("<font color='red'>Please enter Map Title</font>");
+            $("#txtMapTitle").focus();
+            return;
+        }
+        else {
+            $("#errMapTitle").html("");
+        }
+
+        var headerDetails = { headerId: headerId, headerName: txtMapTitle }
+        var JsonHeaderDetails = JSON.stringify(headerDetails);
+
+        locHeader = {
+            jsonString: JsonHeaderDetails
+        };
+        var baseUrl = "@Url.Action("SaveMapHeader", "MapCompetitor")";
+
+        $.ajax({
+            type: 'POST',
+            url: baseUrl,
+            data: locHeader,
+            success: function (response) {
+                if (response != null) {
+
+                    var allObjects = [];
+                    var arrayLength = selectedMarkersObjectArray.length;
+                    for (var j = 0; j < arrayLength; j++) {
+                        var selObject = {
+                            MarkerId: selectedMarkersObjectArray[j].MarkerId,
+                            MapHeaderId: response,
+                            Latitude: selectedMarkersObjectArray[j].Latitude,
+                            Longitude: selectedMarkersObjectArray[j].Longitude,
+                            MarkerColor: selectedMarkersObjectArray[j].MarkerColor,
+                            MarkerHeader: selectedMarkersObjectArray[j].MarkerHeader,
+                            MarkedAddress: selectedMarkersObjectArray[j].MarkedAddress,
+                            MarkerType: selectedMarkersObjectArray[j].MarkerType
+                        };
+
+                        allObjects.push(selObject)
+                    }
+
+                    var locationsJSON = JSON.stringify(allObjects);
+                    locDetails = {
+                        jsonString: locationsJSON
+                    };
+
+                    var baseUrl = "@Url.Action("SaveMapCordinates", "MapCompetitor")";
+                    $.ajax({
+                        type: 'POST',
+                        url: baseUrl,
+                        data: locDetails,
+                        success: function (response) {
+                            if (response != null) {
+                                $("#divLoading").hide();
+                                location.href = "@Url.Action("Index", "MapCompetitor")";
+                            }
+                        },
+                        failure: function (response) {
+                            $("#divLoading").hide();
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            $("#divLoading").hide();
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            },
+            failure: function (response) {
+                $("#divLoading").hide();
+                alert(response.responseText);
+            },
+            error: function (response) {
+                $("#divLoading").hide();
+                alert(response.responseText);
+            }
+        });
+
+
+
+
+
+
+
+
+    }
+
+    function highlightLocations(selectedIndex) {
+        selectedColor = colorArray[selectedIndex];
+        selectedPlaceOnClick = placesArray[selectedIndex];
+        $("#selectionType").val("select_competitor");
+
+
+    }
+</script>
+
+<div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Proposed Locations</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <section class="content">
+
+
+
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="card card-info card-tabs">
+
+
+
+
+                    <div class="row">
+
+                        <div class="col-12">
+
+                            <div class="row">
+
+
+
+                                <div class="col-12">
+
+
+
+                                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByxJE-OM4Lv77gVdAYJAfKOiDpD6H9ofg&callback=initAutocomplete&libraries=places&v=weekly&radius=100000"
+                                            defer></script>
+
+                                    <script>
+                                        var indx = 0;
+                                        var uniqueId = 1;
+
+                                        var displayedLocationArray = [];
+
+                                        (function (exports) {
+                                            "use strict";
+
+                                            // This example adds a search box to a map, using the Google Place Autocomplete
+                                            // feature. People can enter geographical searches. The search box will return a
+                                            // pick list containing a mix of places and predicted search terms.
+                                            // This example requires the Places library. Include the libraries=places
+                                            // parameter when you first load the API. For example:
+                                            // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+                                            function initAutocomplete() {
+                                                var map = new google.maps.Map(document.getElementById("map-canvas"), {
+                                                    center: {
+                                                        lat: @latt,
+                                                        lng: @lonn
+                                                    },
+                                                    zoom: 13,
+                                                    mapTypeId: "roadmap"
+                                                }); // Create the search box and link it to the UI element.
+
+                                                
+
+                                                var input = document.getElementById("pac-input");
+                                                var searchBox = new google.maps.places.SearchBox(input);
+                                                //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); // Bias the SearchBox results towards current map's viewport.
+
+                                                map.addListener("bounds_changed", function () {
+                                                    searchBox.setBounds(map.getBounds());
+                                                });
+
+
+
+
+
+
+                                                
+
+                                                //var markers = []; // Listen for the event fired when the user selects a prediction and retrieve
+
+                                                // more details for that place.
+
+                                                var selectedColorCode = "";
+                                                var selectedPlace = "";
+                                                //var colorCodes = ["009900", "FF5733", "F7E104", "55F704", "5F1010", "5F5F10", "FFFF00", "00FFE8", "096D64", "0036FF", "FF00DC", "750646"];
+                                                var colorCodes = [
+                                                    "http://maps.google.com/mapfiles/ms/icons/blue.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/green.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/yellow.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/orange.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/pink.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/purple.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/red.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/blue.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/green.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/yellow.png",
+                                                    "http://maps.google.com/mapfiles/ms/icons/orange.png"
+                                                ];
+                                                
+
+                                                searchBox.addListener("places_changed", function () {
+                                                    var places = searchBox.getPlaces();
+
+                                                    //alert(places);
+                                                    $("#selectionType").val("select_competitor");
+
+                                                    if (places.length == 0) {
+                                                        alert("No places found");
+                                                        return;
+                                                    } // Clear out the old markers.
+
+                                                    
+                                                    
+
+                                                    /*
+                                                    markers.forEach(function (marker) {
+                                                        marker.setMap(null);
+                                                    });
+                                                    */
+
+                                                    markers = []; // For each place, get the icon, name and location.
+                                                    
+
+                                                    var placeNameForLegant = "";
+                                                    var bounds = new google.maps.LatLngBounds();
+                                                    places.forEach(function (place) {
+                                                        if (!place.geometry) {
+                                                            alert("Returned place contains no geometry");
+                                                            return;
+                                                        }
+
+                                                        var plName = place.name.substring(0, 2);
+                                                        selectedPlace = plName;
+
+                                                        
+
+                                                        var icon = {
+                                                            url: colorCodes[indx],
+                                                            //size: new google.maps.Size(71, 71),
+                                                            origin: new google.maps.Point(0, 0),
+                                                            anchor: new google.maps.Point(17, 34),
+                                                            //scaledSize: new google.maps.Size(25, 25)
+                                                        }; // Create a marker for each place.
+
+                                                        var marker = new google.maps.Marker({
+                                                            map: map,
+                                                            icon: icon,
+                                                            title: place.formatted_address,
+                                                            position: place.geometry.location
+                                                        })
+
+                                                        //Set unique id
+                                                        marker.id = uniqueId;
+                                                        
+
+                                                        //alert(place.formatted_address);
+
+                                                        markers.push(
+                                                            marker
+                                                        );
+
+                                                        allMarkers.push(marker);
+
+
+                                                        var locationObject = {
+                                                            MarkerId: uniqueId,
+                                                            Latitude: place.geometry.location.lat(),
+                                                            Longitude: place.geometry.location.lng(),
+                                                            MarkerColor: colorCodes[indx],
+                                                            MarkerHeader: place.name,
+                                                            MarkedAddress: place.formatted_address,
+                                                            MarkerType: 'competitor'
+                                                        };
+                                                        
+                                                        selectedMarkersObjectArray.push(locationObject);
+                                                        //alert("added")
+                                                        uniqueId++;
+
+                                                        google.maps.event.addListener(marker, "click", function (e) {
+                                                            var content = "<b>"+place.name + "</b><br />" + place.formatted_address + "<br />";
+                                                            content += "<br /><input class='btn btn-block btn-danger btn-sm' type = 'button' value = 'Delete' onclick = 'DeleteMarker(" + marker.id + ");' value = 'Delete' />";
+                                                            var infoWindow = new google.maps.InfoWindow({
+                                                                content: content
+                                                            });
+
+                                                            infoWindow.open(map, marker);
+                                                        });
+
+                                                        placeNameForLegant = place.name;
+
+                                                        if (place.geometry.viewport) {
+                                                            // Only geocodes have viewport.
+                                                            bounds.union(place.geometry.viewport);
+                                                        } else {
+                                                            bounds.extend(place.geometry.location);
+                                                        }
+
+                                                        selectedColorCode = colorCodes[indx];
+                                                    });
+
+                                                    
+
+                                                    markerList.push(markers);
+                                                    
+                                                    colorArray.push(colorCodes[indx]);
+                                                    placesArray.push(placeNameForLegant);
+
+                                                    var arrayLength = markerList.length;
+
+                                                    var controlAdd = '<ul class="legend">';
+
+                                                    for (var i = 0; i < arrayLength; i++) {
+                                                        controlAdd = controlAdd + "<li><a href='javascript:highlightLocations(" + i + ")'><span style='background-color: #" + colorArray[i] + ";'></span> <label>" + placesArray[i] + "</a></label> </li>";
+                                                    }
+
+                                                    var controlAdd = controlAdd + '</ul>';
+
+                                                    $("#divLegents").html(controlAdd);
+
+
+                                                    map.fitBounds(bounds);
+
+                                                    indx = indx + 1;
+
+                                                });
+
+
+
+
+                                                //Attach click event handler to the map.
+                                                google.maps.event.addListener(map, 'click', function (e) {
+
+                                                    var selType = $("#selectionType").val();
+
+                                                    if (selType == "sh_proposed") {
+
+                                                        $("#selectionType").val("0");
+
+                                                        var clientFullName = "";
+                                                        if (selectedColor != "") {
+                                                            selectedColorCode = selectedColor;
+                                                            clientFullName = selectedPlaceOnClick;
+                                                            selectedPlaceOnClick = selectedPlaceOnClick.substring(0, 2);
+                                                        }
+                                                        else {
+                                                            clientFullName = selectedPlace;
+                                                            selectedPlaceOnClick = selectedPlace.substring(0, 2);
+                                                        }
+
+                                                        var markedAddress = "";
+                                                        var lbl = "";
+                                                        if (selType == "sh_proposed") {
+                                                            var icon = {
+                                                                //url: 'http://www.googlemapsmarkers.com/v1/' + 'S' + '/' + '850685' + "/FFFFFF/FFFFFF/",
+                                                                url: 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
+                                                                //size: new google.maps.Size(70, 78),
+                                                                //origin: new google.maps.Point(0, 0),
+                                                                //anchor: new google.maps.Point(17, 34),
+                                                                scaledSize: new google.maps.Size(60, 60)
+                                                            }; // Create a marker for each place.
+
+                                                            markedAddress = "Sams Proposed";
+                                                            lbl = "SH";
+                                                        }
+                                                        else {
+                                                            var icon = new google.maps.MarkerImage(selectedColorCode);
+                                                            markedAddress = "Admin Selected";
+                                                        }
+
+
+                                                        //Determine the location where the user has clicked.
+                                                        var location = e.latLng;
+
+                                                        //Create a marker and placed it on the map.
+                                                        var marker = new google.maps.Marker({
+                                                            position: location,
+                                                            icon: icon,
+                                                            draggable: true,
+                                                            label: {
+                                                                text: lbl,
+                                                                color: 'white',
+                                                            },
+                                                            map: map
+                                                        });
+
+                                                        
+                                                        //Set unique id
+                                                        marker.id = uniqueId;
+                                                        
+                                                        var markerArrayList = [];
+                                                        
+                                                        var markerArrayList;
+                                                        if (indx == 0) {
+                                                            //markerArrayList = markerList[indx];
+                                                        }
+                                                        else {
+                                                            markerArrayList = markerList[indx - 1];
+                                                        }
+                                                        
+                                                        
+                                                        markerArrayList.push(marker);
+                                                        
+                                                        allMarkers.push(marker);
+                                                        
+                                                        var locationObject = {
+                                                            MarkerId: uniqueId,
+                                                            Latitude: location.lat(),
+                                                            Longitude: location.lng(),
+                                                            MarkerHeader: clientFullName,
+                                                            MarkedAddress: markedAddress
+                                                        };
+
+                                                        if (selType == "sh_proposed") {
+                                                            var locationObject = {
+                                                                MarkerId: uniqueId,
+                                                                Latitude: location.lat(),
+                                                                Longitude: location.lng(),
+                                                                MarkerColor: "850685",
+                                                                MarkerHeader: clientFullName,
+                                                                MarkedAddress: markedAddress,
+                                                                MarkerType: 'sh_proposed'
+                                                            };
+                                                        }
+                                                        else {
+                                                            var locationObject = {
+                                                                MarkerId: uniqueId,
+                                                                Latitude: location.lat(),
+                                                                Longitude: location.lng(),
+                                                                MarkerColor: selectedColorCode,
+                                                                MarkerHeader: clientFullName,
+                                                                MarkedAddress: markedAddress,
+                                                                MarkerType: 'competitor'
+                                                            };
+                                                        }
+
+
+                                                        selectedMarkersObjectArray.push(locationObject);
+
+                                                        markerCoords(marker, uniqueId);
+
+                                                        markerList[indx - 1] = markerArrayList;
+                                                        uniqueId++;
+
+                                                        //Attach click event handler to the marker.
+                                                        google.maps.event.addListener(marker, "click", function (e) {
+                                                            
+                                                            var content = "<div class='row'>";
+                                                            content += "<div class='col-lg-12'>";
+
+                                                            content += "<div class='form-group'>";
+                                                            content += 'Latitude: ' + location.lat() + '<br />Longitude: ' + location.lng();
+                                                            content += "<br /><input class='btn btn-block btn-danger btn-sm' type = 'button' value = 'Delete' onclick = 'DeleteMarker(" + marker.id + ");' value = 'Delete' />";
+                                                            content += "</div>";
+
+                                                            content += "</div>";
+                                                            content += "</div>";
+
+                                                            var infoWindow = new google.maps.InfoWindow({
+                                                                content: content
+                                                            });
+
+                                                            infoWindow.open(map, marker);
+                                                        });
+
+                                                    //Add marker to the array.
+                                                    //latArray.push(selType);
+                                                    //markers.push(marker);
+                                                    }
+
+                                                });
+
+
+                                                
+
+
+                                            }
+
+                                            exports.initAutocomplete = initAutocomplete;
+                                        })((this.window = this.window || {}));
+
+                                        function DeleteMarker(id) {
+                                            if (confirm("Do you want to delete this marker?")) {
+
+
+                                                for (var idx = 0; idx < selectedMarkersObjectArray.length; idx++) {
+                                                    if (selectedMarkersObjectArray[idx].MarkerId == id) {
+                                                        selectedMarkersObjectArray.splice(idx, 1);
+                                                    }
+                                                }
+
+
+                                                for (var j = 0; j < markerList.length; j++) {
+                                                    var markerArrayList = markerList[j];
+
+
+                                                    //Find and remove the marker from the Array
+                                                    for (var i = 0; i < markerArrayList.length; i++) {
+                                                        if (markerArrayList[i].id == id) {
+                                                            //Remove the marker from Map
+                                                            markerArrayList[i].setMap(null);
+
+                                                            //Remove the marker from array.
+                                                            markerArrayList.splice(i, 1);
+                                                            //latArray.splice(i, 1);
+
+                                                            return;
+                                                        }
+                                                    }
+                                                }
+
+                                                return;
+
+                                                
+                                            }
+
+
+                                        };
+
+                                        function markerCoords(markerobject, indx) {
+                                            google.maps.event.addListener(markerobject, 'dragend', function (evt) {
+
+                                                
+                                                markerobject.position = evt;
+                                                
+                                                selectedMarkersObjectArray[indx - 1].Latitude = evt.latLng.lat();
+                                                selectedMarkersObjectArray[indx - 1].Longitude = evt.latLng.lng();
+
+                                                
+                                                // markerArrayList[indx - 1] = markerobject;
+                                                
+
+                                                infoWindow.setOptions({
+                                                    content: '<p>Marker dropped: Current Lat: ' + evt.latLng.lat().toFixed(3) + ' Current Lng: ' + evt.latLng.lng().toFixed(3) + '</p>'
+                                                });
+                                                infoWindow.open(map, markerobject);
+                                            });
+
+                                            google.maps.event.addListener(markerobject, 'drag', function (evt) {
+                                                
+                                            });
+                                        }
+
+                                    </script>
+
+
+                                    <div class="card card-info">
+                                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+
+                                            <div class="row">
+                                                <div class="col-10">
+                                                    <h3 class="card-title">Map Locations</h3>
+                                                </div>
+                                                <div class="col-2">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div id="divLegents"></div>
+
+                                            <style>
+                                                #wrapper {
+                                                    position: relative;
+                                                }
+
+                                                #over_map {
+                                                    position: absolute;
+                                                    top: 100px;
+                                                    left: 10px;
+                                                    z-index: 99;
+                                                }
+                                            </style>
+
+                                            <div class="form-group">
+                                                <input id="pac-input"
+                                                       class="form-control"
+                                                       type="text"
+                                                       placeholder="Search Box" />
+                                            </div>
+
+                                            <div id="wrapper">
+                                                <div id="map-canvas" style="height:400px;width:100%;">
+
+                                                </div>
+
+                                                <div id="over_map">
+                                                    <!--
+                                                    <div class="form-group">
+                                                        <input type="button" id="btnSave" value="Mark Competitor Locations on Map" class="btn btn-danger" onclick="markProposedLocations('sh_competitor');" />
+                                                        
+                                                    </div>
+                                                    -->
+
+                                                    <div class="form-group">
+                                                        <input type="button" id="btnList" value="Mark Proposed Locations" class="btn btn-success" onclick="markProposedLocations('sh_proposed');" />
+                                                        <input type="hidden" id="selectionType" value="0" />
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 15).CanEdit)
+                                        {
+                                            <input type="button" id="btnSave" value="Save this Map" class="btn btn-primary" onclick="saveComparison();" />
+                                        }
+
+
+
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" id="modal-map-name">
+
+    <script>
+
+
+
+    </script>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add A Map Title</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="SaveTodo" id="SaveTodo" name="SaveTodo" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <label id="" class="control-label">Map Title</label>
+                                <input id="txtMapTitle" name="txtMapTitle" class="form-control" />
+                                <input id="hdnHeaderId" name="hdnHeaderId" type="hidden" value="0" />
+                                <div id="errMapTitle"></div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+
+
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                <div id="divLoading" class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+
+                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 15).CanEdit)
+                {
+                    <button id="btnSaveMap" type="button" class="btn btn-primary" onclick="saveMap()">Save</button>
+                }
+
+
+            </div>
+            
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

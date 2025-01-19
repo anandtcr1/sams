@@ -1,0 +1,342 @@
+﻿@model sams.Models.ShoppingCenterViewModel
+
+@{
+    ViewData["Title"] = "ViewShoppingCenter";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+    <script>
+    function selectImage() {
+        $("#UploadedImage").click();
+    }
+
+    function postImage() {
+        if (confirm("Do you want to proceed?")) {
+            $("#frmImage").submit();
+        }
+    }
+
+    function removeImage(imageId, propertyId) {
+
+        if (confirm("Do you want to delete the image?")) {
+            location.href = "DeleteImage/?imageId=" + imageId + "&propertyId=" + propertyId;
+        }
+
+    }
+
+    function editDetails(centerId) {
+        location.href = "@Url.Action("EditShoppingCenter", "ShoppingCenter")?centerId=" + centerId;
+    }
+
+        function viewList() {
+            location.href = "Index";
+            location.href = "@Url.Action("Index", "ShoppingCenter")";
+        }
+    </script>
+
+<style>
+    #image-container {
+        /*border-radius: 25px;*/
+        border: 2px solid Black;
+        padding: 15px 15px 15px 15px;
+        margin: 20px 20px 20px 20px;
+        background: #FFFFFF;
+        overflow: visible;
+        box-shadow: 5px 5px 2px #888888;
+        position: relative;
+    }
+
+    #x {
+        position: absolute;
+        background: red;
+        color: white;
+        top: -10px;
+        right: -10px;
+    }
+</style>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Shopping Center Details</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                            <li class="breadcrumb-item active">View Details</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <section class="content">
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-8">
+
+                            <div class="card card-info">
+                                <div class="card-header">
+                                    <h3 class="card-title">Shopping Center Details</h3>
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="ShoppingCenterId" class="form-control" />
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="ShoppingCenterName" class="control-label">Shopping Center Name : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.ShoppingCenterName
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="StateName" class="control-label">State Name : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.StateName
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label for="CityName" class="control-label">City Name : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.CityName
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="Zipcode" class="control-label">Zipcode : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.Zipcode
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="PropertyTypeName" class="control-label">Asset Type : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                $ @Model.PropertyTypeName
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="RentAmount" class="control-label">Rent Amount : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                $ @Model.RentAmount
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="Spaces" class="control-label">Spaces : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.Spaces
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="SpacesAvailable" class="control-label">Spaces Available : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.SpacesAvailable
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="BuildingSize" class="control-label">Building Size : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.BuildingSize
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="ShopDescription" class="control-label">Description : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.ShopDescription
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="CreatedDate" class="control-label">Created Date : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.CreatedDate.ToString("MM/dd/yyyy")
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+
+                        </div>
+
+                        <div class="col-4">
+
+                            <div class="card card-info">
+                                <div class="card-header">
+                                    <h3 class="card-title">Images</h3>
+                                </div>
+                                <div class="card-body">
+
+
+                                    <div class="row">
+                                        @foreach (var imgItem in Model.ImageList)
+                                        {
+                                            <div id="image-container">
+                                                <button id="x" onclick="removeImage(@imgItem.ImageId, @Model.ShoppingCenterId)">
+                                                    X
+                                                </button>
+                                                <img src="@Url.Content("~/" +imgItem.ImageName)" style="width:100px;" />
+                                            </div>
+                                            <!-- <div class="col-lg-6"> -->
+
+                                            <!-- </div> -->
+                                        }
+
+                                    </div>
+
+                                    <form id="frmImage" name="frmImage" method="post" enctype="multipart/form-data" action="UploadImage">
+
+                                        <div class="form-group">
+                                            <input type="file" name="UploadedImage" id="UploadedImage" accept="image/x-png,image/gif,image/jpeg" onchange="postImage()" style="visibility:hidden;" />
+                                            <input type="hidden" id="ImageId" name="ImageId" value="0" />
+                                            <input type="hidden" id="PropertyType" name="PropertyType" value="4" />
+                                            <input type="hidden" id="PropertyId" name="PropertyId" value="@Model.ShoppingCenterId" />
+                                            <a href="javascript:selectImage()" class="btn btn-sm btn-warning">Add Image</a>
+                                        </div>
+
+
+
+
+                                    </form>
+                                    <!-- /input-group -->
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+
+
+                    </div>
+                    <div class="form-group">
+                        <input type="button" id="btnSave" value="Edit" class="btn btn-primary" onclick="editDetails(@Model.ShoppingCenterId);" />
+                        <input type="button" id="btnList" value="Mark As Sold Out" class="btn btn-info" onclick="markAsSoldOut(@Model.ShoppingCenterId);" />
+                        <input type="button" id="btnList" value="View List" class="btn btn-success" onclick="viewList();" />
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+
+

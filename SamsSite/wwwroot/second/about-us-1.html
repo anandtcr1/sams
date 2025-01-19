@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>About SAMS GROUP || Prime and reliable Real Estate and Properties</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="icon" href="images/favicon.png" type="image/x-icon">
+        	
+        <!-- Google Fonts -->	
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i,900,900i%7CPlayfair+Display:400,400i,700,700i,900,900i" rel="stylesheet">
+        
+        <!-- Bootstrap Stylesheet -->	
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        
+        <!-- Font Awesome Stylesheet -->
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+            
+        <!-- Custom Stylesheets -->	
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" id="cpswitch" href="css/lightblue.css?a=1">
+        <link rel="stylesheet" href="css/responsive.css">
+    </head>
+    
+    
+    <body>
+        
+        <!--====== LOADER =====-->
+        <div class="loader"></div>
+        
+        
+        <!--======== SEARCH-OVERLAY =========-->       
+        <div class="overlay">
+            <a href="javascript:void(0)" id="close-button" class="closebtn">&times;</a>
+            <div class="overlay-content">
+                <div class="form-center">
+                    <form>
+                    	<div class="form-group">
+                        	<div class="input-group">
+                        		<input type="text" class="form-control" placeholder="Search..." required />
+                            	<span class="input-group-btn"><button type="submit" class="btn"><span><i class="fa fa-search"></i></span></button></span>
+                            </div><!-- end input-group -->
+                        </div><!-- end form-group -->
+                    </form>
+                </div><!-- end form-center -->
+            </div><!-- end overlay-content -->
+        </div><!-- end overlay -->
+        
+        
+        <!--============= TOP-BAR ===========-->
+        <div id="top-bar" class="tb-text-white">
+            <div class="container">
+                <div class="row">          
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <div id="info">
+                            <ul class="list-unstyled list-inline">
+                                <li><span><i class="fa fa-map-marker"></i></span>7935 Council Place, Matthews, NC 28105</li>
+                                <li><span><i class="fa fa-phone"></i></span>704-819-6919</li>
+                            </ul>
+                        </div><!-- end info -->
+                    </div><!-- end columns -->
+                    
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                        <div id="links">
+                            <ul class="list-unstyled list-inline">
+                                <li><a href="login.html"><span><i class="fa fa-lock"></i></span>Login</a></li>
+                                <li><a href="registration.html"><span><i class="fa fa-plus"></i></span>Sign Up</a></li>
+                            </ul>
+                        </div><!-- end links -->
+                    </div><!-- end columns -->				
+                </div><!-- end row -->
+            </div><!-- end container -->
+        </div><!-- end top-bar -->
+
+        <nav class="navbar navbar-default main-navbar navbar-custom navbar-white" id="mynavbar-1">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" id="menu-button">
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>                        
+                    </button>
+                    <div class="header-search hidden-lg">
+                    	<a href="javascript:void(0)" class="search-button"><span><i class="fa fa-search"></i></span></a>
+                    </div>
+                    <a href="#" class="navbar-brand">
+                        <img src="images/logo_4.png" class="img-logo-king" alt="logo-img" style="width:130px;" />
+                    </a>
+                </div><!-- end navbar-header -->
+                
+                <div class="collapse navbar-collapse" id="myNavbar1">
+                    <ul class="nav navbar-nav navbar-right navbar-search-link">
+                      <li class="dropdown active"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Home<span></i></span></a>
+                            			
+                        </li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">About<span></i></span></a>
+                           		
+                        </li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Submit Site<span></i></span></a>
+                          			
+                        </li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Surplus<span></i></span></a>
+                            			
+                        </li>
+                                    <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Sales<span><i class="fa fa-angle-down"></i></span></a>
+                            	<ul class="dropdown-menu">
+                                    	<li><a href="flight-homepage.html">Gas Stations</a></li>
+                                        <li><a href="flight-listing-left-sidebar.html">Convenience Stores</a></li>
+                                </ul>		
+                        </li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Contact<span></i></span></a>
+                            	
+                        </li>
+                        <li><a href="javascript:void(0)" class="search-button"><span><i class="fa fa-search"></i></span></a></li>
+                    </ul>
+                </div><!-- end navbar collapse -->
+            </div><!-- end container -->
+        </nav><!-- end navbar -->
+        
+        <div class="sidenav-content">
+              <div id="mySidenav" class="sidenav" >
+                <h2 id="web-name"><span><i class="fa fa-plane"></i></span>Sams Holdings</h2>
+
+                <div id="main-menu">
+                	<div class="closebtn">
+                        <button class="btn btn-default" id="closebtn">&times;</button>
+                    </div><!-- end close-btn -->
+                    
+                    <div class="list-group panel">
+                    
+                        <a href="#home-links" class="list-group-item active" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-home link-icon"></i></span>Home<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#flights-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-plane link-icon"></i></span>About<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#hotels-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-building link-icon"></i></span>Submit Site<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#tours-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-globe link-icon"></i></span>Surplus<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#cruise-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-ship link-icon"></i></span>Sales<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                        <a href="#cars-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-car link-icon"></i></span>Guest<span><i class="fa fa-chevron-down arrow"></i></span></a>
+						
+						<a href="#cars-links" class="list-group-item" data-toggle="collapse" data-parent="#main-menu"><span><i class="fa fa-car link-icon"></i></span>Contact<span><i class="fa fa-chevron-down arrow"></i></span></a>
+                        
+                        
+                    </div><!-- end list-group -->
+                </div><!-- end main-menu -->
+            </div><!-- end mySidenav -->
+        </div><!-- end sidenav-content -->
+        
+        
+        <!--================= PAGE-COVER ================-->
+        <section class="page-cover" id="cover-byf-info">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                    	<h1 class="page-title">About</h1>
+                        <ul class="breadcrumb">
+                            <li><a href="#">Home</a></li>
+                            <li class="active">About sams</li>
+                        </ul>
+                    </div><!-- end columns -->
+                </div><!-- end row -->
+            </div><!-- end container -->
+        </section><!-- end page-cover -->
+        
+        
+        <!--==== INNERPAGE-WRAPPER =====-->
+        <section class="innerpage-wrapper">
+        	<div id="byf-guidelines" class="innerpage-section-padding">
+        		<div class="container">
+        			<div class="row">
+
+                    	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 content-side byf-info">
+                        	<div class="space-right">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a href="#airport-info" data-toggle="tab"><span><i class="fa fa-building"></i></span>Who we are </a></li>
+                                    <!--<li><a href="#visa-passport" data-toggle="tab"><span><i class="fa fa-ticket"></i></span>Visa & Passport</a></li>
+                                    <li><a href="#check-in" data-toggle="tab"><span><i class="fa fa-check"></i></span>Check In</a></li>
+                                    <li><a href="#baggage-info" data-toggle="tab"><span><i class="fa fa-suitcase"></i></span>Baggage Information</a></li>-->
+                                </ul>
+                                
+                                <div class="tab-content">
+    
+                                    <div id="airport-info" class="tab-pane in active">
+                                        <div class="byf-info-wrap">
+                                            <img src="images/about-us-2-ls.jpg" class="img-responsive" alt="byf-info-img">
+                                            <h3 class="byf-info-heading">Creating Real Value</h3>
+                                            <p>Sam’s Holdings is a sister company to Sam’s Xpress Car Wash and Sam’s Mart Convenience stores.  We select sites and develop high-quality Commercial properties not only for our internal clients, but also for third party users.  Furthermore, as current owners of many well-located parcels of land, many of which are located at signalized intersections, we seek to repurpose these sites as attractive, neighborhood friendly properties.  We understand how to build and manage well-located projects that foster growth and impact our communities.</p>
+                                            <p>For more than 26 years, we have focused on building next generation gasoline stations and carwash facilities that provide superior results.  Experienced in everything from C-stores to retail and strip centers, our team can handle all aspects from site selection and planning to construction management. We understand that our properties leave an impression on our development partners, and we pride ourselves on providing superior properties by doing things right. Our thorough development process includes:</p>
+                                            <ul>
+                                                <li>MSA & submarket research</li>
+                                                <li>Demographic & psychographic analysis</li>
+                                                <li>Identification</li>
+                                                <li>Contracting</li>
+                                                <li>Acquisitions</li>
+												<li>Due diligence, entitlements, permitting</li>
+												<li>Design development</li>
+												<li>Construction management</li>
+
+                                            </ul>
+                                        </div><!-- end byf-info-wrap -->
+                                        
+                                        
+                                    </div><!-- end airport-info -->
+                                    
+                                    <div id="visa-passport" class="tab-pane">
+                                        <div class="byf-info-wrap">
+                                            <img src="images/byf-visa-passport.jpg" class="img-responsive" alt="byf-info-img">
+                                            <h3 class="byf-info-heading">Passports & Visas</h3>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper.</p>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri.</p>
+                                        </div><!-- end byf-info-wrap -->
+                                        
+                                        <div class="byf-info-wrap">
+                                            <h3 class="byf-info-heading">Custom & Immigration</h3>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper.</p>
+                                            <ul>
+                                                <li>Veniam delectus ei vis st atqui timeam mnesarchum at.</li>
+                                                <li>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri.</li>
+                                                <li>Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper.</li>
+                                                <li>Ad duo fugit aeque fabulas, in lucilius prodesset pri.</li>
+                                                <li>Veniam delectus ei vis st atqui timeam mnesarchum at.</li>
+                                            </ul>
+                                        </div><!-- end byf-info-wrap -->
+                                    </div><!-- end visa-passport -->
+                                    
+                                    <div id="check-in" class="tab-pane">
+                                        <div class="byf-info-wrap">
+                                            <img src="images/byf-check-in.jpg" class="img-responsive" alt="byf-info-img">
+                                            <h3 class="byf-info-heading">Airport Check-In</h3>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper.</p>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri.</p>
+                                        </div><!-- end byf-info-wrap -->
+                                        
+                                        <div class="byf-info-wrap">
+                                            <h3 class="byf-info-heading">Website Check-In</h3>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper.</p>
+                                        </div><!-- end byf-info-wrap -->
+                                    </div><!-- end check-in -->
+                                    
+                                    <div id="baggage-info" class="tab-pane">                                    
+                                        <div class="byf-info-wrap">
+                                            <img src="images/byf-baggage-info.jpg" class="img-responsive" alt="byf-info-img">
+                                            <h3 class="byf-info-heading">Booking of Baggage</h3>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper.</p>
+                                        </div><!-- end byf-info-wrap -->
+                                        
+                                        <div class="byf-info-wrap">
+                                            <h3 class="byf-info-heading">Max Limit Baggage</h3>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper.</p>
+                                            <p>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri. Veniam delectus ei vis. Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper. Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri.</p>
+                                            <ul>
+                                                <li>Veniam delectus ei vis st atqui timeam mnesarchum at.</li>
+                                                <li>Lorem ipsum dolor sit amet, ad duo fugit aeque fabulas, in lucilius prodesset pri.</li>
+                                                <li>Est atqui timeam mnesarchum at, pro an eros perpetua ullamcorper.</li>
+                                                <li>Ad duo fugit aeque fabulas, in lucilius prodesset pri.</li>
+                                                <li>Veniam delectus ei vis st atqui timeam mnesarchum at.</li>
+                                            </ul>
+                                        </div><!-- end byf-info-wrap -->
+                                    </div><!-- end baggage-info -->
+                                    
+                                </div><!-- end tab-content -->
+                        	</div><!-- end space-right -->
+                        </div><!-- end columns -->
+						
+                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 side-bar blog-sidebar right-side-bar">
+                      
+                            <div class="row">    
+                            	<div class="col-xs-12 col-sm-6 col-md-12">
+                                    <div class="side-bar-block categories">
+                                       
+                                        <ul class="nav nav-pills nav-stacked">
+										 
+                                            
+                                            <li style="margin-top:30px;"><a href="#"><span><i class="fa fa-angle-right"></i></span>Retail Leasing</a></li>
+                                            <li><a href="#"><span><i class="fa fa-angle-right"></i></span>Office Leasing</a></li>
+                                          
+                                        </ul>
+                                    </div><!-- end side-bar-block -->
+                                </div>
+
+
+							</div><!-- end row -->
+                            
+							<div class="row">
+                            	<div class="col-xs-12 col-sm-6 col-md-12">
+                                    <div class="side-bar-block contact">
+                                        <h2 class="side-bar-heading">Contact Us</h2>
+                                        <div class="c-list">
+                                            <div class="icon"><span><i class="fa fa-envelope"></i></span></div>
+                                            <div class="text"><p>pjoseph@samsholdings.com</p></div>
+                                        </div><!-- end c-list -->
+                                        
+                                        <div class="c-list">
+                                            <div class="icon"><span><i class="fa fa-phone"></i></span></div>
+                                            <div class="text"><p>704-819-6919</p></div>
+                                        </div><!-- end c-list -->
+                                        
+                                        <div class="c-list">
+                                            <div class="icon"><span><i class="fa fa-map-marker"></i></span></div>
+                                            <div class="text"><p>7935 Council Place, Matthews, NC 28105</p></div>
+                                        </div><!-- end c-list -->
+                                    </div><!-- end side-bar-block -->
+                                </div><!-- end columns -->
+                                
+                            	<div class="col-xs-12 col-sm-6 col-md-12">
+                                    <div class="side-bar-block follow-us">
+                                        <h2 class="side-bar-heading">Follow Us</h2>
+                                        <ul class="list-unstyled list-inline">
+                                            <li><a href="#"><span><i class="fa fa-facebook"></i></span></a></li>
+                                            <li><a href="#"><span><i class="fa fa-twitter"></i></span></a></li>
+                                            <li><a href="#"><span><i class="fa fa-linkedin"></i></span></a></li>
+                                            <li><a href="#"><span><i class="fa fa-google-plus"></i></span></a></li>
+                                            <li><a href="#"><span><i class="fa fa-pinterest-p"></i></span></a></li>
+                                        </ul>
+                                    </div><!-- end side-bar-block -->
+								</div><!-- end columns -->
+                                
+                            </div><!-- end row -->
+                        </div><!-- end columns -->
+                        
+                    </div><!-- end row -->
+        		</div><!-- end container -->
+        	</div><!-- end byf-guidelines --> 
+        </section><!-- end innerpage-wrapper -->
+        
+        
+        <!--======================= BEST FEATURES =====================-->
+       
+        
+        <!--========================= NEWSLETTER-1 ==========================-->
+       
+        
+        
+        <!--======================= FOOTER =======================-->
+      <section id="footer" class="ftr-heading-w ftr-heading-mgn-2">
+        
+            <div id="footer-top" class="banner-padding ftr-top-grey">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 footer-widget ftr-about ftr-our-company">
+                            <h3 class="footer-heading">OUR COMPANY</h3>
+                            <p>Sam’s Holdings is a sister company to Sam’s Xpress Car Wash and Sam’s Mart Convenience stores. We select sites and develop high-quality Commercial properties not only for our internal clients, but also for third party users. We understand how to build and manage well-located projects that foster growth and impact our communities.</p>
+                            <ul class="social-links list-inline list-unstyled">
+                            	<li><a href="#"><span><i class="fa fa-facebook"></i></span></a></li>
+                            	<li><a href="#"><span><i class="fa fa-twitter"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-google-plus"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-pinterest-p"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-instagram"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-linkedin"></i></span></a></li>
+                                <li><a href="#"><span><i class="fa fa-youtube-play"></i></span></a></li>
+                            </ul>
+                        </div><!-- end columns -->
+                        
+                        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 footer-widget ftr-in-touch">
+                            <h3 class="footer-heading">Get in Touch</h3>
+                            <form>
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-5 col-lg-5 slide-right-vis">
+                                    
+                                        <div class="form-group">
+                                             <input type="text" class="form-control" placeholder="Name"  required/>
+                                        </div>
+        
+                                        <div class="form-group">
+                                             <input type="text" class="form-control" placeholder="Email"  required/>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                             <input type="text" class="form-control" placeholder="Subject"  required/>
+                                        </div>
+                                        
+                                    </div><!-- end columns -->
+        
+                                    <div class="col-sm-6 col-md-7 col-lg-7 slide-left-vis">
+                                        <div class="form-group">
+                                            <textarea class="form-control" placeholder="Your Message"></textarea>
+                                        </div>
+                                    </div><!-- end columns -->
+                                    
+                                    <div class="col-sm-12 text-center">
+                                        <button class="btn btn-orange">Send</button>
+                                    </div><!-- end butn -->
+                                </div><!-- end row -->
+                            </form>
+                        </div><!-- end columns -->
+                        
+                    </div><!-- end row -->
+                </div><!-- end container -->
+            </div><!-- end footer-top -->
+
+            <div id="footer-bottom" class="ftr-bot-black">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" id="copyright">
+                            <p>© 2019 <a href="#">SAMS LLC</a>. All rights reserved.</p>
+                        </div><!-- end columns -->
+                        
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" id="terms">
+                            <ul class="list-unstyled list-inline">
+                            	<li><a href="#">Terms & Condition</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                            </ul>
+                        </div><!-- end columns -->
+                    </div><!-- end row -->
+                </div><!-- end container -->
+            </div><!-- end footer-bottom -->
+            
+        </section><!-- end footer -->
+        
+        
+        <!-- Page Scripts Starts -->
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/custom-navigation.js"></script>
+        <!-- Page Scripts Ends -->
+        
+	</body>
+</html>

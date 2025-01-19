@@ -1,0 +1,231 @@
+﻿@model sams.Models.ModuleRolePermissionViewModel
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "AddRole";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var i = 0;
+}
+
+
+
+<script>
+    function saveData() {
+
+        var txtAssetTypeName = $("#RoleName").val();
+        if (txtAssetTypeName == '') {
+            canSave = false;
+            $("#errRoleName").html("<font color='red'>Please enter Role Name</font>");
+            $("#RoleName").focus();
+            return;
+        }
+        else {
+            $("#errRoleName").html("");
+        }
+
+        $("#SaveRole").submit();
+    }
+
+    function back() {
+        var baseUrl = "@Url.Action("Index", "SamsRole")";
+        location.href = baseUrl;
+        }
+
+
+</script>
+
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Role</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+
+
+
+        <div class="card card-info">
+            <div class="card-header @sams.Common.Helper.PrimaryColor ">
+                <h3 class="card-title">Role</h3>
+            </div>
+            <div class="card-body">
+
+                <div class="col-lg-8">
+
+                    <form id="SaveRole" name="SaveRole" action="@Url.Action("SaveRole", "SamsRole")" method="post" enctype="multipart/form-data">
+
+                        <div class="form-group">
+                            <input type="hidden" asp-for="@Model.SamsRole.RoleId" class="form-control" />
+                            <label for="RoleName" class="control-label">Role Name *</label>
+                            <input id="RoleName" name="SamsRole.RoleName" value="@Model.SamsRole.RoleName" class="form-control" />
+                            <div id="errRoleName"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="checkbox" asp-for="@Model.SamsRole.CanPublishListings">
+                            <label asp-for="@Model.SamsRole.CanPublishListings">
+                                Can Publish Listing
+                            </label>
+                        </div>
+
+
+                        <section class="content">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header @sams.Common.Helper.PrimaryColor ">
+                                            <h3 class="card-title">Permissions</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <div class="card-body">
+                                            <table id="example1_" class="table table-sm text-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Module Name</th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @for (int item = 0; item < Model.RolePermissionList.Count; item++)
+                                                    {
+                                                        /*
+                                                        var readCheckBoxId = "read_" + item.ModuleName.Replace(" ", "_").Replace("-", "_");
+                                                        var createCheckBoxId = "create_" + item.ModuleName.Replace(" ", "_").Replace("-", "_");
+                                                        var editCheckBoxId = "edit_" + item.ModuleName.Replace(" ", "_").Replace("-", "_");
+                                                        var deleteCheckBoxId = "delete_" + item.ModuleName.Replace(" ", "_").Replace("-", "_");
+                                                        */
+
+
+                                                        <tr>
+                                                            <td>
+                                                                <label class="control-label">@Model.RolePermissionList[item].ModuleName</label>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="icheck-success d-inline">
+                                                                    <input type="checkbox" asp-for="@Model.RolePermissionList[item].CanRead">
+                                                                    <label asp-for="@Model.RolePermissionList[item].CanRead">
+                                                                        View Details
+                                                                    </label>
+
+                                                                    <input type="hidden" asp-for="@Model.RolePermissionList[item].RolePermissionId">
+                                                                    <input type="hidden" asp-for="@Model.RolePermissionList[item].RoleId">
+                                                                    <input type="hidden" asp-for="@Model.RolePermissionList[item].RoleName">
+                                                                    <input type="hidden" asp-for="@Model.RolePermissionList[item].ModuleId">
+                                                                    <input type="hidden" asp-for="@Model.RolePermissionList[item].ModuleName">
+                                                                </div>
+                                                            </td>
+
+
+                                                            <td>
+                                                                <div class="icheck-success d-inline">
+                                                                    <input type="checkbox" asp-for="@Model.RolePermissionList[item].CanCreate">
+                                                                    <label asp-for="@Model.RolePermissionList[item].CanCreate">
+                                                                        Create New
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="icheck-success d-inline">
+                                                                    <input type="checkbox" asp-for="@Model.RolePermissionList[item].CanEdit">
+                                                                    <label asp-for="@Model.RolePermissionList[item].CanEdit">
+                                                                        Edit
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="icheck-success d-inline">
+                                                                    <input type="checkbox" asp-for="@Model.RolePermissionList[item].CanDelete">
+                                                                    <label asp-for="@Model.RolePermissionList[item].CanDelete">
+                                                                        Delete
+                                                                    </label>
+                                                                </div>
+                                                            </td>
+
+                                                        </tr>
+
+                                                        i = i + 1;
+                                                    }
+
+
+
+                                                </tbody>
+
+                                            </table>
+
+
+
+                                        </div>
+                                        <!-- /.card-body -->
+
+                                        <div class="form-group">
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 12).CanEdit)
+                                            {
+                                                <input type="button" id="btnSave" value="Submit" class="btn btn-primary" onclick="saveData();" />
+                                            }
+
+                                            <input type="button" id="btnCancel" value="Cancel" class="btn btn-info" onclick="back();" />
+                                        </div>
+
+                                    </div>
+                                    <!-- /.card -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </section>
+
+                    </form>
+
+
+
+                </div>
+
+
+            </div>
+            <!-- /.card-body -->
+
+
+
+        </div>
+
+
+
+
+    </section>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#example1').DataTable({
+            "lengthMenu": [[25, 50, 75, -1], [25, 50, 75, "All"]]
+        });
+    });
+</script>

@@ -1,0 +1,231 @@
+﻿@model IEnumerable<sams.Models.FutureTenantCriticalDateModel>
+
+@{
+    ViewData["Title"] = "GetFutureTenantCriticalDateList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Future Tenant Critial Time Tracker</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <form asp-action="SaveFutureTenant" id="frmSaveFutureTenant" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="card card-info">
+                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                            <div class="row">
+                                <div class="col-10">
+                                    <h3 class="card-title">Critical Date Tracker</h3>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modal-new-period">
+                                        Add New
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-body">
+
+
+
+                            <table id="example1_" class="table table-sm text-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Critical Item</th>
+                                        <th>Duration</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Days To Expire</th>
+                                        <th>Notes</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.CriticalDateMaster</td>
+                                            <td>@item.Duration</td>
+                                            <td>@item.StartDate.ToString("MM/dd/yyyy")</td>
+                                            <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+                                            <td>@item.DaysToExpire</td>
+                                            <td>@item.CriticalDateNotes</td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <!--<a href="javascript:editCriticalDate(@item.CriticalDateId, '@item.CriticalDateMaster', '@item.StartDate.ToString("yyyy-MM-dd")', '@item.Duration', '@item.CriticalDateNotes');" class="btn btn-info"><i class="fas fa-eye"></i></a>-->
+                                                    <a href="javascript:editCriticalDate(@item.CriticalDateId, '@item.CriticalDateMaster', '@item.StartDate.ToString("MM-dd-yyyy")', '@item.Duration', '@item.CriticalDateNotes');" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                    <a href="javascript:deletePeriod(@item.CriticalDateId)" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+
+
+
+                            <button type="button" class="btn btn-info" onclick="goBack()">
+                                Back
+                            </button>
+
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+
+                </div>
+            </div>
+        </form>
+
+
+
+    </section>
+</div>
+
+
+<script>
+    function goBack() {
+        window.location.href = '@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=' + @ViewBag.NetleaseId;
+    }
+
+    function editCriticalDate(criticalDateId, dateMaster, startDate, duration, periodNotes) {
+        $("#CriticalDateId").val(criticalDateId);
+        $("#idCriticalDateMaster").val(dateMaster);
+        $("#p_StartDate").val(startDate);
+        $("#txtDuration").val(duration);
+        $("#p_CriticalDateNotes").val(periodNotes);
+
+        $('#modal-new-period').modal('show');
+
+    }
+
+    function deletePeriod(criticalDateId) {
+        if (confirm("Confirm Delete?")) {
+            window.location.href = '@Url.Action("DeleteFutureTenantCriticalDate", "NetLeaseProperties")?criticalDateId=' + criticalDateId + '&futureTenantId=' + @ViewBag.futureTenantId + "&netleaseId=" + @ViewBag.NetleaseId;
+        }
+
+    }
+
+</script>
+
+
+<div class="modal fade" id="modal-new-period">
+
+    <script>
+        function submitPeriod() {
+
+            var criticalDateMaster = $("#idCriticalDateMaster").val().trim();
+            var sDate = $("#p_StartDate").val();
+            var duration = $("#txtDuration").val().trim();
+            var criticalDateNotes = $("#p_CriticalDateNotes").val();
+
+            if (criticalDateMaster == "") {
+                $("#errCriticalDateMaster").html("<font color='red'>Please Enter Critical Item</font>");
+                return;
+            }
+            
+            if (sDate == '') {
+                $("#errStartDate").html("<font color='red'>Please Enter Start Date</font>");
+                return;
+            }
+            
+            if (duration == '') {
+                $("#errDuration").html("<font color='red'>Please Enter Duration</font>");
+                return;
+            }
+            
+            
+            if (criticalDateNotes == '') {
+                $("#errCriticalDateNotes").html("<font color='red'>Please Enter Notes</font>");
+                return;
+            }
+            
+            $("#SaveFutureTenantCriticalDate").submit();
+        }
+
+
+    </script>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Critical Item</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("SaveFutureTenantCriticalDate", "NetLeaseProperties")" id="SaveFutureTenantCriticalDate" name="SaveFutureTenantCriticalDate" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="idCriticalDateMaster" class="control-label">Critical Item * </label>
+                                    <input type="text" value="" name="CriticalDateMaster" id="idCriticalDateMaster" class="form-control" />
+                                </div>
+
+
+                                <input type="hidden" name="NetleasePropertyId" value="@ViewBag.NetleaseId" id="NetleasePropertyId" />
+                                <input type="hidden" name="CriticalDateId" id="CriticalDateId" value="0" />
+                                <input type="hidden" name="IsFromNetLease" id="IsFromNetLease" value="1" />
+                                <input type="hidden" name="FutureTenantId" value="@ViewBag.futureTenantId" />
+                                <div id="errCriticalDateMaster"></div>
+                            </div>
+
+
+                            <!-- /.input group -->
+                            <div class="form-group">
+                                <label for="p_StartDate" class="control-label">Start Date * </label>
+                                <input type="text" value="" name="StartDate" class="form-control" id="p_StartDate" readonly />
+                                <div id="errStartDate"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Duration" class="control-label">Duration *</label>
+                                <input type="text" value="" name="AddedDuration" class="form-control" id="txtDuration" onkeypress="return isNumberKey(event)" />
+                                <div id="errDuration"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CriticalDateNotes" class="control-label">Notes * </label>
+                                <textarea name="CriticalDateNotes" class="form-control" rows="5" id="p_CriticalDateNotes"></textarea>
+                                <div id="errCriticalDateNotes"></div>
+                            </div>
+
+                            
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitPeriod()">Save</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

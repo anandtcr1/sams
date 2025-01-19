@@ -1,0 +1,240 @@
+﻿@model sams.Models.NetleasePropertiesViewModel
+
+@{
+    ViewData["Title"] = "AddNetLeaseProperties";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+
+    function saveData() {
+        var canSave = true;
+        //var selMarketId = $("#MarketName").val();
+
+        var assetId = $("#AssetId").val();
+        
+        if (assetId == '') {
+            canSave = false;
+            $("#errAssetId").html("<font color='red'>Please enter Asset Id</font>");
+            $("#AssetId").focus();
+            return;
+        }
+        else {
+            $("#errAssetId").html("");
+        }
+
+        var city = $("#City").val();
+        if (city == '') {
+            canSave = false;
+            $("#errCity").html("<font color='red'>Please enter City</font>");
+            $("#City").focus();
+            return;
+        }
+        else {
+            $("#errCity").html("");
+        }
+
+
+        var assetName = $("#AssetName").val();
+        if (assetName == '') {
+            canSave = false;
+            $("#errAssetName").html("<font color='red'>Please enter Asset Name</font>");
+            $("#AssetName").focus();
+            return;
+        }
+        else {
+            $("#errAssetName").html("");
+        }
+
+
+        var propertyPrice = $("#PropertyPrice").val();
+        if (propertyPrice == '') {
+            canSave = false;
+            $("#errPropertyPrice").html("<font color='red'>Please enter Price</font>");
+            $("#PropertyPrice").focus();
+            return;
+        }
+        else {
+            if (capRate == 0) {
+                canSave = false;
+                $("#errPropertyPrice").html("<font color='red'>Please enter Price</font>");
+                $("#PropertyPrice").focus();
+                return;
+            }
+            else {
+                $("#errPropertyPrice").html("");
+            }
+
+        }
+
+
+
+        var capRate = $("#CapRate").val();
+        if (capRate == '') {
+            canSave = false;
+            $("#errCapRate").html("<font color='red'>Please enter Cap rate</font>");
+            $("#CapRate").focus();
+            return;
+        }
+        else {
+            if (capRate == 0) {
+                canSave = false;
+                $("#errCapRate").html("<font color='red'>Please enter Cap rate</font>");
+                $("#CapRate").focus();
+                return;
+            }
+            else {
+                $("#errCapRate").html("");
+            }
+            
+        }
+
+        $("#frmSaveNetLeaseProperties").submit();
+    }
+
+
+
+
+</script>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Property</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form id="frmSaveNetLeaseProperties" name="frmSaveNetLeaseProperties" action="SaveNetLeaseProperties" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-lg-6">
+
+
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="NetleasePropertyId" class="form-control" />
+                                        <label asp-for="AssetId" class="control-label">Asset Id *</label>
+                                        <input asp-for="AssetId" class="form-control" />
+                                        <div id="errAssetId"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="AssetName" class="control-label">Asset Name *</label>
+                                        <input asp-for="AssetName" class="form-control" />
+                                        <div id="errAssetName"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="selState" class="control-label">Select State</label>
+                                        <select id="StateId" name="StateId" class="form-select form-control">
+                                            @if (Model != null)
+                                            {
+                                                foreach (var itemSel in Model.StateList)
+                                                {
+                                                    if (Model.StateId == itemSel.StateId)
+                                                    {
+                                                        <option selected value="@itemSel.StateId">@itemSel.StateName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                                    }
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="City" class="control-label">City *</label>
+                                        <input asp-for="City" class="form-control" />
+                                        <div id="errCity"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="PropertyPrice" class="control-label">Price</label>
+                                        <input asp-for="PropertyPrice" class="form-control" />
+                                        <div id="errPropertyPrice"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="CapRate" class="control-label">Cap Rate</label>
+                                        <input asp-for="CapRate" class="form-control" />
+                                        <div id="errCapRate"></div>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+
+
+                                    <div class="form-group">
+                                        <label for="AssetTypeId" class="control-label">Select Asset Type</label>
+                                        <select id="AssetTypeId" name="AssetTypeId" class="form-select form-control">
+                                            @if (Model != null)
+                                            {
+                                                foreach (var itemSel in Model.AssetTypeList)
+                                                {
+                                                    if (Model.AssetTypeId == itemSel.AssetTypeId)
+                                                    {
+                                                        <option selected value="@itemSel.AssetTypeId">@itemSel.AssetTypeName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@itemSel.AssetTypeId">@itemSel.AssetTypeName</option>
+                                                    }
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Term" class="control-label">Term</label>
+                                        <textarea rows="4" asp-for="Term" class="form-control"></textarea>
+                                        <div id="errAddress"></div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="UploadedPdf" class="control-label">Upload Brochure as Pdf/Image</label>
+                                        <input type="file" id="UploadedPdf" name="UploadedPdf" class="form-control" />
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <!--
+                                    <div class="form-group">
+
+                                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpired" data-sitekey="6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL"></div>
+                                    </div>
+                                    -->
+                                    <div class="form-group">
+                                        <input type="button" id="btnSave" value="Save" class="btn btn-primary" onclick="saveData();" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+</div>
+
+
+

@@ -1,0 +1,577 @@
+﻿@model sams.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+
+    /*
+    var latt = sams.Common.Helper.SamsLatitude;
+    var lng = sams.Common.Helper.SamsLongitude;
+
+    */
+
+    var latt = "35.23601940074175";
+    var lng = "-80.82292742675781";
+
+}
+
+<script>
+    function doSearch() {
+        var stateId = $("#selState").val();
+        var typeId = $("#selType").val();
+
+        
+        if (typeId == 0) {
+            alert("Please select a property type");
+            return;
+        }
+
+        if (typeId == 1) {
+            location.href = "/RealEstate/Surplus_Real_Estate?stateId=" + stateId;
+        }
+        else if (typeId == 2) {
+            location.href = "/RealEstate/net_lease_properties?stateId=" + stateId;
+        }
+        else if (type == 3) {
+            location.href = "/RealEstate/c_store_list?stateId=" + stateId;
+        }
+    }
+
+    const myFont = new FontFace('My Font', 'url(https://myfont.woff2)');
+
+    myFont.load().then((font) => {
+        document.fonts.add(font);
+
+        console.log('Font loaded');
+    });
+
+</script>
+
+<style>
+    .overlay1 {
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 100%;
+        -webkit-transition: .2s all;
+        -webkit-filter: brightness(50%);
+    }
+
+    .item1 {
+        position: relative;
+    }
+</style>
+
+
+
+<!-- header-end -->
+<!-- slider_area_start -->
+<div class="slider_area">
+    <div class="slider_active owl-carousel">
+        
+        <div class="single_slider  d-flex align-items-center slider_bg_1  ">
+            
+            <div class="container" style="background-color: rgba(0, 0, 0, 0); padding:10px;">
+
+                <div class="row align-items-center" style="margin-bottom:190px;">
+                    <div class="col-xl-12 col-md-12">
+                        <div class="slider_text text-center " >
+                            <p><h3 style="text-transform: uppercase;">Bringing Quality Service <br /> to the Community</h3></p>
+                            <p style="font-size: 30px;"> Taking our customer service to Real Estate</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--
+
+    <a href="#" class="boxed-btn3">Find Out More</a>
+
+    <div class="single_slider  d-flex align-items-center slider_bg_2 overlay">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-xl-12 col-md-12">
+                    <div class="slider_text text-center">
+                        <h3>PRIME PROPERTIES</h3>
+                        <p>Sams Holding is the trusted partner</p>
+                        <a href="#" class="boxed-btn3">Explore Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="single_slider  d-flex align-items-center slider_bg_3 overlay">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-xl-12 col-md-12">
+                    <div class="slider_text text-center">
+                        <h3>GUARANTEE OF SERVICE</h3>
+                        <p>100% trusted delivery</p>
+                        <a href="#" class="boxed-btn3">Explore Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+
+    </div>
+
+</div>
+<!-- slider_area_end -->
+<!-- where_togo_area_start  -->
+<div class="where_togo_area">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4">
+                <div class="form_area">
+                    <h3>Find Your Perfect Location</h3>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="search_wrap">
+                    <div class="search_form" >
+
+                        <div class="input_field">
+                            <select id="selState" class="select2 form-control" style="height:30px;" >
+                                <option value="0">State</option>
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model.StateList)
+                                    {
+                                        <option value="@item.StateId">@item.StateName</option>
+                                    }
+                                }
+
+
+                            </select>
+                        </div>
+                        <div class="input_field">
+                            <select id="selType" class="select2 form-control" style="height:30px;" >
+                                <option value="0">Type</option>
+                                <option value="1">Surplus Real Estate</option>
+                                <option value="2">Net Lease Properties</option>
+                                <option value="3">C-Stores</option>
+                            </select>
+                        </div>
+                        <div class="search_btn">
+                            <button class="boxed-btn4 " type="submit" onclick="doSearch()">Property Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- where_togo_area_end  -->
+<!-- popular_destination_area_start  -->
+<div class="popular_destination_area" >
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12" >
+                <div class="section_title text-center mb_70">
+                    <h3> Who We Are </h3>
+                </div>
+
+                
+
+
+                
+
+
+                <div class="section_title text-center mb_70">
+
+                    <p style="margin-top:25px;">
+                        Sam’s Holdings<sup style="font-size: 7px; vertical-align:middle;">SM</sup>, LLC is privately owned and operated in the Matthews area of Charlotte, NC.  It is the parent company to
+                        Sam’s Xpress® Car Wash and Sam’s Mart Convenience stores.  We select locations with the highest quality value for
+                        our customers and we know how to choose the best that is available to foster growth and bring a positive impact to our community.
+                    </p>
+                    <p style="margin-top:25px;">
+                        Sam’s Holdings<sup style="font-size: 7px; vertical-align:middle;">SM</sup>, LLC is a company with an eye on the future.  As a developer of high-quality commercial properties, we ensure that our
+                        clients can find the perfect location for their next venture.  Our priority is to provide surplus real estate, C-stores,
+                        and net lease properties with unbeatable value to our clients.
+
+                    </p>
+                    <p style="margin-top:25px;">
+                        We are committed to developing strong relationships with our clients that uphold our values of <i>
+    integrity, accountability,
+    transparency, and professionalism
+</i> while negotiating mutually beneficial solutions.
+                    </p>
+
+                    <p style="margin-top:25px;">
+                        <b style="color:black">We look forward to helping you ﬁnd the perfect site for your next commercial project.</b>
+                    </p>
+
+                    <!--
+    <a href="#" class="boxed-btn3">Call Us</a>
+    <a href="#" class="boxed-btn3_reverse_color">Read More</a>
+    -->
+                </div>
+            </div>
+        </div>
+
+        <!--
+        <div class="row">
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/sams-mart.png" alt="">
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/burger-king.png" alt="">
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/mdDonald.png" alt="">
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/popeyes.png" alt="">
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/seven-11.png" alt="">
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/sams-car-wash.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+
+
+    </div>
+</div>
+
+
+<div class="where_togo_area popular_destination_area">
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 align-items-center" style="text-align:center; margin-bottom:25px; color:#ffffff; font-size:40px; ">
+                Our Clients Include:
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        
+        <div class="row align-items-center">
+
+            
+
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/p6.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/p2.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/p3.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/p4.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/p5.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <div class="single_destination">
+                    <div class="thumb">
+                        <img src="~/img/partners/p1.png" alt="" >
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+<section class="contact-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 align-items-center" style="text-align:center; margin-bottom:25px; color:#ffffff; font-size:40px; ">
+                <b>Past Locations :</b>
+                <p>
+                    Sam’s Holdings<sup style="font-size: 7px; vertical-align:middle;">SM</sup>, LLC knows how to pick quality commercial property locations.
+                </p>
+                <p>
+                    Check out the previous locations that now beneﬁt our clients.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="d-none1 d-sm-block mb-5 pb-4">
+
+
+
+
+
+
+
+
+
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByxJE-OM4Lv77gVdAYJAfKOiDpD6H9ofg&v=3.exp&sensor=false&libraries=places"></script>
+            <script>
+
+                var map;
+                var Markers = {};
+                var infowindow;
+                var locations = [
+
+                    @{
+                        int i = 0;
+                        foreach (var selLocations in Model.SamsLocationList)
+                        {
+
+                                @:[
+                                @:    '@selLocations.BusinessName',
+                                @:    '<strong>@selLocations.BusinessName </strong> <br />@selLocations.LocationAddress, @selLocations.City, @selLocations.State, @selLocations.Zipcode',
+                                @:    @selLocations.Latitude,
+                                @:    @selLocations.Longitude,
+                                @:    @i
+                                @:],
+
+                            i++;
+                            latt = selLocations.Latitude;
+                            lng = selLocations.Longitude;
+                        }
+                        }
+
+
+
+
+
+
+                ];
+                //var icon = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/009900/");
+                //var icon = new google.maps.MarkerImage("img/map/green_pointer.png");
+                var icon = new google.maps.MarkerImage("img/map/map_red.png");
+                var origin = new google.maps.LatLng(@latt, @lng);
+
+                            function initialize() {
+                                var mapOptions = {
+                        zoom: 11,
+                        center: new google.maps.LatLng(@latt, @lng)
+                                };
+
+                            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+                    infowindow = new google.maps.InfoWindow();
+
+                    for (i = 0; i < locations.length; i++) {
+                        var position = new google.maps.LatLng(locations[i][2], locations[i][3]);
+                            var marker = new google.maps.Marker({
+                                position: position,
+                                icon: icon,
+                                map: map,
+                        });
+                        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                            return function () {
+                                infowindow.setContent(locations[i][1]);
+                                infowindow.setOptions({ maxWidth: 200 });
+                                infowindow.open(map, marker);
+                            }
+                        })(marker, i));
+                        Markers[locations[i][4]] = marker;
+                        }
+
+                        locate(0);
+
+                    }
+
+                    function locate(marker_id) {
+                        var myMarker = Markers[marker_id];
+                        var markerPosition = myMarker.getPosition();
+                        map.setCenter(markerPosition);
+                        google.maps.event.trigger(myMarker, 'click');
+                    }
+
+                    google.maps.event.addDomListener(window, 'load', initialize);
+
+
+            </script>
+
+
+
+
+
+
+            <div id="map-canvas" style="height: 480px; position: relative; overflow: hidden;"> </div>
+            
+
+        </div>
+
+    </div>
+</section>
+
+    <!-- popular_destination_area_end  -->
+    <!--
+    <div class="popular_places_area">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="section_title text-center mb_70">
+                        <h3>Popular Places</h3>
+                        <p>Suffered alteration in some form, by injected humour or good day randomised booth anim 8-bit hella wolf moon beard words.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place">
+                        <div class="thumb">
+                            <img src="img/place/aerial_thumb.jpg" alt="">
+                            <a href="#" class="prise">$175,000</a>
+                        </div>
+                        <div class="place_info">
+                            <a href="destination_details.html"><h3>Asset # L001</h3></a>
+                            <p>Zoning: RS-110- Residential <br /> 42,360 S/F Vacant Land</p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <a href="#" class="boxed-btn3_reverse_color">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place">
+                        <div class="thumb">
+                            <img src="img/place/aerial_thumb.jpg" alt="">
+                            <a href="#" class="prise">$175,000</a>
+                        </div>
+                        <div class="place_info">
+                            <a href="destination_details.html"><h3>Asset # L001</h3></a>
+                            <p>Zoning: RS-110- Residential <br /> 42,360 S/F Vacant Land</p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <a href="#" class="boxed-btn3_reverse_color">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place">
+                        <div class="thumb">
+                            <img src="img/place/aerial_thumb.jpg" alt="">
+                            <a href="#" class="prise">$175,000</a>
+                        </div>
+                        <div class="place_info">
+                            <a href="destination_details.html"><h3>Asset # L001</h3></a>
+                            <p>Zoning: RS-110- Residential <br /> 42,360 S/F Vacant Land</p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <a href="#" class="boxed-btn3_reverse_color">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place">
+                        <div class="thumb">
+                            <img src="img/place/aerial_thumb.jpg" alt="">
+                            <a href="#" class="prise">$175,000</a>
+                        </div>
+                        <div class="place_info">
+                            <a href="destination_details.html"><h3>Asset # L001</h3></a>
+                            <p>Zoning: RS-110- Residential <br /> 42,360 S/F Vacant Land</p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <a href="#" class="boxed-btn3_reverse_color">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place">
+                        <div class="thumb">
+                            <img src="img/place/aerial_thumb.jpg" alt="">
+                            <a href="#" class="prise">$175,000</a>
+                        </div>
+                        <div class="place_info">
+                            <a href="destination_details.html"><h3>Asset # L001</h3></a>
+                            <p>Zoning: RS-110- Residential <br /> 42,360 S/F Vacant Land</p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <a href="#" class="boxed-btn3_reverse_color">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="single_place">
+                        <div class="thumb">
+                            <img src="img/place/aerial_thumb.jpg" alt="">
+                            <a href="#" class="prise">$175,000</a>
+                        </div>
+                        <div class="place_info">
+                            <a href="destination_details.html"><h3>Asset # L001</h3></a>
+                            <p>Zoning: RS-110- Residential <br /> 42,360 S/F Vacant Land</p>
+                            <div class="rating_days d-flex justify-content-between">
+                                <a href="#" class="boxed-btn3_reverse_color">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="more_place_btn text-center">
+                        <a class="boxed-btn4" href="#">More Places</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->

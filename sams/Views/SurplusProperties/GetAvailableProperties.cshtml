@@ -1,0 +1,640 @@
+﻿@model IEnumerable<sams.Models.SiteDetails>
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+@{
+    ViewData["Title"] = "GetAvailableProperties";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+    function editProperty(siteDetailsId) {
+        //location.href = "EditSurplusProperty?propertyId=" + siteDetailsId;
+        location.href = "../SurplusProperties/ViewSurplusProperty?propertyId=" + siteDetailsId;
+    }
+
+    function addProperty() {
+        //location.href = "AddSurplusProperty";
+        location.href = "EditSurplusProperty?propertyId=0";
+    }
+
+    function deleteProperty(propertyId) {
+
+        if (confirm("Do you want to delete the listing?")) {
+            location.href = "../SurplusProperties/DeleteProperty?propertyId=" + propertyId;
+        }
+
+    }
+
+    function ViewSoldOutProperty() {
+
+        var baseUrl = "@Url.Action("Index", "SurplusProperties")";
+        location.href = baseUrl;
+    }
+
+    function ViewUnderContractPropertyList() {
+        var baseUrl = "@Url.Action("GetUnderContractProperties", "SurplusProperties")";
+        //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+        //location.href = location.pathname + "GetSoldoutProperties/";
+        location.href = baseUrl;
+        }
+
+        function ViewSoldPropertyList() {
+            var baseUrl = "@Url.Action("GetSoldProperties", "SurplusProperties")";
+            //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+            //location.href = location.pathname + "GetSoldoutProperties/";
+            location.href = baseUrl;
+        }
+
+        function ViewAvailablePropertyList() {
+            var baseUrl = "@Url.Action("GetAvailableProperties", "SurplusProperties")";
+            //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+            //location.href = location.pathname + "GetSoldoutProperties/";
+            location.href = baseUrl;
+        }
+
+        function ViewAllProperty() {
+            var baseUrl = "@Url.Action("Index", "SurplusProperties")";
+            location.href = baseUrl;
+        }
+
+        function ViewTerminatedPropertyList() {
+            var baseUrl = "@Url.Action("GetTerminatedProperties", "SurplusProperties")";
+            //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+            //location.href = location.pathname + "GetSoldoutProperties/";
+            location.href = baseUrl;
+        }
+
+</script>
+<style>
+    .makeScroll {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+</style>
+
+<style>
+    .headcol221 {
+        position: absolute;
+        width: 5em;
+        left: 0;
+        top: auto;
+        border-top-width: 1px;
+        /*only relevant for first row*/
+        margin-top: -1px;
+        /*compensate for top border*/
+    }
+
+    .headcol21 {
+        position: absolute;
+        width: 5em;
+        right: 0;
+        top: auto;
+        border-top-width: 1px;
+        /*only relevant for first row*/
+        margin-top: -1px;
+        /*compensate for top border*/
+        background-color: white;
+    }
+
+    .makeScroll {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .fix {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -100px;
+        width: 100px;
+    }
+</style>
+
+<style>
+    .fixed_table {
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .fixed_td, fixed_th {
+        vertical-align: top;
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        width: 350px;
+    }
+
+    .fix {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -380px;
+        width: 50px;
+    }
+
+    .fix_2 {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -280px;
+        width: 180px;
+    }
+
+    .fix_3 {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -130px;
+        width: 200px;
+    }
+
+    .outer {
+        position: relative;
+    }
+
+    .inner {
+        overflow-x: scroll;
+        overflow-y: visible;
+        margin-left: 380px;
+    }
+
+
+    .underlined_tr {
+        border-bottom: 1pt solid black;
+    }
+</style>
+
+<style>
+    .fixed_table {
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .fixed_td, fixed_th {
+        vertical-align: top;
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        width: 350px;
+    }
+
+    .fix {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -380px;
+        width: 50px;
+    }
+
+    .fix_2 {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -280px;
+        width: 180px;
+    }
+
+    .fix_3 {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -130px;
+        width: 200px;
+    }
+
+    .outer {
+        position: relative;
+    }
+
+    .inner {
+        overflow-x: scroll;
+        overflow-y: visible;
+        margin-left: 380px;
+    }
+
+
+    .underlined_tr {
+        border-bottom: 1pt solid black;
+    }
+</style>
+
+<link href="~/css/jquery.floatingscroll.css" rel="stylesheet">
+<script src="~/js/jquery.floatingscroll.min.js"></script>
+<script>
+    $("#example111").floatingScroll();
+</script>
+
+<div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Surplus Property List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" onclick="ViewAllProperty()">
+                                        <label for="customRadio1" class="custom-control-label">All Properties</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
+                                        <label for="customRadio2" class="custom-control-label">Available</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio3" name="customRadio" onclick="ViewUnderContractPropertyList()">
+                                        <label for="customRadio3" class="custom-control-label">Under Contract</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio4" name="customRadio" onclick="ViewSoldPropertyList()">
+                                        <label for="customRadio4" class="custom-control-label">Sold</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+
+
+                        <div class="outer">
+                            <div class="inner">
+
+                                <table id="example111" class="table11 table-sm text-sm makeScroll fixed_table" data-fl-scrolls>
+                                    <thead>
+                                        <tr>
+                                            <th data-orderable="false" class="headcol2 hard_left fix">Action</th>
+                                            <th class="headcol1 next_left fix_2">Asset Id</th>
+                                            <th data-orderable="false" class="fix_3">Address</th>
+                                            <th>State</th>
+                                            <th>City</th>
+                                            <th data-orderable="false">County</th>
+
+                                            <th data-orderable="false">Lot size</th>
+                                            <th data-orderable="false">Price</th>
+                                            <th data-orderable="false">Listing Status</th>
+                                            <th data-orderable="false">Asset Type</th>
+
+                                            <th>Created</th>
+
+                                            <th>Buyer</th>
+                                            <th>Escrow Agent</th>
+                                            <th>Buyers Attorney</th>
+
+                                            <th>Tenant</th>
+
+
+                                            <th>Under Contract Date</th>
+                                            <th>DDP</th>
+                                            <th>DDP Extension</th>
+
+                                            <th>Closing</th>
+                                            <th data-orderable="false">Transaction Status</th>
+
+                                            <th>EMD</th>
+                                            <th>Days To Close</th>
+                                            <th>To Do</th>
+
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model)
+                                        {
+                                            var dtUnderContract = "";
+
+
+                                            var dtClosedDate = "";
+                                            int? daysToClose = null;
+
+
+
+
+                                            /*
+                                             * 1	Available - Green - 7BF37A
+                                             * 2	Under contract - Yellow - #9166d2
+                                             * 3	Sold - Red - e82d38
+                                             */
+
+                                            var bgColor = "";
+                                            if (item.SelectedPropertyStatusId == 1)
+                                            {
+                                                bgColor = Helper.AvailableBackColor;
+                                            }
+                                            else if (item.SelectedPropertyStatusId == 2)
+                                            {
+                                                bgColor = "badge badge-danger " + sams.Common.Helper.PrimaryColor;
+
+                                            }
+                                            else if (item.SelectedPropertyStatusId == 3)
+                                            {
+                                                bgColor = "badge badge-danger ";
+                                            }
+
+
+                                            <tr class="underlined_tr">
+                                                <td class="headcol2 hard_left fix">
+                                                    <button type="button" class="btn btn-success" onclick="editProperty(@item.SiteDetailsId)"><i class="fas fa-edit"></i></button>
+                                                    @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 2).CanDelete)
+                                                    {
+                                                        <button type="button" class="btn btn-danger" onclick="deleteProperty(@item.SiteDetailsId)"><i class="fas fa-minus-square"></i></button>
+                                                    }
+
+                                                </td>
+                                                <td class="headcol1 next_left fix_2">@item.AssetId</td>
+                                                <td title="@item.SiteAddress" class="fix_3">@item.SiteAddressSmall</td>
+                                                <td>
+                                                    <div style="min-height:30px;">@item.SiteStateName</div>
+                                                </td>
+                                                <td>@item.SiteCity</td>
+                                                <td>@item.SiteCounty</td>
+
+                                                <td>@item.LotSize</td>
+
+                                                <td>@item.SalesPrice</td>
+                                                <td>
+                                                    <div class="@bgColor">
+                                                        <i class="far fa-asterisk"></i> @item.SelectedPropertyStatus
+                                                    </div>
+                                                </td>
+                                                <td>@item.AssetTypeName</td>
+
+                                                <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+
+                                                @{
+                                                    if (item.AssetTypeId == (int)SamAssetType.Fee || item.AssetTypeId == (int)SamAssetType.FeeSubjectToLease)
+                                                    {
+                                                        if (item.SelectedDiligenceDispositions.UnderContractDate != default(DateTime?))
+                                                        {
+                                                            dtUnderContract = item.SelectedDiligenceDispositions.UnderContractDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        var dtDueDiligenceExpairyDate = "";
+                                                        if (item.SelectedDiligenceDispositions.DueDiligenceExpairyDate != default(DateTime?))
+                                                        {
+                                                            dtDueDiligenceExpairyDate = item.SelectedDiligenceDispositions.DueDiligenceExpairyDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.SelectedDiligenceDispositions.ClosingDate != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceDispositions.ClosingDate.Value.Year > 1)
+                                                            {
+                                                                dtClosedDate = item.SelectedDiligenceDispositions.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                                daysToClose = (item.SelectedDiligenceDispositions.ClosingDate.Value - DateTime.Now).Days;
+                                                                if (daysToClose < 0)
+                                                                {
+                                                                    //daysToClose = 0;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        var drDdpExtension = "";
+                                                        if (item.SelectedDiligenceDispositions.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceDispositions.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                drDdpExtension = item.SelectedDiligenceDispositions.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td>@item.SelectedDiligenceDispositions.Buyers</td>
+                                                        <td>@item.SelectedDiligenceDispositions.EscrowAgent</td>
+
+                                                        <td>@item.SelectedDiligenceDispositions.BuyersAttorney</td>
+                                                        <td></td>
+                                                        <td>@dtUnderContract</td>
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@drDdpExtension</td>
+
+                                                        <td>@dtClosedDate</td>
+                                                    }
+                                                    else if (item.AssetTypeId == (int)SamAssetType.Lease)
+                                                    {
+                                                        var dtDueDiligenceExpairyDate = "";
+                                                        if (item.SelectedDiligenceLease.DueDiligenceExpiryDate != default(DateTime?))
+                                                        {
+                                                            dtDueDiligenceExpairyDate = item.SelectedDiligenceLease.DueDiligenceExpiryDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.SelectedDiligenceLease.ClosingDate != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceLease.ClosingDate.Value.Year > 1)
+                                                            {
+                                                                dtClosedDate = item.SelectedDiligenceLease.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                                daysToClose = (item.SelectedDiligenceLease.ClosingDate.Value - DateTime.Now).Days;
+                                                                if (daysToClose < 0)
+                                                                {
+                                                                    //daysToClose = 0;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        var drDdpExtension = "";
+                                                        if (item.SelectedDiligenceLease.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceLease.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                drDdpExtension = item.SelectedDiligenceLease.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td></td>
+                                                        <td></td>
+
+                                                        <td></td>
+                                                        <td>@item.SelectedDiligenceLease.Tenant</td>
+                                                        <td></td>
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@drDdpExtension</td>
+                                                        <td>@dtClosedDate</td>
+                                                    }
+                                                    else if (item.AssetTypeId == (int)SamAssetType.LeaseWithPurchaseOption)
+                                                    {
+                                                        var dtDueDiligenceExpairyDate = "";
+                                                        if (item.DiligenceLeaseWithPurchase.DueDiligenceExpiryDate != default(DateTime?))
+                                                        {
+                                                            dtDueDiligenceExpairyDate = item.DiligenceLeaseWithPurchase.DueDiligenceExpiryDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.DiligenceLeaseWithPurchase.ClosingDate != default(DateTime?))
+                                                        {
+                                                            if (item.DiligenceLeaseWithPurchase.ClosingDate.Value.Year > 1)
+                                                            {
+                                                                dtClosedDate = item.DiligenceLeaseWithPurchase.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                                daysToClose = (item.DiligenceLeaseWithPurchase.ClosingDate.Value - DateTime.Now).Days;
+                                                                if (daysToClose < 0)
+                                                                {
+                                                                    //daysToClose = 0;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        var drDdpExtension = "";
+                                                        if (item.DiligenceLeaseWithPurchase.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.DiligenceLeaseWithPurchase.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                drDdpExtension = item.DiligenceLeaseWithPurchase.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td></td>
+                                                        <td></td>
+
+                                                        <td></td>
+                                                        <td>@item.DiligenceLeaseWithPurchase.Tenant</td>
+                                                        <td></td>
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@drDdpExtension</td>
+                                                        <td>@dtClosedDate</td>
+                                                    }
+                                                    else if (item.AssetTypeId == (int)SamAssetType.SaleLeaseBack)
+                                                    {
+                                                        if (item.SelectedDiligenceDispositions.UnderContractDate != default(DateTime?))
+                                                        {
+                                                            dtUnderContract = item.SelectedDiligenceDispositions.UnderContractDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        var dtDueDiligenceExpairyDate = "";
+                                                        if (item.SelectedDiligenceDispositions.DueDiligenceExpairyDate != default(DateTime?))
+                                                        {
+                                                            dtDueDiligenceExpairyDate = item.SelectedDiligenceDispositions.DueDiligenceExpairyDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.SelectedDiligenceDispositions.ClosingDate != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceDispositions.ClosingDate.Value.Year > 1)
+                                                            {
+                                                                dtClosedDate = item.SelectedDiligenceDispositions.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                                daysToClose = (item.SelectedDiligenceDispositions.ClosingDate.Value - DateTime.Now).Days;
+                                                                if (daysToClose < 0)
+                                                                {
+                                                                   // daysToClose = 0;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        var drDdpExtension = "";
+                                                        if (item.SelectedDiligenceDispositions.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceDispositions.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                drDdpExtension = item.SelectedDiligenceDispositions.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td>@item.SelectedDiligenceDispositions.Buyers</td>
+                                                        <td>@item.SelectedDiligenceDispositions.EscrowAgent</td>
+
+                                                        <td>@item.SelectedDiligenceDispositions.BuyersAttorney</td>
+                                                        <td></td>
+                                                        <td>@dtUnderContract</td>
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@drDdpExtension</td>
+
+                                                        <td>@dtClosedDate</td>
+                                                    }
+                                                }
+
+
+
+
+                                                <td>@item.MaxPriorityTransactionStatusName</td>
+                                                <td>@item.SelectedDiligenceDispositions.EMD</td>
+                                                <td>
+                                                    @{
+                                                        if (daysToClose != null)
+                                                        {
+                                                            if (daysToClose < 0)
+                                                            {
+                                                                daysToClose = 0;
+                                                            }
+                                                            <div class="@bgColor">
+                                                                <i class="far fa-clock"></i> <a>@daysToClose Days</a>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @foreach (TodoViewModel tdl in item.TodoList)
+                                                    {
+                                                        <div>@tdl.TodoText</div>
+
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+
+
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>

@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewData["Title"] = "ContactUs";
+}
+
+<script>
+    var isValidCaptcha = false;
+
+    function SubmitCustomerMessage() {
+        var customerMessage = $("#CustomerMessage").val().trim();
+        var customerName = $("#CustomerName").val().trim();
+        var customerEmail = $("#CustomerEmail").val().trim();
+        var emailSubject = $("#EmailSubject").val().trim();
+
+        if (isValidCaptcha) {
+            $("#CaptchaEntered").val("1");
+        }
+        else {
+            $("#CaptchaEntered").val("0");
+        }
+
+        if (customerMessage == '') {
+            $("#errCustomerMessage").html("<font color='red'>Please Enter Customer Message</font>");
+            $("#CustomerMessage").focus();
+            return;
+        }
+        else {
+            $("#errCustomerMessage").html("");
+        }
+
+
+
+        if (customerName == '') {
+            $("#errCustomerName").html("<font color='red'>Please Enter Customer Name</font>");
+            $("#CustomerName").focus();
+            return;
+        }
+        else {
+            $("#errCustomerName").html("");
+        }
+
+        
+        if (customerEmail == '') {
+            $("#errCustomerEmail").html("<font color='red'>Please Enter Customer Email</font>");
+            $("#CustomerEmail").focus();
+            return;
+        }
+        else {
+            $("#errCustomerEmail").html("");
+            
+        }
+
+        if (!emailIsValid(customerEmail)) {
+            $("#errCustomerEmail").html("<font color='red'>Please Enter Valid Email Address</font>");
+            $("#CustomerEmail").focus();
+            return;
+        }
+        else {
+            $("#errCustomerEmail").html("");
+        }
+
+
+        if (emailSubject == '') {
+            $("#errEmailSubject").html("<font color='red'>Please Enter Email Subject</font>");
+            $("#EmailSubject").focus();
+            return;
+        }
+        else {
+            $("#errEmailSubject").html("");
+        }
+
+        if (isValidCaptcha == false) {
+            alert("Please do captcha check");
+            return;
+        }
+
+        $("#SaveCustomerMessage").submit();
+
+    }
+
+    function emailIsValid(email) {
+        return /\S+@@\S+\.\S+/.test(email)
+    }
+
+    
+    
+    function recaptchaCallback() {
+        isValidCaptcha = true;
+        
+    }
+
+    function recaptchaExpired() {
+        isValidCaptcha = false;
+        $("#CaptchaEntered").val("0");
+    }
+</script>
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3 style="text-transform: uppercase;">Contact Us</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area  -->
+
+<section class="contact-section">
+    <div class="container">
+        
+
+
+        <div class="row">
+            <div class="col-12">
+                <h2 class="contact-title">Get in Touch</h2>
+            </div>
+            <div class="col-lg-8">
+                <form class="form-contact contact_form" action="@Url.Action("SaveCustomerMessage", "CustomerMessage")" method="post" id="SaveCustomerMessage" name="SaveCustomerMessage" >
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <textarea class="form-control w-100" name="CustomerMessage" id="CustomerMessage" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Enter Message"></textarea>
+                                <input type="hidden" name="CaptchaEntered" id="CaptchaEntered" value="0"/>
+                                <div id="errCustomerMessage"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <input class="form-control valid" name="CustomerName" id="CustomerName" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter your name'" placeholder="Enter your name">
+                                <div id="errCustomerName"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <input class="form-control valid" name="CustomerEmail" id="CustomerEmail" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter email address'" placeholder="Email">
+                                <div id="errCustomerEmail"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="form-group">
+                                <input class="form-control" name="EmailSubject" id="EmailSubject" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Subject'" placeholder="Enter Subject">
+                                <div id="errEmailSubject"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpired" data-sitekey="6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL"></div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <a class="boxed-btn4" href="javascript:SubmitCustomerMessage()">Submit</a>
+                        </div>
+                    </div>
+                    
+                    @section scripts{
+                        <script src="https://www.google.com/recaptcha/api.js?render=6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL" async defer></script>
+                    }
+
+                </form>
+            </div>
+            <div class="col-lg-3 offset-lg-1">
+                <div class="media contact-info">
+                    <span class="contact-info__icon"><i class="ti-home"></i></span>
+                    <div class="media-body">
+                        <h3>7935 Council Place #200.</h3>
+                        <p>Matthews, NC 28105</p>
+                    </div>
+                </div>
+                <div class="media contact-info">
+                    <span class="contact-info__icon"><i class="ti-tablet"></i></span>
+                    <div class="media-body">
+                        <h3>704-567-8424</h3>
+                        <p>Mon to Fri 8am to 5pm</p>
+                    </div>
+                </div>
+                <div class="media contact-info">
+                    <span class="contact-info__icon">
+                        <a href="mailto:infosh@samsholdings.com"><i class="ti-email"></i></a>
+                    </span>
+                    <div class="media-body">
+                        <h3>Sam's Holdings<sup style="font-size: 7px; vertical-align:middle;">SM</sup>, LLC</h3>
+                        <p>
+                            <a href="mailto:infosh@samsholdings.com">Send us your query anytime!</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

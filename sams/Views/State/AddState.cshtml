@@ -1,0 +1,105 @@
+﻿@model sams.Models.StateDetails
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "AddState";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<script>
+    function saveData() {
+        var txtStateCode = $("#StateCode").val();
+        if (txtStateCode == '') {
+            canSave = false;
+            $("#errStateCode").html("<font color='red'>Please enter Code</font>");
+            $("#StateCode").focus();
+            return;
+        }
+        else {
+            $("#errStateCode").html("");
+        }
+
+        var txtStateName = $("#StateName").val();
+        if (txtStateName == '') {
+            canSave = false;
+            $("#errStateName").html("<font color='red'>Please enter State Name</font>");
+            $("#StateName").focus();
+            return;
+        }
+        else {
+            $("#errStateName").html("");
+        }
+
+        $("#SaveState").submit();
+    }
+
+    function viewList() {
+        var baseUrl = "@Url.Action("Index", "State")";
+        location.href = baseUrl;
+    }
+</script>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Property</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form id="SaveState" name="SaveState" action="SaveState" method="post">
+                            <div class="row">
+                                <div class="col-lg-6">
+
+
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="StateId" class="form-control" />
+                                        <label asp-for="StateCode" class="control-label">State Code *</label>
+                                        <input asp-for="StateCode" class="form-control" />
+                                        <div id="errStateCode"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="StateName" class="control-label">State Name *</label>
+                                        <input asp-for="StateName" class="form-control" />
+                                        <div id="errStateName"></div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 14).CanEdit)
+                                        {
+                                            <input type="button" id="btnSave" value="Submit" class="btn btn-primary" onclick="saveData();" />
+                                        }
+
+                                        <input type="button" id="btnSave" value="View List" class="btn btn-success" onclick="viewList();" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+</div>
+
+
+

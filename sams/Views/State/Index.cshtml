@@ -1,0 +1,104 @@
+﻿@model IEnumerable<sams.Models.StateDetails>
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<script>
+    function editState(stateId) {
+
+        //location.href = "AddState?stateId=" + stateId;
+        var baseUrl = "@Url.Action("AddState", "State")/?stateId=" + stateId;
+        location.href = baseUrl;
+    }
+
+    function addState() {
+        //location.href = "AddState?stateId=0";
+        var baseUrl = "@Url.Action("AddState", "State")/?stateId=" + 0;
+        location.href = baseUrl;
+    }
+
+    /*
+    function deleteState(stateId) {
+        if (confirm("Do you want to delete the state?")) {
+            location.href = "DeleteState?stateId=" + stateId;
+        }
+    }
+    */
+</script>
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">State List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>State Name</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.StateCode</td>
+                                        <td>@item.StateName</td>
+                                        <td>
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 14).CanEdit)
+                                            {
+                                                <button type="button" class="btn btn-success" onclick="editState(@item.StateId)"><i class="fas fa-edit"></i></button>
+                                            }
+
+
+
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 14).CanCreate)
+                        {
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success" onclick="addState()">Add State</button>
+                            </div>
+                        }
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

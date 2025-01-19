@@ -1,0 +1,655 @@
+﻿@model sams.Models.FutureTenantModel
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "GetFutureTenantByIdOnTransaction";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var isRentFreePeriod = "";
+    var canShow = " display:none; ";
+    if (Model.RentFreePeriod == 1)
+    {
+        isRentFreePeriod = " checked ";
+        canShow = "";
+    }
+}
+
+<script>
+    function saveData() {
+        $("#errTenantName").html("");
+        var tenantName = $("#Tenant").val().trim();
+
+        if (tenantName == '') {
+            $("#errTenantName").html("<font color='red'>Please Enter Tenant Name</font>");
+            $("#Tenant").focus();
+            return;
+        }
+
+        $("#frmSaveFutureTenant").submit();
+    }
+
+    function checkClientRepresentation() {
+        var selected = document.querySelector('[id="radioRentFreePeriod"]:checked')
+        if (selected != null) {
+            $("#RentFreePeriod").val("1");
+            $("#rentFreePeriodDescription").show();
+        }
+        else {
+            $("#RentFreePeriod").val("0");
+            $("#rentFreePeriodDescription").hide();
+        }
+    }
+
+        function cancelEdit(netleaseId) {
+            var baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + netleaseId;
+            location.href = baseUrl;
+    }
+
+    function removeTransactionFile(transactionFileId, transactionId, propertyId) {
+        if (confirm("Do you want to delete?")) {
+            var baseUrl = "@Url.Action("DeleteLeaseTransactionFile", "NetLeaseProperties")/?transactionFiled=" + transactionFileId + "&transactionId=" + transactionId + "&propertyId=" + propertyId;
+            location.href = baseUrl;
+        }
+    }
+
+    
+    function editCriticalDate(criticalDateId, dateMaster, startDate, duration, periodNotes) {
+        $("#CriticalDateId").val(criticalDateId);
+        $("#idCriticalDateMaster").val(dateMaster);
+        $("#p_StartDate").val(startDate);
+        $("#txtDuration").val(duration);
+        $("#p_CriticalDateNotes").val(periodNotes);
+
+        $('#modal-new-period').modal('show');
+
+    }
+
+    function deletePeriod(criticalDateId) {
+        if (confirm("Confirm Delete?")) {
+            window.location.href = '@Url.Action("DeleteFutureTenantCriticalDate", "NetLeaseProperties")?criticalDateId=' + criticalDateId + '&futureTenantId=' + @Model.FutureTenantId + "&netleaseId=" + @Model.NetLeaseId;
+        }
+
+    }
+    
+
+</script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Future Tenant List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <form asp-action="SaveFutureTenant" id="frmSaveFutureTenant" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <!--First column-->
+                <div class="col-6">
+
+                    <div class="card card-info">
+                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                            <h3 class="card-title ">&nbsp;</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label asp-for="Tenant" class="control-label">Tenant Name *</label>
+                                <input asp-for="Tenant" class="form-control" />
+                                <input type="hidden" name="FutureTenantId" value="@Model.FutureTenantId" />
+                                <input type="hidden" name="NetLeaseId" value="@Model.NetLeaseId" />
+                                <input type="hidden" name="IsLeaseTransaction" value="1" />
+                                <div id="errTenantName"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Unit" class="control-label">Unit #</label>
+                                <input asp-for="Unit" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Term" class="control-label">Term</label>
+                                <input asp-for="Term" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Rent" class="control-label">Rent</label>
+                                <input asp-for="Rent" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="CAM" class="control-label">CAM</label>
+                                <input asp-for="CAM" class="form-control" />
+                            </div>
+                            @{
+                                //var dtUnderContractDate = Model.UnderContractDate == default(DateTime?) ? "" : Model.UnderContractDate.Value.ToString("yyyy-MM-dd");
+                                var dtUnderContractDate = Model.UnderContractDate == default(DateTime?) ? "" : Model.UnderContractDate.Value.ToString("MM-dd-yyyy");
+                            }
+                            <div class="form-group">
+                                <label asp-for="UnderContractDate" class="control-label">Under Contract Date</label>
+                                <input type="text" name="UnderContractDate" class="form-control" id="p_UnderContractDate" readonly value="@dtUnderContractDate" />
+                                <a href="javascript:clearUnderContractDate()">Clear Date</a>
+                            </div>
+                            <script>
+                                function clearUnderContractDate() {
+                                    $("#p_UnderContractDate").val('');
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label asp-for="DDP" class="control-label">DDP</label>
+                                <input asp-for="DDP" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="TenantUpfitConcession" class="control-label">Tenant Upfit Concession</label>
+                                <input asp-for="TenantUpfitConcession" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+
+                                <div class="icheck-success d-inline">
+                                    <input type="checkbox" name="ddpRentFreePeriod" id="radioRentFreePeriod" onchange="checkClientRepresentation(this.value)" @isRentFreePeriod>
+                                    <label for="radioRentFreePeriod">
+                                        Rent Free Period
+                                    </label>
+                                    <input type="hidden" asp-for="RentFreePeriod" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="rentFreePeriodDescription" style="@canShow">
+                                <label asp-for="FreeRentPeriodDescription" class="control-label">Description</label>
+                                <input asp-for="FreeRentPeriodDescription" class="form-control" />
+                            </div>
+
+                            @{
+                                //var dtLeaseDate = Model.LeaseDate == default(DateTime?) ? "" : Model.LeaseDate.Value.ToString("yyyy-MM-dd");
+                                var dtLeaseDate = Model.LeaseDate == default(DateTime?) ? "" : Model.LeaseDate.Value.ToString("MM-dd-yyyy");
+                            }
+                            <div class="form-group">
+                                <label asp-for="LeaseDate" class="control-label">Lease Date</label>
+                                <input type="text" value="@dtLeaseDate" name="LeaseDate" class="form-control" id="p_LeaseDate" readonly />
+                                <a href="javascript:clearLeaseDate()">Clear Date</a>
+                            </div>
+                            <script>
+                                function clearLeaseDate() {
+                                    $("#p_LeaseDate").val('');
+                                }
+                            </script>
+
+
+                            <div class="form-group">
+                                <label for="selPropertyStatus" class="control-label">Transaction Status</label>
+                                <select id="selTransactionStatusId" name="TransactionStatusId" class="form-select form-control">
+                                    <option value="0">--- Select ---</option>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var itemSel in Model.LeaseTransactionList)
+                                        {
+                                            if (Model.TransactionStatusId == itemSel.TransactionStatusId)
+                                            {
+                                                <option selected value="@itemSel.TransactionStatusId">@itemSel.TransactionStatusName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@itemSel.TransactionStatusId">@itemSel.TransactionStatusName</option>
+                                            }
+
+                                        }
+                                    }
+
+                                </select>
+                            </div>
+
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+
+
+                    @{
+                        if (Model.FutureTenantId > 0)
+                        {
+                            <div class="card card-info">
+                                                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <h3 class="card-title">Critical Date Tracker</h3>
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modal-new-period">
+                                                                    Add New
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                <div class="card-body">
+
+                                    <div class="row">
+
+                                        <div class="col-lg-12">
+                                            <table id="example1_" class="table table-sm text-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Critical Item</th>
+                                                        <th>Duration</th>
+                                                        <th>Start Date</th>
+                                                        <th>End Date</th>
+                                                        <th>Days To Expire</th>
+                                                        <th>Notes</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    @foreach (var item in Model.TenantCriticalDates)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.CriticalDateMaster</td>
+                                                            <td>@item.Duration</td>
+                                                            <td>@item.StartDate.ToString("MM/dd/yyyy")</td>
+                                                            <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+                                                            <td>@item.DaysToExpire</td>
+                                                            <td>@item.CriticalDateNotes</td>
+                                                            <td>
+                                                                <div class="btn-group btn-group-sm">
+                                                                    <!--<a href="javascript:editCriticalDate(@item.CriticalDateId, '@item.CriticalDateMaster', '@item.StartDate.ToString("yyyy-MM-dd")', '@item.Duration', '@item.CriticalDateNotes');" class="btn btn-info"><i class="fas fa-eye"></i></a>-->
+                                                                    <a href="javascript:editCriticalDate(@item.CriticalDateId, '@item.CriticalDateMaster', '@item.StartDate.ToString("MM-dd-yyyy")', '@item.Duration', '@item.CriticalDateNotes');" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                                    <a href="javascript:deletePeriod(@item.CriticalDateId)" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+
+                <!--Second column-->
+                <div class="col-6">
+
+                    <div class="card card-info">
+                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                            <h3 class="card-title ">&nbsp;</h3>
+                        </div>
+                        <div class="card-body">
+
+                            @{
+                                //var dtLeaseCommencementDate = Model.LeaseCommencementDate == default(DateTime?) ? "" : Model.LeaseCommencementDate.Value.ToString("yyyy-MM-dd");
+                                var dtLeaseCommencementDate = Model.LeaseCommencementDate == default(DateTime?) ? "" : Model.LeaseCommencementDate.Value.ToString("MM-dd-yyyy");
+                            }
+
+                            <div class="form-group">
+                                <label asp-for="LeaseCommencementDate" class="control-label">Lease Commencement Date</label>
+                                <input type="text" value="@dtLeaseCommencementDate" name="LeaseCommencementDate" class="form-control" id="p_LeaseCommencementDate" readonly />
+                                <a href="javascript:clearLeaseCommencementDate()">Clear Date</a>
+                            </div>
+                            <script>
+                                function clearLeaseCommencementDate() {
+                                    $("#p_LeaseCommencementDate").val('');
+                                }
+                            </script>
+
+                            @{
+                                //var dtLeaseExpirationDate = Model.LeaseExpirationDate == default(DateTime?) ? "" : Model.LeaseExpirationDate.Value.ToString("yyyy-MM-dd");
+                                var dtLeaseExpirationDate = Model.LeaseExpirationDate == default(DateTime?) ? "" : Model.LeaseExpirationDate.Value.ToString("MM-dd-yyyy");
+                            }
+                            <div class="form-group">
+                                <label asp-for="LeaseExpirationDate" class="control-label">Lease Expiration Date</label>
+                                <input type="text" value="@dtLeaseExpirationDate" name="LeaseExpirationDate" class="form-control" id="p_LeaseExpirationDate" readonly />
+                                <a href="javascript:clearLeaseExpirationDate()">Clear Date</a>
+                            </div>
+                            <script>
+                                function clearLeaseExpirationDate() {
+                                    $("#p_LeaseExpirationDate").val('');
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label asp-for="LeaseOptions" class="control-label">Lease Options</label>
+                                <input asp-for="LeaseOptions" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="RentEscalation" class="control-label">Rent Escalation</label>
+                                <input asp-for="RentEscalation" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="TenantAttorney" class="control-label">Tenant Attorney</label>
+                                <input asp-for="TenantAttorney" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="TenantAgentCommission" class="control-label">Tenant Agent Commission</label>
+                                <input asp-for="TenantAgentCommission" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="LandlordAgentCommission" class="control-label">Landlord Agent Commission</label>
+                                <input asp-for="LandlordAgentCommission" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="LeaseSecurityDeposit" class="control-label">Lease Security Deposit</label>
+                                <input asp-for="LeaseSecurityDeposit" class="form-control" />
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+                    @{
+                        if (Model.FutureTenantId > 0)
+                        {
+                            <div class="card card-info">
+                                <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                    <h3 class="card-title ">Files</h3>
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="row">
+
+                                        <div class="col-lg-12">
+                                            <ul class="list-unstyled">
+                                                @foreach (var transactionFile in Model.TransactionFileList)
+                                                {
+                                                    <li>
+                                                        <div class="row">
+                                                            <div class="col-lg-8">
+                                                                <b>@transactionFile.FileHeader</b>
+                                                            </div>
+                                                            <div class="col-lg-4">
+                                                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 2).CanEdit)
+                                                                {
+                                                                    <button type="button" class="btn btn-xs btn-danger" onclick="removeTransactionFile(@transactionFile.TransactionFilesId, @Model.FutureTenantId, @Model.NetLeaseId)">
+                                                                        Delete
+                                                                    </button>
+                                                                }
+
+                                                            </div>
+
+
+                                                            <div class="col-lg-12">
+                                                                <a href="@Url.Content("~/transaction_files/" + transactionFile.FileFullName)" class="btn-link text-secondary" target="_blank">
+                                                                    <i class="far fa-fw fa-file-word"></i>@transactionFile.FileName
+                                                                </a>
+                                                            </div>
+
+                                                            <div class="col-lg-8">
+                                                                <b>Note :</b> @transactionFile.Notes
+                                                            </div>
+
+                                                            <div class="col-lg-8">
+                                                                <b>On @transactionFile.UploadedDate.ToString("MM-dd-yyyy")</b>
+                                                            </div>
+
+                                                            <div class="col-lg-8">
+                                                                <b>By :</b> @transactionFile.UploadedByName
+                                                            </div>
+
+                                                        </div>
+                                                        <hr />
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                        </div>
+
+
+                                    </div>
+
+                                    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modal-default">
+                                        Upload File
+                                    </button>
+
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+
+
+
+                </div>
+
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-12">
+                <input type="button" id="btnSave" value="Save Tenant" class="btn btn-success" onclick="saveData();" />
+                <input type="button" id="btnCancel" value="Cancel Edit" class="btn btn-danger" onclick="cancelEdit(@Model.NetLeaseId);" />
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<div class="modal fade" id="modal-default">
+
+    <script>
+        function submitValues() {
+            //$("#SaveTransactionFile").submit();
+
+
+            var txtFileHeader = $("#FileHeader").val();
+            if (txtFileHeader == "") {
+                $("#errFileHeader").html("<font color='red'>Please Enter Header</font>");
+                $("#FileHeader").focus();
+                return;
+            }
+            else {
+                $("#errFileHeader").html("");
+            }
+            var fileName = $("#SelectedFile").val();
+            if (!fileName) {
+                $("#errUploadedFile").html("<font color='red'>Please Select a file</font>");
+                return;
+            }
+            else {
+                $("#errUploadedFile").html("");
+            }
+
+            var txtNote = $("#Notes").val();
+            if (txtNote == "") {
+                $("#errNotes").html("<font color='red'>Please Add Note</font>");
+                return;
+            }
+            else {
+                $("#errNotes").html("");
+            }
+
+
+            $("#SaveTransactionFile").submit();
+
+        }
+
+
+    </script>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Select File</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("SaveLeaseTransactionFile", "NetLeaseProperties")" id="SaveTransactionFile" name="SaveTransactionFile" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <label for="FileHeader" class="control-label">Header *</label>
+                                <input id="FileHeader" name="FileHeader" class="form-control" />
+                                <div id="errFileHeader"></div>
+
+                                <input name="TransactionId" class="form-control" value="@Model.FutureTenantId" type="hidden" />
+                                <input name="PropertyId" class="form-control" value="@Model.NetLeaseId" type="hidden" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="SelectedFile" class="control-label">Select File *</label>
+                                <input type="file" id="SelectedFile" name="SelectedFile" class="form-control" />
+                                <div id="errUploadedFile"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label id="" class="control-label">Note *</label>
+                                <input id="Notes" name="Notes" class="form-control" />
+
+                                <div id="errNotes"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 2).CanEdit)
+                {
+                    <button type="button" class="btn btn-primary" onclick="submitValues()">Save changes</button>
+                }
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="modal-new-period">
+
+    <script>
+        function submitPeriod() {
+
+            var criticalDateMaster = $("#idCriticalDateMaster").val().trim();
+            var sDate = $("#p_StartDate").val();
+            var duration = $("#txtDuration").val().trim();
+            var criticalDateNotes = $("#p_CriticalDateNotes").val();
+
+            if (criticalDateMaster == "") {
+                $("#errCriticalDateMaster").html("<font color='red'>Please Enter Critical Item</font>");
+                return;
+            }
+
+            if (sDate == '') {
+                $("#errStartDate").html("<font color='red'>Please Enter Start Date</font>");
+                return;
+            }
+
+            if (duration == '') {
+                $("#errDuration").html("<font color='red'>Please Enter Duration</font>");
+                return;
+            }
+
+
+            if (criticalDateNotes == '') {
+                $("#errCriticalDateNotes").html("<font color='red'>Please Enter Notes</font>");
+                return;
+            }
+
+            $("#SaveFutureTenantCriticalDate").submit();
+        }
+
+
+    </script>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Critical Item</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("SaveFutureTenantCriticalDate", "NetLeaseProperties")" id="SaveFutureTenantCriticalDate" name="SaveFutureTenantCriticalDate" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="idCriticalDateMaster" class="control-label">Critical Item * </label>
+                                    <input type="text" value="" name="CriticalDateMaster" id="idCriticalDateMaster" class="form-control" />
+                                </div>
+
+
+                                <input type="hidden" name="NetleasePropertyId" value="@Model.NetLeaseId" id="NetleasePropertyId" />
+                                <input type="hidden" name="CriticalDateId" id="CriticalDateId" value="0" />
+                                <input type="hidden" name="FutureTenantId" value="@Model.FutureTenantId" />
+                                <div id="errCriticalDateMaster"></div>
+                            </div>
+
+
+                            <!-- /.input group -->
+                            <div class="form-group">
+                                <label for="p_StartDate" class="control-label">Start Date * </label>
+                                <input type="text" value="" name="StartDate" class="form-control" id="p_StartDate" readonly />
+                                <div id="errStartDate"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Duration" class="control-label">Duration *</label>
+                                <input type="text" value="" name="AddedDuration" class="form-control" id="txtDuration" onkeypress="return isNumberKey(event)" />
+                                <div id="errDuration"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="CriticalDateNotes" class="control-label">Notes * </label>
+                                <textarea name="CriticalDateNotes" class="form-control" rows="5" id="p_CriticalDateNotes"></textarea>
+                                <div id="errCriticalDateNotes"></div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitPeriod()">Save</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

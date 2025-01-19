@@ -1,0 +1,117 @@
+﻿@model IEnumerable<sams.Models.AssetTypeViewModel>
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <script>
+    function addAssetType(AssetTypeId) {
+        location.href = "/AssetType/AddAssetType?AssetTypeId=" + AssetTypeId;
+    }
+
+    function deleteAssetType(AssetTypeId) {
+        if (confirm("Do you want to delete this?")) {
+            location.href = "/AssetType/DeleteAssetType?AssetTypeId=" + AssetTypeId;
+        }
+
+    }
+
+        function goDashboard() {
+            var baseUrl = "@Url.Action("Index", "Admin")?propertyType=all";
+            location.href = baseUrl;
+        }
+
+    </script>
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Asset Type List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:goDashboard()">Home</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Asset Type List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Asset Type Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.AssetTypeId</td>
+                                        <td>@item.AssetTypeName</td>
+
+                                        <td>
+                                            <button type="button" class="btn btn-success" disabled onclick="addAssetType(@item.AssetTypeId)"><i class="fas fa-edit"></i></button>
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 11).CanDelete)
+                                            {
+                                                <button type="button" class="btn btn-danger" disabled onclick="deleteAssetType(@item.AssetTypeId)"><i class="fas fa-minus-square"></i></button>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                        <!--
+    <div class="form-group">
+        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 11).CanCreate)
+        {
+            <button type="button" class="btn btn-success" disabled onclick="addAssetType(0)">Add New AssetType</button>
+        }
+
+    </div>
+                            -->
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>

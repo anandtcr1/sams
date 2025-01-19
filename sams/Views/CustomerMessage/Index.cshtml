@@ -1,0 +1,109 @@
+﻿@model IEnumerable<sams.Models.CustomerMessageViewModel>
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+    function deleteMessage(customerMessageId) {
+        if (confirm("Do you want to delete?")) {
+            var baseUrl = "@Url.Action("DeleteCustomerMessage", "CustomerMessage")?customerMessageId=" + customerMessageId;
+            location.href = baseUrl;
+        }
+        }
+
+        function goDashboard() {
+            var baseUrl = "@Url.Action("Index", "Admin")?propertyType=all";
+            location.href = baseUrl;
+        }
+
+        function viewMessage(customerMessageId) {
+            var baseUrl = "@Url.Action("ShowCustomerMessage", "CustomerMessage")?customerMessageId=" + customerMessageId;
+            location.href = baseUrl;
+        }
+</script>
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Customer Message List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:goDashboard()">Home</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Email</th>
+                                    <th>Subject</th>
+                                    <th>Message</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.CustomerName</td>
+                                        <td>@item.CustomerEmail</td>
+                                        <td>@item.EmailSubject</td>
+                                        <td>@item.CustomerMessage</td>
+                                        <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="viewMessage(@item.CustomerMessageId)"><i class="fas fa-eye"></i></button>
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 10).CanDelete)
+                                            {
+                                                <button type="button" class="btn btn-danger" onclick="deleteMessage(@item.CustomerMessageId)"><i class="fas fa-minus-square"></i></button>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

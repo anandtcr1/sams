@@ -1,0 +1,556 @@
+﻿@model IEnumerable<sams.Models.NetleasePropertiesViewModel>
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "ShowListByTransactionStatus";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+    function editProperty(siteDetailsId) {
+        //location.href = "../NetLeaseProperties/ViewNetLeaseProperties?propertyId=" + siteDetailsId;
+
+        var baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + siteDetailsId;
+        location.href = baseUrl;
+    }
+
+    function addProperty() {
+        //location.href = "AddNetLeaseProperties";
+        //location.href = "EditNetLeaseProperty?propertyId=0";
+
+         var baseUrl = "@Url.Action("EditNetLeaseProperty", "NetLeaseProperties")?propertyId=0";
+        location.href = baseUrl;
+    }
+
+        function deleteProperty(pId) {
+        if (confirm("Do you want to delete the property?")) {
+
+            //location.href = "../NetLeaseProperties/DeleteProperty?propertyId=" + propertyId;
+
+            var baseUrl = "@Url.Action("DeleteProperty", "NetLeaseProperties")?propertyId=" + pId;
+            location.href = baseUrl;
+
+        }
+    }
+
+    function ViewSoldOutProperty() {
+        var baseUrl = "@Url.Action("GetSoldoutProperties", "NetLeaseProperties")";
+        //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+        //location.href = location.pathname + "GetSoldoutProperties/";
+        location.href = baseUrl;
+        }
+
+        function exportExcel() {
+            //location.href = "AddSurplusProperty";
+            //location.href = "ExportExcel";
+            var baseUrl = "@Url.Action("ExportExcel", "NetLeaseProperties")";
+            location.href = baseUrl;
+        }
+
+
+
+
+        function ViewAvailablePropertyList() {
+            var baseUrl = "@Url.Action("GetAvailableProperties", "NetLeaseProperties")";
+            //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+            //location.href = location.pathname + "GetSoldoutProperties/";
+            location.href = baseUrl;
+        }
+
+        function ViewUnderContractPropertyList() {
+            var baseUrl = "@Url.Action("ViewUnderContractProperty", "NetLeaseProperties")";
+            location.href = baseUrl;
+        }
+
+        function ViewSoldPropertyList() {
+            var baseUrl = "@Url.Action("ViewSoldOutProperty", "NetLeaseProperties")";
+            location.href = baseUrl;
+        }
+
+        function ViewAll() {
+            var baseUrl = "@Url.Action("Index", "NetLeaseProperties")";
+            location.href = baseUrl;
+        }
+
+        function ViewDashboard() {
+            var baseUrl = "@Url.Action("Dashboard", "NetLeaseProperties")?s=all";
+            location.href = baseUrl;
+        }
+
+</script>
+
+<style>
+    .fixed_table {
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .fixed_td, fixed_th {
+        vertical-align: top;
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        width: 350px;
+    }
+
+    .fix {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -380px;
+        width: 50px;
+    }
+
+    .fix_2 {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -280px;
+        width: 180px;
+    }
+
+    .fix_3 {
+        position: absolute;
+        *position: relative; /*ie7*/
+        margin-left: -130px;
+        width: 200px;
+    }
+
+    .outer {
+        position: relative;
+    }
+
+    .inner {
+        overflow-x: scroll;
+        overflow-y: visible;
+        margin-left: 380px;
+    }
+
+
+    .underlined_tr {
+        border-bottom: 1pt solid black;
+    }
+</style>
+<link href="~/css/jquery.floatingscroll.css" rel="stylesheet">
+<script src="~/js/jquery.floatingscroll.min.js"></script>
+<script>
+    $("#example111").floatingScroll();
+</script>
+
+
+
+<style>
+    .makeScroll {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Net Lease Property Details</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:ViewDashboard()">Home</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="outer">
+                            <div class="inner">
+                                <table id="example111" class="table12 table-sm text-sm makeScroll fixed_table" data-fl-scrolls>
+                                    <thead>
+                                        <tr>
+                                            <th data-orderable="false" class="fix">Action</th>
+                                            <th class="fix_2">Asset Id</th>
+                                            <th data-orderable="false" class="fix_3">Address</th>
+                                            <th data-orderable="false">Asset Type</th>
+                                            <th>State</th>
+                                            <th>City</th>
+                                            <th data-orderable="false">Price</th>
+                                            <th data-orderable="false">Cap Rate</th>
+                                            <th data-orderable="false">Type</th>
+                                            <th data-orderable="false">Listing Status</th>
+                                            <th data-orderable="false">Asset Status</th>
+                                            <th data-orderable="false">Transaction Status</th>
+                                            <th>Created</th>
+
+                                            <th>Buyer</th>
+                                            <th>Escrow Agent</th>
+                                            <th>Buyers Attorney</th>
+
+                                            <th>Tenant</th>
+
+                                            <th>Under Contract Date</th>
+                                            <th>DDP</th>
+                                            <th>DDP Extension</th>
+
+                                            <th>Closing</th>
+                                            <th data-orderable="false">Transaction Status</th>
+
+                                            <th>EMD</th>
+                                            <th>Days To Close</th>
+                                            <th>To Do</th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in Model)
+                                        {
+
+                                            var dtUnderContract = "";
+                                            if (item.SelectedDiligenceDisposition.UnderContractDate != default(DateTime?))
+                                            {
+                                                dtUnderContract = item.SelectedDiligenceDisposition.UnderContractDate.Value.ToString("MM/dd/yyyy");
+                                            }
+
+                                            var dtDueDiligenceExpairyDate = "";
+                                            if (item.SelectedDiligenceDisposition.DueDiligenceExpairyDate != default(DateTime?))
+                                            {
+                                                dtDueDiligenceExpairyDate = item.SelectedDiligenceDisposition.DueDiligenceExpairyDate.Value.ToString("MM/dd/yyyy");
+                                            }
+
+                                            var dtClosedDate = "";
+                                            var daysToClose = 0;
+
+                                            if (item.SelectedDiligenceDisposition.ClosingDate != default(DateTime?) && item.SelectedDiligenceDisposition.ClosingDate.Value.Year > 1)
+                                            {
+                                                dtClosedDate = item.SelectedDiligenceDisposition.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                daysToClose = (item.SelectedDiligenceDisposition.ClosingDate.Value - DateTime.Now).Days;
+                                                if (daysToClose < 0)
+                                                {
+                                                    daysToClose = 0;
+                                                }
+                                            }
+
+                                            /*
+                                             * 1	Available - Green - 7BF37A
+                                             * 2	Under contract - Yellow - EDF036
+                                             * 3	Sold - Red - F08087
+                                             */
+
+                                            var bgColor = "";
+                                            if (item.SelectedPropertyStatusId == 1)
+                                            {
+                                                bgColor = Helper.AvailableBackColor;
+                                            }
+                                            else if (item.SelectedPropertyStatusId == 2)
+                                            {
+                                                bgColor = "badge badge-danger " + sams.Common.Helper.PrimaryColor;
+
+                                            }
+                                            else if (item.SelectedPropertyStatusId == 3)
+                                            {
+                                                bgColor = "badge badge-danger ";
+                                            }
+
+                                            <tr style="@bgColor" class="underlined_tr">
+
+                                                <td class="fix">
+                                                    <button type="button" class="btn btn-success" onclick="editProperty(@item.NetleasePropertyId)"><i class="fas fa-edit"></i></button>
+                                                    @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 3).CanDelete)
+                                                    {
+                                                        <button type="button" class="btn btn-danger" onclick="deleteProperty(@item.NetleasePropertyId)"><i class="fas fa-minus-square"></i></button>
+                                                    }
+
+                                                </td>
+                                                <td class="fix_2">@item.AssetId</td>
+                                                <td title="@item.Address" class="fix_3">@item.AddressShort</td>
+                                                <td>
+                                                    <div style="min-height:30px;">@item.AssetTypeName</div>
+                                                </td>
+                                                <td>@item.StateName</td>
+                                                <td>@item.City</td>
+                                                <td>@item.PropertyPrice</td>
+                                                <td>@item.CapRate</td>
+                                                <td>@item.ShoppingCenterOrNetlease</td>
+                                                <td>
+                                                    <div class="@bgColor">
+                                                        <i class="far fa-asterisk"></i> @item.SelectedPropertyStatus
+                                                    </div>
+                                                </td>
+                                                <td>@item.AssetStatusName</td>
+                                                <td>@item.MaxPriorityTransactionStatusName</td>
+                                                <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+
+                                                @{
+                                                    if (item.AssetTypeId == (int)SamAssetType.Fee || item.AssetTypeId == (int)SamAssetType.FeeSubjectToLease)
+                                                    {
+                                                        var dtDdpExtension = "";
+                                                        if (item.SelectedDiligenceDisposition.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceDisposition.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                dtDdpExtension = item.SelectedDiligenceDisposition.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td>@item.SelectedDiligenceDisposition.Buyers</td>
+                                                        <td>@item.SelectedDiligenceDisposition.EscrowAgent</td>
+
+                                                        <td>@item.SelectedDiligenceDisposition.BuyersAttorney</td>
+
+                                                        <td></td>
+
+                                                        <td>@dtUnderContract</td>
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@dtDdpExtension</td>
+
+                                                        <td>@dtClosedDate</td>
+                                                    }
+                                                    else if (item.AssetTypeId == (int)SamAssetType.Lease)
+                                                    {
+                                                        if (item.DiligenceLease.UnderContractDate != default(DateTime?))
+                                                        {
+                                                            dtUnderContract = item.DiligenceLease.UnderContractDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.DiligenceLease.DueDiligenceExpiryDate != default(DateTime?))
+                                                        {
+                                                            dtDueDiligenceExpairyDate = item.DiligenceLease.DueDiligenceExpiryDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.DiligenceLease.ClosingDate != default(DateTime?))
+                                                        {
+                                                            if (item.DiligenceLease.ClosingDate.Value.Year > 1)
+                                                            {
+                                                                dtClosedDate = item.DiligenceLease.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                                daysToClose = (item.DiligenceLease.ClosingDate.Value - DateTime.Now).Days;
+                                                                if (daysToClose < 0)
+                                                                {
+                                                                    daysToClose = 0;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        var dtDdpExtension = "";
+                                                        if (item.DiligenceLease.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.DiligenceLease.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                dtDdpExtension = item.DiligenceLease.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td></td>
+                                                        <td></td>
+
+                                                        <td></td>
+                                                        <td>@item.DiligenceLease.Tenant</td>
+                                                        <td>@dtUnderContract</td>
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@dtDdpExtension</td>
+                                                        <td>@dtClosedDate</td>
+                                                    }
+                                                    else if (item.AssetTypeId == (int)SamAssetType.NetLease)
+                                                    {
+                                                        if (item.SelectedDiligenceNetlease.UnderContractDate != default(DateTime?))
+                                                        {
+                                                            dtUnderContract = item.SelectedDiligenceNetlease.UnderContractDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+
+                                                        if (item.SelectedDiligenceNetlease.DueDiligenceExpairyDate != default(DateTime?))
+                                                        {
+                                                            dtDueDiligenceExpairyDate = item.SelectedDiligenceNetlease.DueDiligenceExpairyDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+
+
+                                                        if (item.SelectedDiligenceNetlease.ClosingDate != default(DateTime?) && item.SelectedDiligenceNetlease.ClosingDate.Value.Year > 1)
+                                                        {
+                                                            dtClosedDate = item.SelectedDiligenceNetlease.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                            daysToClose = (item.SelectedDiligenceNetlease.ClosingDate.Value - DateTime.Now).Days;
+                                                            if (daysToClose < 0)
+                                                            {
+                                                                daysToClose = 0;
+                                                            }
+                                                        }
+
+                                                        var dtDdpExtension = "";
+                                                        if (item.SelectedDiligenceNetlease.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceNetlease.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                dtDdpExtension = item.SelectedDiligenceNetlease.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td>@item.SelectedDiligenceNetlease.Buyers</td>
+                                                        <td>@item.SelectedDiligenceNetlease.EscrowAgent</td>
+
+                                                        <td>@item.SelectedDiligenceNetlease.BuyersAttorney</td>
+
+                                                        <td>@item.SelectedDiligenceNetlease.Tenant</td>
+
+                                                        <td>@dtUnderContract</td>
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@dtDdpExtension</td>
+
+                                                        <td>@dtClosedDate</td>
+                                                    }
+                                                    else if (item.AssetTypeId == (int)SamAssetType.LeaseWithPurchaseOption)
+                                                    {
+                                                        if (item.DiligenceLease.UnderContractDate != default(DateTime?))
+                                                        {
+                                                            dtUnderContract = item.DiligenceLease.UnderContractDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.DiligenceLeaseWithPurchase.DueDiligenceExpiryDate != default(DateTime?))
+                                                        {
+                                                            dtDueDiligenceExpairyDate = item.DiligenceLeaseWithPurchase.DueDiligenceExpiryDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.DiligenceLeaseWithPurchase.ClosingDate != default(DateTime?))
+                                                        {
+                                                            if (item.DiligenceLeaseWithPurchase.ClosingDate.Value.Year > 1)
+                                                            {
+                                                                dtClosedDate = item.DiligenceLeaseWithPurchase.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                                daysToClose = (item.DiligenceLeaseWithPurchase.ClosingDate.Value - DateTime.Now).Days;
+                                                                if (daysToClose < 0)
+                                                                {
+                                                                    daysToClose = 0;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        var dtDdpExtension = "";
+                                                        if (item.DiligenceLeaseWithPurchase.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.DiligenceLeaseWithPurchase.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                dtDdpExtension = item.DiligenceLeaseWithPurchase.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td></td>
+                                                        <td></td>
+
+                                                        <td></td>
+                                                        <td>@item.DiligenceLeaseWithPurchase.Tenant</td>
+                                                        <td>@dtUnderContract</td>
+
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@dtDdpExtension</td>
+                                                        <td>@dtClosedDate</td>
+                                                    }
+                                                    else if (item.AssetTypeId == (int)SamAssetType.SaleLeaseBack)
+                                                    {
+                                                        if (item.SelectedDiligenceDisposition.UnderContractDate != default(DateTime?))
+                                                        {
+                                                            dtUnderContract = item.SelectedDiligenceDisposition.UnderContractDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+                                                        if (item.SelectedDiligenceDisposition.DueDiligenceExpairyDate != default(DateTime?))
+                                                        {
+                                                            dtDueDiligenceExpairyDate = item.SelectedDiligenceDisposition.DueDiligenceExpairyDate.Value.ToString("MM/dd/yyyy");
+                                                        }
+
+
+
+                                                        if (item.SelectedDiligenceDisposition.ClosingDate != default(DateTime?) && item.SelectedDiligenceDisposition.ClosingDate.Value.Year > 1)
+                                                        {
+                                                            dtClosedDate = item.SelectedDiligenceDisposition.ClosingDate.Value.ToString("MM/dd/yyyy");
+                                                            daysToClose = (item.SelectedDiligenceDisposition.ClosingDate.Value - DateTime.Now).Days;
+                                                            if (daysToClose < 0)
+                                                            {
+                                                                daysToClose = 0;
+                                                            }
+                                                        }
+
+                                                        var dtDdpExtension = "";
+                                                        if (item.SelectedDiligenceDisposition.DDPExtension != default(DateTime?))
+                                                        {
+                                                            if (item.SelectedDiligenceDisposition.DDPExtension.Value.Year > 1)
+                                                            {
+                                                                dtDdpExtension = item.SelectedDiligenceDisposition.DDPExtension.Value.ToString("MM/dd/yyyy");
+                                                            }
+                                                        }
+
+                                                        <td>@item.SelectedDiligenceDisposition.Buyers</td>
+                                                        <td>@item.SelectedDiligenceDisposition.EscrowAgent</td>
+
+                                                        <td>@item.SelectedDiligenceDisposition.BuyersAttorney</td>
+
+                                                        <td></td>
+
+                                                        <td>@dtUnderContract</td>
+                                                        <td>@dtDueDiligenceExpairyDate</td>
+                                                        <td>@dtDdpExtension</td>
+
+                                                        <td>@dtClosedDate</td>
+
+                                                    }
+                                                }
+
+
+
+                                                <td>@item.MaxPriorityTransactionStatusName</td>
+                                                <td>@item.SelectedDiligenceNetlease.EMD</td>
+                                                <td>
+                                                    <div class="@bgColor">
+                                                        <i class="far fa-clock"></i> @daysToClose Days
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @foreach (TodoViewModel tdl in item.TodoList)
+                                                    {
+                                                        <div>@tdl.TodoText</div>
+
+                                                    }
+                                                </td>
+
+                                            </tr>
+                                        }
+
+
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+
+                            <button type="button" class="btn btn-success" onclick="ViewDashboard()">View Dashboard</button>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

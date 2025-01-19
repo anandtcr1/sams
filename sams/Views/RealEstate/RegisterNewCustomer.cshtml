@@ -1,0 +1,425 @@
+﻿@model sams.Models.CustomerViewModel
+
+@{
+    ViewData["Title"] = "RegisterNewCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+
+    <script>
+
+    var isValidCaptcha = false;
+
+
+        function checkPassword(str) {
+            // at least one number, one lowercase and one uppercase letter
+            // at least six characters
+            var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+            return re.test(str);
+        }
+
+    function loadNda() {
+        var firstName = $("#FirstName").val().trim();
+        var lastName = $("#LastName").val().trim();
+        //var emailAddress = $("#EmailAddress").val().trim();
+        var contactNumber = $("#ContactNumber").val().trim();
+        var company = $("#Company").val().trim();
+        var address = $("#Address").val().trim();
+        var zipcode = $("#Zipcode").val().trim();
+        var city = $("#City").val().trim();
+
+        var userName = $("#UserName").val().trim();
+        var password = $("#Password").val().trim();
+        var retypePassword = $("#RetypePassword").val().trim();
+
+        
+        
+
+        if (firstName == '') {
+            canSave = false;
+            $("#errFirstName").html("<font color='red'>Please enter First Name</font>");
+            $("#FirstName").focus();
+            return;
+        }
+        else {
+            $("#errFirstName").html("");
+        }
+
+        if (lastName == '') {
+            canSave = false;
+            $("#errLastName").html("<font color='red'>Please enter Last Name</font>");
+            $("#LastName").focus();
+            return;
+        }
+        else {
+            $("#errLastName").html("");
+        }
+
+        /*
+        if (emailAddress == '') {
+            canSave = false;
+            $("#errEmailAddress").html("<font color='red'>Please enter Email Address</font>");
+            $("#EmailAddress").focus();
+            return;
+        }
+        else {
+
+            if (!ValidateEmail(emailAddress)) {
+                canSave = false;
+                $("#errEmailAddress").html("<font color='red'>Please enter Valid Email Address</font>");
+                $("#EmailAddress").focus();
+                return;
+            }
+            else {
+                $("#errEmailAddress").html("");
+            }
+        }
+        */
+
+        
+
+        if (contactNumber == '') {
+            canSave = false;
+            $("#errContactNumber").html("<font color='red'>Please enter Contact Number</font>");
+            $("#ContactNumber").focus();
+            return;
+        }
+        else {
+            $("#errContactNumber").html("");
+        }
+
+        
+        
+
+
+        if (userName == '') {
+            canSave = false;
+            $("#errUserName").html("<font color='red'>Please enter User Name</font>");
+            $("#UserName").focus();
+            return;
+        }
+        else {
+            if (!ValidateEmail(userName)) {
+                canSave = false;
+                $("#errUserName").html("<font color='red'>Please enter Valid Email Address</font>");
+                $("#UserName").focus();
+                return;
+            }
+            else {
+                $("#errUserName").html("");
+            }
+
+        }
+
+        CheckUserInDb();
+        var canSave = $("#hdnUserExistStatus").val();
+        if (canSave == 'true') {
+            $("#errUserNameExist").html("<font color='red'>User Name already exists! Please use another </font>");
+            return;
+        }
+        else {
+            $("#errUserNameExist").html("<font color='green'>User Name Available!</font>");
+        }
+
+        if (password == '') {
+            canSave = false;
+            $("#errPassword").html("<font color='red'>Please enter Password</font>");
+            $("#Password").focus();
+            return;
+        }
+        else {
+
+            if (!checkPassword(password)) {
+                $("#errPassword").html("<font color='red'>Password must be minimum 8 letters, a combination of capital letters, small letters and numbers</font>");
+                return;
+            }
+            else {
+                $("#errPassword").html("");
+            }
+        }
+
+        if (retypePassword == '') {
+            canSave = false;
+            $("#errRetypePassword").html("<font color='red'>Please enter Retype Password</font>");
+            $("#RetypePassword").focus();
+            return;
+        }
+        else {
+            $("#errRetypePassword").html("");
+        }
+
+        if (password != retypePassword) {
+            $("#errRetypePassword").html("<font color='red'>Password and ReType password must be same</font>");
+            $("#RetypePassword").focus();
+            return;
+        }
+        else {
+            $("#errRetypePassword").html("");
+        }
+
+        if (isValidCaptcha == false) {
+            canSave = false;
+            alert("Please do captcha check");
+            return;
+        }
+
+        $("#RegisterCustomer").submit();
+
+    }
+
+    function recaptchaCallback() {
+
+        isValidCaptcha = true;
+
+    }
+
+    function recaptchaExpired() {
+        isValidCaptcha = false;
+    }
+
+    function CheckUserInDb() {
+        var txt = $("#UserName").val().trim();
+
+
+
+        siteDetails = {
+            UserName: txt
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: 'CheckDuplicateUserName',
+            data: siteDetails,
+            success: function (data) {
+                $("#hdnUserExistStatus").val(data);
+            },
+            error: function (xhr, textStatus, error) {
+                alert(error);
+            }
+        });
+    }
+
+
+    
+
+    </script>
+
+
+
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_7">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3 style="text-transform: uppercase;">Customer Registration</h3>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="popular_places_area">
+    <div class="container">
+
+        <form id="RegisterCustomer" name="RegisterCustomer" action="RegisterCustomer" method="post" enctype="multipart/form-data">
+            
+            <div class="row">
+
+                <div class="col-lg-6">
+
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h3 class="footer_title" style="color:#ffffff;">
+                                Personal Information
+                            </h3>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+                                        <label asp-for="FirstName" class="control-label">First Name * </label>
+                                        <input asp-for="FirstName" class="form-control" />
+                                        <div id="errFirstName"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="LastName" class="control-label">Last Name * </label>
+                                        <input asp-for="LastName" class="form-control" />
+                                        <div id="errLastName"></div>
+                                    </div>
+
+                                    
+
+                                    <div class="form-group">
+                                        <label asp-for="ContactNumber" class="control-label">Contact Number * </label>
+                                        <input asp-for="ContactNumber" class="form-control" />
+                                        <div id="errContactNumber"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="CellNumber" class="control-label">Cell Number * </label>
+                                        <input asp-for="CellNumber" class="form-control" />
+                                        <div id="errCellNumber"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Company" class="control-label">Organization Name </label>
+                                        <input asp-for="Company" class="form-control" />
+                                        <div id="errCompany"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="GivenTitle" class="control-label">Title </label>
+                                        <input asp-for="GivenTitle" class="form-control" />
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+                <div class="col-lg-6">
+
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h3 class="footer_title" style="color:#ffffff;">
+                                Other Details
+                            </h3>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <div class="form-group">
+                                        <label asp-for="Address" class="control-label">Address </label>
+                                        <input asp-for="Address" class="form-control" />
+                                        <div id="errAddress"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Zipcode" class="control-label">ZIP Code </label>
+                                        <input asp-for="Zipcode" class="form-control" />
+                                        <div id="errZipcode"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="City" class="control-label">City </label>
+                                        <input asp-for="City" class="form-control" />
+                                        <div id="errCity"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="StateId" class="control-label">Select State </label>
+                                        <select id="StateId" name="StateId" class="form-select form-control">
+
+                                            @if (Model != null)
+                                            {
+                                                foreach (var itemSel in Model.StateList)
+                                                {
+                                                    <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <!--
+    <div class="form-group">
+        <label asp-for="EmailAddress" class="control-label">Email Address * </label>
+        <input asp-for="EmailAddress" class="form-control" />
+        <div id="errEmailAddress"></div>
+    </div>-->
+
+                                    <div class="form-group">
+                                        <label asp-for="UserName" class="control-label">Email Address * </label>
+                                        <input asp-for="UserName" class="form-control" onchange="CheckUserInDb()" />
+                                        <input type="hidden" id="hdnUserExistStatus" name="hdnUserExistStatus" />
+                                        <div id="errUserName"></div>
+                                        <div id="errUserNameExist"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Password" class="control-label">Password * </label>
+                                        <input type="password" asp-for="Password" class="form-control" />
+                                        <div id="errPassword"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="RetypePassword" class="control-label">Retype Password * </label>
+                                        <input type="password" asp-for="RetypePassword" class="form-control" />
+
+                                        <div id="errRetypePassword"></div>
+                                    </div>
+
+                                    <style>
+                                        ul {
+                                            list-style: none;
+                                        }
+
+                                            ul li:before {
+                                                content: '✓';
+                                            }
+                                    </style>
+
+                                    <div class="form-group">
+                                        <ul>
+                                            <li>Password must be minimum 8 letters</li>
+                                            <li>Include at least one upper case character (A-Z)</li>
+                                            <li>Include at least one lower case character (a-z)</li>
+                                            <li>Include a number (0-9)</li>
+                                        </ul>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpired" data-sitekey="6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL"></div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <button type="button" class="boxed-btn4" onclick="loadNda()">Next</button>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+

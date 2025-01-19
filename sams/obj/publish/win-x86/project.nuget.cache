@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ihiNDaCdaEfMJw/98vtUbsS3a9prwYRgfeqPx8kvq+LGoMaLdczx4fSeDL9009qmDyjsEMk7B6E/WPocfwXlHA==",
+  "success": true,
+  "projectFilePath": "G:\\work\\SamsHoldings\\sams\\sams\\sams.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\3.1.2\\microsoft.netcore.app.runtime.win-x86.3.1.2.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\3.1.2\\microsoft.windowsdesktop.app.runtime.win-x86.3.1.2.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\3.1.2\\microsoft.aspnetcore.app.runtime.win-x86.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}

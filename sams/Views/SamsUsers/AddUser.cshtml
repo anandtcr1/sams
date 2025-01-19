@@ -1,0 +1,289 @@
+﻿@model sams.Models.UserViewModel
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "AddUser";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+    <script>
+        function saveData() {
+
+            var firstName = $("#FirstName").val();
+            if (firstName.trim() == '') {
+
+                $("#errFirstName").html("<font color='red'>Please Enter First Name</font>");
+                $("#FirstName").focus();
+                return;
+            }
+            else {
+                $("#errFirstName").html("");
+            }
+
+            var lastName = $("#LastName").val();
+            if (lastName.trim() == '') {
+
+                $("#errLastName").html("<font color='red'>Please Enter Last Name</font>");
+                $("#LastName").focus();
+                return;
+            }
+            else {
+                $("#errLastName").html("");
+            }
+
+            var emailAddress = $("#EmailAddress").val().trim();
+            if (emailAddress == '') {
+                $("#errEmailAddress").html("<font color='red'>Please Enter Email Address</font>");
+                $("#EmailAddress").focus();
+                return;
+            }
+            else {
+                $("#errEmailAddress").html("");
+            }
+
+            if (!emailIsValid(emailAddress)) {
+                $("#errEmailAddress").html("<font color='red'>Please Enter Valid Email Address</font>");
+                $("#EmailAddress").focus();
+                return;
+            }
+            else {
+                $("#errEmailAddress").html("");
+            }
+
+            /*
+            var userName = $("#UserName").val();
+            if (userName.trim() == '') {
+
+                $("#errUserName").html("<font color='red'>Please Enter User Name</font>");
+                $("#UserName").focus();
+                return;
+            }
+            else {
+                $("#errUserName").html("");
+            }
+            */
+
+            @{
+                if (Model.UserId > 0)
+                {
+                    @:$("#SaveUser").submit();
+                }
+             }
+
+            var email = $("#EmailAddress").val();
+            var nameReplace = email.replace(/@@.*$/, "");
+            var userName = nameReplace !== email ? nameReplace : null;
+
+            userDetails = {
+                UserName: userName
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckDuplicateUserName", "SamsUsers")',
+                data: userDetails,
+                success: function (data) {
+                        if (data === true) {
+                        $("#errEmailAddress").html("<font color='red'>User Name Exists. Please Choose A Different User Name</font>");
+
+                        }
+                        else {
+                        $("#SaveUser").submit();
+                        }
+
+
+                        //$("#errUserName").html("");
+                    },
+                error: function (xhr, textStatus, error) {
+                        alert(error);
+                    }
+                });
+
+
+
+
+        }
+
+        function back() {
+            location.href = "@Url.Action("Index", "SamsUsers")";
+        }
+
+        function checkForDuplicate(userName) {
+            var isExists = false;
+
+            userDetails = {
+                UserName: userName
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CheckDuplicateUserName", "SamsUsers")',
+                data: userDetails,
+                success: function (data) {
+                    isExists = data;
+                    if (data === true) {
+                        $("#errUserName").html("<font color='red'>User Name Exists. Please select another</font>");
+                        return;
+                    }
+
+
+                    //$("#errUserName").html("");
+                },
+                error: function (xhr, textStatus, error) {
+                    alert(error);
+                }
+            });
+            return isExists;
+        }
+
+
+
+        function emailIsValid (email) {
+            return /\S+@@\S+\.\S+/.test(email)
+        }
+
+
+    </script>
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>User List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <div class="col-6">
+
+                <form id="SaveUser" name="SaveUser" action="SaveUser" method="post" enctype="multipart/form-data">
+
+                    <div class="card card-info">
+                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                            <h3 class="card-title">User Details</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <input type="hidden" asp-for="UserId" class="form-control" />
+                                <label asp-for="FirstName" class="control-label">First Name *</label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <div id="errFirstName"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="LastName" class="control-label">Last Name *</label>
+                                <input asp-for="LastName" class="form-control" />
+                                <div id="errLastName"></div>
+                            </div>
+
+                            @{
+                                if (Model.UserId == 0)
+                                {
+                                    <div class="form-group">
+                                        <label asp-for="EmailAddress" class="control-label">Email Address *</label>
+                                        <input asp-for="EmailAddress" class="form-control" />
+                                        <div id="errEmailAddress"></div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <label asp-for="EmailAddress" class="control-label">Email Address : </label>
+                                        @Model.EmailAddress
+                                        <input asp-for="EmailAddress" class="form-control" type="hidden" />
+                                    </div>
+                                }
+                            }
+
+
+
+                            <input type="hidden" asp-for="UserName" class="form-control" />
+                            <!--
+                                <div class="form-group">
+                                    <label asp-for="UserName" class="control-label">User Name *</label>
+                                    <input asp-for="UserName" class="form-control" readonly/>
+                                    <div id="errUserName"></div>
+                                </div>
+    -->
+
+                            <input id="Password" name="Password" value="@Model.Password" type="hidden" class="form-control" />
+
+                            <!--
+    <div class="form-group">
+        <label asp-for="Password" class="control-label">Password *</label>
+        <input id="Password" name="Password" value="@Model.Password" type="password" class="form-control" />
+        <div id="errPassword"></div>
+    </div>
+                                -->
+
+                            <div class="form-group">
+                                <label for="RoleId" class="control-label">Select Role</label>
+                                <select id="RoleId" name="RoleId" class="form-select form-control">
+                                    @if (Model != null)
+                                    {
+                                        foreach (var itemSel in Model.RoleList)
+                                        {
+                                            if (Model.RoleId == itemSel.RoleId)
+                                            {
+                                                <option selected value="@itemSel.RoleId">@itemSel.RoleName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@itemSel.RoleId">@itemSel.RoleName</option>
+                                            }
+
+                                        }
+                                    }
+
+                                </select>
+                            </div>
+
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </form>
+
+
+
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="form-group">
+                    @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 7).CanEdit)
+                    {
+                        <input type="button" id="btnSave" value="Submit" class="btn btn-primary" onclick="saveData();" />
+                    }
+
+                    <input type="button" id="btnCancel" value="Cancel" class="btn btn-info" onclick="back();" />
+                </div>
+            </div>
+
+        </div>
+
+
+    </section>
+</div>
+
+
+

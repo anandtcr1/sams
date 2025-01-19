@@ -1,0 +1,833 @@
+﻿@{
+    int showShoppingCenter = sams.Common.Helper.ShowShoppingCenter();
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>SAMS GROUP || Sam's Holdings LLC</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <!-- <link rel="manifest" href="site.webmanifest"> -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.png">
+    <!-- Place favicon.ico in the root directory -->
+    <!-- CSS here -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" media="all">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css" media="all">
+    <link rel="stylesheet" href="~/css/magnific-popup.css" media="all">
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="~/css/themify-icons.css" media="all">
+    <link rel="stylesheet" href="~/css/nice-select.css" media="all">
+    <link rel="stylesheet" href="~/css/flaticon.css" media="all">
+    <link rel="stylesheet" href="~/css/gijgo.css" media="all">
+    <link rel="stylesheet" href="~/css/animate.css" media="all">
+    <link rel="stylesheet" href="~/css/slick.css" media="all">
+    <link rel="stylesheet" href="~/css/slicknav.css" media="all">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" media="all">
+
+    <link rel="stylesheet" href="~/css/style.css?r65=2">
+    <!-- <link rel="stylesheet" href="css/responsive.css"> -->
+
+    <link rel="stylesheet" href="~/css/jquery.signature.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" media="all">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="~/css/signature_font.css?a6=1" media="all">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="~/js/jquery.signature.js"></script>
+
+    <script>
+        function doLogout() {
+            if (confirm("Do you confirm logout?")) {
+                location.href = "LogOutCustomer";
+            }
+        }
+
+
+    </script>
+    <script src="~/js/sams.js?a1=1"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Euphoria+Script&display=swap" rel="stylesheet" media="all">
+
+    <script>
+        $(function () {
+            var sig = $('#sig').signature();
+            $('#disable').click(function () {
+                var disable = $(this).text() === 'Disable';
+                $(this).text(disable ? 'Enable' : 'Disable');
+                sig.signature(disable ? 'disable' : 'enable');
+            });
+            $('#clear').click(function () {
+                sig.signature('clear');
+            });
+            $('#json').click(function () {
+                alert(sig.signature('toJSON'));
+            });
+            $('#svg').click(function () {
+                alert(sig.signature('toSVG'));
+            });
+        });
+    </script>
+    <style>
+        .property_image_border {
+            border: 3px solid #ddd;
+            border-radius: 4px;
+            padding: 1px;
+        }
+    </style>
+    
+    
+
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+    <!-- header-start -->
+    <header>
+
+        <div class="header-area ">
+            <div id="sticky-header" class="main-header-area">
+                <!--
+                <div class="row align-items-end" >
+                    <div class="col-xl-9 col-lg-9 align-items-end">
+
+                    </div>
+                    <div class="col-xl-3 col-lg-3 align-items-end">
+                        <a href="#" class="boxed-btn3">Join Our Email List</a>
+                    </div>
+                </div>
+                -->
+
+                <div class="container-fluid">
+                    <div class="header_bottom_border">
+
+
+
+                        <div class="row align-items-center">
+                            <div class="col-xl-2 col-lg-2">
+                                <div class="logo">
+                                    <a href="/Home">
+                                        <img src="~/img/logo_sams.png?e=1" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xl-10 col-lg-10">
+                                <div class="main-menu  d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation" style="float: right;">
+
+                                            <!--
+                                                <li><a class="active" href="/Home">home</a></li>
+                                                <li><a href="/Home/About">About</a></li>
+                                                <li><a href="/RealEstate/Surplus_Real_Estate">Surplus Real estate</a></li>
+                                                <li><a href="/RealEstate/net_lease_properties">net lease properties</a></li>
+                                                <li><a href="/RealEstate/c_store_list">c-stores for sale</a></li>
+                                                <li><a href="/RealEstate/submit_site">submit a site</a></li>
+                                                <li><a href="/Home/ContactUs">contact us</a></li>
+                                            -->
+                                            <li><a href="/Home">Home</a></li>
+                                            <li><a href="/Home/About">About</a></li>
+                                            <li>
+                                                <a href="#">Available Properties</a>
+                                                <ul class="submenu">
+                                                    <li><a href="/RealEstate/Surplus_Real_Estate?stateId=0&regionId=0&p=0">Surplus Real Estate</a></li>
+                                                    <li><a href="/RealEstate/net_lease_properties?stateId=0&regionId=0">Net&nbsp;Lease&nbsp;Properties</a></li>
+                                                    <li><a href="/RealEstate/c_store_list?stateId=0&regionId=0">C-Stores For Sale</a></li>
+
+                                                    @{
+                                                        if (showShoppingCenter == 1)
+                                                        {
+                                                            <li><a href="/RealEstate/shopping_center_list_state_wise?stateId=0">Shopping Centers</a></li>
+                                                        }
+
+                                                    }
+
+
+                                                </ul>
+                                            </li>
+
+                                            <li><a href="/RealEstate/submit_site">submit your site</a></li>
+                                            <li><a href="/Home/ContactUs">contact us</a></li>
+
+
+
+
+                                            @if (ViewData["LoggedInUserName"] != null && ViewData["LoggedInUserName"].ToString().Trim().Length > 0)
+                                            {
+
+                                                <li>
+                                                    <!--
+                                                    <i class="fa fa-user" aria-hidden="true" data-toggle="modal" data-target="#myModal_User"></i>
+                                                    -->
+                                                    <button type="button" class="boxed-btn4" style="background-color:purple" onclick="doLogout()">Logout</button>
+                                                </li>
+
+                                            }
+
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+
+
+                            <!--
+                            <div class="col-xl-4 col-lg-4 d-none d-lg-block">
+                                <div class="social_wrap d-flex align-items-center justify-content-end">
+                                    <div class="number">
+                                        <p> <i class="fa fa-phone"></i> 10(256)-928 256</p>
+                                    </div>
+                                    <div class="social_links d-none d-xl-block">
+                                        <ul>
+                                            <li><a href="#"> <i class="fa fa-instagram"></i> </a></li>
+                                            <li><a href="#"> <i class="fa fa-linkedin"></i> </a></li>
+                                            <li><a href="#"> <i class="fa fa-facebook"></i> </a></li>
+                                            <li><a href="#"> <i class="fa fa-google-plus"></i> </a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="seach_icon">
+                                <a data-toggle="modal" data-target="#exampleModalCenter" href="#">
+                                    <i class="fa fa-search"></i>
+                                </a>
+                            </div>
+                            -->
+
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div style='font-family: "Great Vibes"; '>
+        &nbsp;
+    </div>
+
+    @RenderBody()
+
+
+    <footer class="footer">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6 col-md-6 col-lg-6 ">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">
+                                Get to Know Us Better
+                            </h3>
+                            <!--
+                            <p>
+                                Sam’s Holdings is a parent company to Sam’s Xpress Car Wash and Sam’s Mart Convenience stores. We select sites and develop high-quality Commercial properties not only for our internal clients, but also for third party users. We understand how to build and manage well-located projects that foster growth and impact our communities.
+                            </p>
+                            -->
+                            <p>
+                                Sam’s Holdings<sup><font color="#AAB1B7" size="1">SM</font></sup>, LLC is the parent company of Sam’s Xpress® Car Wash and
+                                Sam’s Mart Convenience stores. For us, relationships matter. We
+                                understand the importance of excellent locations, which is why we
+                                select high-quality commercial sites that are perfect for our clients and
+                                third-party users. Our success is a result of our selective process as
+                                well as a commitment to our company values: <i>
+                                    integrity, accountability,
+                                    professionalism, and transparency.
+                                </i>
+                            </p>
+                            <p>
+                                <a data-toggle="modal" data-target="#myModal_AddEmailList" class="boxed-btn4" style="color:white;">Join Our Email List</a>
+                            </p>
+
+
+
+                            <div class="socail_links">
+                                <ul>
+                                    <li>
+                                        <a href="#">
+                                            <i class="ti-facebook"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="ti-twitter-alt"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-instagram"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-pinterest"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-youtube-play"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            <p>
+                                <a href="/Home/Privacy">Privacy Policy </a>
+                            </p>
+                            <p>
+                                <a href="/Admin/DoLogin">Admin </a>
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget">
+
+                            <div class="row">
+                                <div class="footer_widget">
+                                    <h2 class="footer_title">
+                                        Our Locations
+                                    </h2>
+
+
+
+
+                                    <ul class="links ">
+                                        <li>North Carolina</li>
+                                        <li>South Carolina</li>
+                                        <li>Virginia</li>
+                                        <li>Georgia</li>
+                                    </ul>
+
+
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">
+                                Sam's Holdings<sup><font size="1" color="#ffffff">SM</font></sup>, LLC
+                            </h3>
+                            <ul class="links ">
+                                <li><b style="color:#ACACAC;"> Call:</b> 704-567-8424</li>
+                                <li style="margin-top:20px;">
+
+                                    <b style="color:#ACACAC; ">Email:</b> <br />
+                                    <a href="mailto:infosh@samsholdings.com">infosh@samsholdings.com</a>
+                                </li>
+                                <li style="margin-top:20px;">
+
+                                    <b style="color:#ACACAC; margin-top:5px;">Visit:</b> <br />
+                                    7935 Council Place #200.<br />
+                                    Matthews, NC 28105
+                                </li>
+
+
+                            </ul>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copy-right_text">
+            <div class="container">
+                <div class="footer_border"></div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <p class="copy_right text-center" style="color:#ACACAC; ">
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved | by <a href="#" target="_blank">Sam's Holdings<sup><font size="1" color="#FF4A52">SM</font></sup> LLC</a>
+                            <br /> Developed by Knowminal Technologies LLP
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Modal -->
+    <div class="modal fade custom_search_pop" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="serch_form">
+                    <input type="text" placeholder="Search">
+                    <button type="submit">search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal_User" role="dialog">
+
+
+
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Welcome @ViewData["LoggedInUserName"]</h2>
+                </div>
+                <div class="modal-body">
+                    <form id="RegisterCustomer" name="RegisterCustomer" action="RegisterCustomer" method="post" enctype="multipart/form-data">
+                        Welcome : @ViewData["LoggedInUserId"]
+                        <hr />
+                        <button type="button" class="btn btn-success" data-dismiss="modal" onclick="ViewCustomer(@ViewData["LoggedInUserId"])">View Details</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="doLogout()">Logout</button>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal_AddEmailList" role="dialog">
+
+        <script>
+            var isValidCaptcha = false;
+
+            function recaptchaExpired() {
+                isValidCaptcha = false;
+            }
+
+            function recaptchaCallback() {
+
+                isValidCaptcha = true;
+
+                //alert("verified");
+            }
+
+            $(function () {
+                /*
+                $('#ContactNumber').keydown(function (e) {
+                    var key = e.charCode || e.keyCode || 0;
+                    $text = $(this);
+                    if (key !== 8 && key !== 9) {
+                        if ($text.val().length === 3) {
+                            $text.val($text.val() + '-');
+                        }
+                        if ($text.val().length === 7) {
+                            $text.val($text.val() + '-');
+                        }
+
+                    }
+
+                    return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+                });
+                */
+
+                $('#LastFourDigitNumber').keydown(function (e) {
+                    var key = e.charCode || e.keyCode || 0;
+                    return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+                });
+
+                $('#ContactNumber1').keydown(function (e) {
+                    var key = e.charCode || e.keyCode || 0;
+                    return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+                });
+
+                $('#ContactNumber2').keydown(function (e) {
+                    var key = e.charCode || e.keyCode || 0;
+                    return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+                });
+
+                $('#ContactNumber3').keydown(function (e) {
+                    var key = e.charCode || e.keyCode || 0;
+                    return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+                });
+
+            });
+
+            function SubmitSignedUpCustomer() {
+
+
+                if ($("#FirstName").val().trim() == "") {
+                    $("#errFirstName").html("<p style='color:red; font-size:12px;'>Please Enter First Name</p>");
+                    return;
+                }
+                else {
+                    $("#errFirstName").html("");
+                }
+
+                if ($("#LastName").val().trim() == "") {
+                    $("#errLastName").html("<p style='color:red; font-size:12px;'>Please Enter Last Name</p>");
+                    return;
+                }
+                else {
+                    $("#errLastName").html("");
+                }
+
+                if ($("#EmailAddress").val().trim() == "") {
+                    $("#errEmailAddress").html("<p style='color:red; font-size:12px;'>Please Enter Email Address</p>");
+                    return;
+                }
+                else {
+                    $("#errEmailAddress").html("");
+                }
+
+                if (!footerEmailIsValid($("#EmailAddress").val().trim())) {
+                    $("#errEmailAddress").html("<p style='color:red; font-size:12px;'>Please Enter Valid Email Address</p>");
+                    $("#EmailAddress").focus();
+                    return;
+                }
+                else {
+                    $("#errEmailAddress").html("");
+                }
+
+                if ($("ContactNumber1").val() == '' || $("ContactNumber2").val() == '' || $("ContactNumber3").val() == '') {
+                    $("#errContactNumber").html("<p style='color:red; font-size:12px;'>Please Enter Contact Number</p>");
+                    $("#ContactNumber1").focus();
+                    return;
+                }
+
+                var txtContactNumber = $("#ContactNumber1").val().trim() + "-" + $("#ContactNumber2").val().trim() + "-" + $("#ContactNumber3").val().trim();
+                var lastFour = "";
+                if (txtContactNumber == '') {
+                    canSave = false;
+                    $("#errContactNumber").html("<p style='color:red; font-size:12px;'>Please Enter Contact Number</p>");
+                    $("#ContactNumber1").focus();
+                    return;
+                }
+                else {
+
+
+                    if (txtContactNumber.length != 12) {
+                        $("#errContactNumber").html("<p style='color:red; font-size:12px;'>Please Enter A Valid Contact Number</p>");
+                        $("#ContactNumber1").focus();
+                        return;
+                    }
+                    $("#errContactNumber").html("");
+
+                    if (txtContactNumber.length == 12) {
+                        lastFour = txtContactNumber.substr(txtContactNumber.length - 4);
+                    }
+                }
+
+                var txtLastFourDigit = $("#LastFourDigitNumber").val();
+                if (txtLastFourDigit == '') {
+                    $("#errLastFourDigitNumber").html("<p style='color:red; font-size:12px;'>Entry Must Match With Your Contact Number</p>");
+                    $("#LastFourDigitNumber").focus();
+                    return;
+                }
+                else {
+                    if (lastFour != '') {
+                        if (lastFour != txtLastFourDigit) {
+                            $("#errLastFourDigitNumber").html("<p style='color:red; font-size:12px;'>Entry Must Match With Your Contact Number</p>");
+                            $("#LastFourDigitNumber").focus();
+                            return;
+                        }
+                    }
+                    $("#errLastFourDigitNumber").html("");
+                }
+
+                $("#ContactNumber").val(txtContactNumber);
+
+                if (isValidCaptcha == false) {
+                    canSave = false;
+                    alert("Please do captcha check");
+                    return;
+                }
+
+
+
+                $("#SaveSignedUpCustomer").submit();
+
+            }
+
+            function footerEmailIsValid(email) {
+                return /\S+@@\S+\.\S+/.test(email)
+            }
+
+        </script>
+
+        <script src='https://www.google.com/recaptcha/api.js'></script>
+
+
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">SIGN UP</h2>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        Sign up to receive periodic updates on our available properties. <br />
+                        * Indicates a required field
+                    </div>
+                    <hr />
+                    <form id="SaveSignedUpCustomer" name="SaveSignedUpCustomer" action="@Url.Action("SaveSignedUpCustomer", "SignUpCustomer")" method="post" enctype="multipart/form-data">
+                        <p>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        First Name *
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <input class="form-control valid" name="FirstName" id="FirstName"
+                                               type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'First Name'"
+                                               placeholder="First Name">
+                                        <div id="errFirstName"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        Last Name *
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <input class="form-control valid" name="LastName" id="LastName" type="text"
+                                               onfocus="this.placeholder = ''" onblur="this.placeholder = 'Last Name'"
+                                               placeholder="Last Name">
+                                        <div id="errLastName"></div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        Email Address *
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <input class="form-control valid" name="EmailAddress"
+                                               id="EmailAddress" type="email" onfocus="this.placeholder = ''"
+                                               onblur="this.placeholder = 'Email Address'" placeholder="Email Address">
+                                    </div>
+                                    <div id="errEmailAddress"></div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        Contact Number *
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <input name="ContactNumber" id="ContactNumber" type="hidden" />
+
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <input name="ContactNumber1" id="ContactNumber1" class="form-control" maxlength="3" placeholder="###" style="width:75px;" />
+                                                </td>
+                                                <td>
+                                                    <input name="ContactNumber2" id="ContactNumber2" class="form-control" maxlength="3" placeholder="###" style="width:75px; margin-left:15px;" />
+                                                </td>
+                                                <td>
+                                                    <input name="ContactNumber3" id="ContactNumber3" class="form-control" maxlength="4" placeholder="####" style="width:75px; margin-left:15px;" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!--
+                                            <input class="form-control valid" name="ContactNumber" id="ContactNumber"
+                                                   type="tel" onfocus="this.placeholder = '$$$-$$$-$$$$'" onblur="this.placeholder = '$$$-$$$-$$$$'"
+                                                   placeholder="$$$-$$$-$$$$" maxlength="12">
+    -->
+                                        <div id="errContactNumber"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+
+                                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpired" data-sitekey="6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        Please Enter Last Four Digits Of Your Contact Number *
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+
+                                        <input name="LastFourDigitNumber" id="LastFourDigitNumber" class="form-control" maxlength="4" style="width:75px;" placeholder="####" />
+                                        <div id="errLastFourDigitNumber"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <button type="button" class="button button-contactForm boxed-btn boxed-btn4 " onclick="SubmitSignedUpCustomer()">sign up</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </p>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+
+                @section scripts{
+                    <script src="https://www.google.com/recaptcha/api.js?render=6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL" async defer></script>
+                }
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- link that opens popup -->
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
+
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"> </script> -->
+    <!-- JS here -->
+    <script src="~/js/vendor/modernizr-3.5.0.min.js"></script>
+    <script src="~/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/isotope.pkgd.min.js"></script>
+    <script src="~/js/ajax-form.js"></script>
+    <script src="~/js/waypoints.min.js"></script>
+    <script src="~/js/jquery.counterup.min.js"></script>
+    <script src="~/js/imagesloaded.pkgd.min.js"></script>
+    <script src="~/js/scrollIt.js"></script>
+    <script src="~/js/jquery.scrollUp.min.js"></script>
+    <script src="~/js/wow.min.js"></script>
+    
+    <script src="~/js/jquery.slicknav.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/plugins.js"></script>
+    <script src="~/js/gijgo.min.js"></script>
+    <script src="~/js/slick.min.js"></script>
+
+
+
+    <!--contact js-->
+    <script src="~/js/contact.js"></script>
+    <script src="~/js/jquery.ajaxchimp.min.js"></script>
+    <script src="~/js/jquery.form.js"></script>
+    <script src="~/js/jquery.validate.min.js"></script>
+    <script src="~/js/mail-script.js"></script>
+
+
+    <script src="~/js/main.js"></script>
+    <script>
+        $('#datepicker').datepicker({
+            iconsLibrary: 'fontawesome',
+            icons: {
+                rightIcon: '<span class="fa fa-caret-down"></span>'
+            }
+        });
+
+        /**/
+        function ViewCustomer(customerId) {
+            var baseUrl = "@Url.Action("GetCustomerById", "RealEstate")?CustomerId=" + customerId;
+            location.href = baseUrl;
+            //location.href = "GetCustomerById?CustomerId=" + customerId;
+        }
+/**/
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

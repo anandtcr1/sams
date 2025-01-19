@@ -1,0 +1,165 @@
+﻿@model IEnumerable<sams.Models.NetleasePropertiesViewModel>
+
+@{
+    ViewData["Title"] = "GetAcquisitions";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+    function editProperty(siteDetailsId) {
+        //location.href = "../NetLeaseProperties/ViewNetLeaseProperties?propertyId=" + siteDetailsId;
+
+        var baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + siteDetailsId;
+        location.href = baseUrl;
+    }
+
+    function addProperty() {
+        //location.href = "AddNetLeaseProperties";
+        //location.href = "EditNetLeaseProperty?propertyId=0";
+
+         var baseUrl = "@Url.Action("EditNetLeaseProperty", "NetLeaseProperties")?propertyId=0";
+        location.href = baseUrl;
+    }
+
+        function deleteProperty(pId) {
+        if (confirm("Do you want to delete the property?")) {
+
+            //location.href = "../NetLeaseProperties/DeleteProperty?propertyId=" + propertyId;
+
+            var baseUrl = "@Url.Action("DeleteProperty", "NetLeaseProperties")?propertyId=" + pId;
+            location.href = baseUrl;
+
+        }
+    }
+
+    function ViewSoldOutProperty() {
+        var baseUrl = "@Url.Action("GetSoldoutProperties", "NetLeaseProperties")";
+        //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+        //location.href = location.pathname + "GetSoldoutProperties/";
+        location.href = baseUrl;
+        }
+
+        function exportExcel() {
+            //location.href = "AddSurplusProperty";
+            location.href = "ExportExcel";
+        }
+
+</script>
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Net Lease Acquisition Property List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" checked>
+                                        <label for="customRadio2" class="custom-control-label">Available Properties</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" onclick="ViewSoldOutProperty()">
+                                        <label for="customRadio1" class="custom-control-label">Sold Out Properties</label>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+
+                                    <th>Asset Id</th>
+                                    <th data-orderable="false">Asset Name</th>
+                                    <th data-orderable="false">Asset Type</th>
+                                    <th>State</th>
+                                    <th>City</th>
+                                    <th data-orderable="false">Price</th>
+                                    <th data-orderable="false">Cap Rate</th>
+                                    <th>Created</th>
+                                    <th data-orderable="false">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+
+                                        <td>@item.AssetId</td>
+                                        <td>@item.AssetName</td>
+                                        <td>@item.AssetTypeName</td>
+                                        <td>@item.StateName</td>
+                                        <td>@item.City</td>
+                                        <td>$ @item.PropertyPrice</td>
+                                        <td>@item.CapRate</td>
+                                        <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="editProperty(@item.NetleasePropertyId)"><i class="fas fa-edit"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="deleteProperty(@item.NetleasePropertyId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" onclick="addProperty()">Add New Property</button>
+                            <button type="button" class="btn btn-success" onclick="exportExcel()">Export</button>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

@@ -1,0 +1,141 @@
+﻿@model IEnumerable<sams.Models.UserViewModel>
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+    <script>
+    function addUser(userId) {
+        // location.href = "../SamsUsers/AddUser?userId=" + userId;
+        location.href = "@Url.Action("AddUser", "SamsUsers")?userId=" + userId;
+    }
+
+    function deleteUser(userId) {
+        if (confirm("Do you want to delete User?")) {
+
+            location.href = "@Url.Action("DeleteUser", "SamsUsers")?userId=" + userId;
+        }
+    }
+
+        function goDashboard() {
+            var baseUrl = "@Url.Action("Index", "Admin")?propertyType=all";
+            location.href = baseUrl;
+        }
+
+        function resetPassword(userId) {
+            if (confirm("Do you want to reset your password?")) {
+                var baseUrl = "@Url.Action("SendPasswordLinkById", "SamsUsers")?userId=" + userId;
+                location.href = baseUrl;
+            }
+        }
+
+    </script>
+
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>User List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:goDashboard()">Home</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">User List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>User Name</th>
+                                    <th>Email Address</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>@item.FirstName</td>
+                                    <td>@item.LastName</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.EmailAddress</td>
+                                    <td>@item.RoleName</td>
+
+                                    <td>
+                                        @if (item.UserName != SiteSettings.SuperAdminUser)
+                                        {
+                                            <button type="button" class="btn btn-success" onclick="addUser(@item.UserId)"><i class="fas fa-edit"></i></button>
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 7).CanDelete)
+                                            {
+                                                <button type="button" class="btn btn-danger" onclick="deleteUser(@item.UserId)"><i class="fas fa-minus-square"></i></button>
+                                            }
+
+                                        }
+                                        <input type="button" id="btnResetPassword" value="Reset Password" class="btn btn-primary" onclick="resetPassword(@item.UserId);" />
+
+                                    </td>
+                                </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 7).CanCreate)
+                        {
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success" onclick="addUser(0)">Add New User</button>
+                            </div>
+                        }
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+
+
+
+
+
+

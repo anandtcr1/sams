@@ -1,0 +1,265 @@
+﻿@model IEnumerable<sams.Models.SiteDetails>
+
+@using sams.Common;
+
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+    <script>
+    function editProperty(siteDetailsId) {
+        //location.href = "EditSurplusProperty?propertyId=" + siteDetailsId;
+        //location.href = "../SurplusProperties/ViewSurplusProperty?propertyId=" + siteDetailsId;
+        var baseUrl = "@Url.Action("ViewSurplusProperty", "SurplusProperties")/?propertyId=" + siteDetailsId;
+        location.href = baseUrl;
+    }
+
+    function addProperty() {
+        //location.href = "AddSurplusProperty";
+        // location.href = "EditSurplusProperty?propertyId=0";
+        var baseUrl = "@Url.Action("EditSurplusProperty", "SurplusProperties")/?propertyId=0";
+        location.href = baseUrl;
+    }
+
+    function deleteProperty(propertyId) {
+
+        if (confirm("Do you want to delete the listing?")) {
+            //location.href = "../SurplusProperties/DeleteProperty?propertyId=" + propertyId;
+            var baseUrl = "@Url.Action("DeleteProperty", "SurplusProperties")/?propertyId=" + propertyId;
+            location.href = baseUrl;
+        }
+
+    }
+
+    function ViewSoldOutProperty() {
+        var baseUrl = "@Url.Action("GetSoldoutProperties", "SurplusProperties")";
+        //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+        //location.href = location.pathname + "GetSoldoutProperties/";
+        location.href = baseUrl;
+    }
+
+
+
+        function exportExcel() {
+            //location.href = "AddSurplusProperty";
+            //location.href = "ExportExcel";
+            var baseUrl = "@Url.Action("ExportExcel", "SurplusProperties")";
+            location.href = baseUrl;
+        }
+
+    function ViewUnderContractPropertyList() {
+        var baseUrl = "@Url.Action("GetUnderContractProperties", "SurplusProperties")";
+        //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+        //location.href = location.pathname + "GetSoldoutProperties/";
+        location.href = baseUrl;
+        }
+
+        function ViewSoldPropertyList() {
+            var baseUrl = "@Url.Action("GetSoldProperties", "SurplusProperties")";
+            //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+            //location.href = location.pathname + "GetSoldoutProperties/";
+            location.href = baseUrl;
+        }
+
+        function ViewAvailablePropertyList() {
+            var baseUrl = "@Url.Action("GetAvailableProperties", "SurplusProperties")";
+            //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+            //location.href = location.pathname + "GetSoldoutProperties/";
+            location.href = baseUrl;
+        }
+
+        function ViewDashboard() {
+            var baseUrl = "@Url.Action("Dashboard", "SurplusProperties")?s=all";
+            location.href = baseUrl;
+        }
+
+        function ViewTerminatedPropertyList() {
+            alert();
+            var baseUrl = "@Url.Action("GetTerminatedProperties", "SurplusProperties")";
+            //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+            //location.href = location.pathname + "GetSoldoutProperties/";
+            location.href = baseUrl;
+    }
+
+    function ViewIndex() {
+
+        var baseUrl = "@Url.Action("Index", "SurplusProperties")";
+        location.href = baseUrl;
+        }
+
+    </script>
+<div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Surplus Property List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:ViewDashboard()">Home</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" onclick="ViewIndex()" >
+                                        <label for="customRadio1" class="custom-control-label">All Properties</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" onclick="ViewAvailablePropertyList()">
+                                        <label for="customRadio2" class="custom-control-label">Available</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio3" name="customRadio" onclick="ViewUnderContractPropertyList()">
+                                        <label for="customRadio3" class="custom-control-label">Under Contract</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio4" name="customRadio" onclick="ViewSoldPropertyList()">
+                                        <label for="customRadio4" class="custom-control-label">Sold</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio5" name="customRadio" checked >
+                                        <label for="customRadio5" class="custom-control-label">Terminated</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th data-orderable="false">Address</th>
+                                    <th>State</th>
+                                    <th>City</th>
+                                    <th data-orderable="false">County</th>
+                                    <th data-orderable="false">Asset Type</th>
+                                    <th data-orderable="false">Lot size</th>
+                                    <th data-orderable="false">Price</th>
+                                    <th data-orderable="false">Status</th>
+                                    <th>Created</th>
+                                    <th data-orderable="false">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>@item.AssetId</td>
+                                    <td title="@item.SiteAddress">@item.SiteAddressSmall</td>
+                                    <td>@item.SiteStateName</td>
+                                    <td>@item.SiteCity</td>
+                                    <td>@item.SiteCounty</td>
+                                    <td>@item.AssetTypeName</td>
+                                    <td>@item.LotSize</td>
+                                    <td>@item.SalesPrice</td>
+                                    <td>@item.SelectedPropertyStatus</td>
+
+                                    @{
+                                        var dt = "";
+                                        if (item.StatusChangedDate != null)
+                                        {
+                                            dt = item.StatusChangedDate.Value.ToString("MM/dd/yyyy");
+                                        }
+
+                                    }
+
+                                    <td>@dt</td>
+
+                                    <td>
+                                        <button type="button" class="btn btn-success" onclick="editProperty(@item.SiteDetailsId)"><i class="fas fa-edit"></i></button>
+                                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 2).CanDelete)
+                                        {
+                                            <button type="button" class="btn btn-danger" onclick="deleteProperty(@item.SiteDetailsId)"><i class="fas fa-minus-square"></i></button>
+                                        }
+
+                                    </td>
+                                </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" onclick="addProperty()">Add New Property</button>
+                            <button type="button" class="btn btn-success" onclick="exportExcel()">Export</button>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

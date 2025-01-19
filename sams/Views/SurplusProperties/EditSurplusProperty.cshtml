@@ -1,0 +1,1065 @@
+﻿@model sams.Models.SiteDetails
+@using sams.Common;
+
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "EditSurplusProperty";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var latt = sams.Common.Helper.SamsLatitude; // "35.1043081";
+    var lonn = sams.Common.Helper.SamsLongitude; // "-80.7123775";
+
+    if (Model.Latitude != null && Model.Longitude != null && Model.Latitude.Trim().Length > 0 && Model.Longitude.Trim().Length > 0)
+    {
+        latt = Model.Latitude;
+        lonn = Model.Longitude;
+    }
+
+    string isBroker = "";
+    string hideDiv = " style=display:none; ";
+    if (Model.CheckIfPropertyListed == 1)
+    {
+        isBroker = "checked";
+        hideDiv = "  ";
+
+
+    }
+
+    if (Model.SiteDetailsId == 0)
+    {
+        Model.AssetTypeId = 2;
+    }
+
+    var hideAssetTypeDetails = " style=display:none; ";
+    var hideAssetTypeOptionPurchaseDetails = " style=display:none; ";
+    var rentText = "Asking Rent";
+    if (Model.AssetTypeId == 1 || Model.AssetTypeId == 6)
+    {
+        hideAssetTypeDetails = "";
+        hideAssetTypeOptionPurchaseDetails = " style=display:none; ";
+        if(Model.AssetTypeId == 6)
+        {
+            rentText = "Rent";
+        }
+    }
+    else if (Model.AssetTypeId == 5)
+    {
+        hideAssetTypeDetails = " style=display:none; ";
+        hideAssetTypeOptionPurchaseDetails = " ";
+    }
+
+    var hideStatusDateSection = "display:none;";
+    var dateStatusText = "";
+    if (Model.SelectedPropertyStatusId == 2 || Model.SelectedPropertyStatusId == 3 || Model.SelectedPropertyStatusId == 4)
+    {
+        hideStatusDateSection = "";
+        if(Model.SelectedPropertyStatusId == 2)
+        {
+            dateStatusText = "Under Contract Date *";
+        }
+        else if(Model.SelectedPropertyStatusId == 3)
+        {
+            dateStatusText = "Closing Date *";
+        }
+        else if (Model.SelectedPropertyStatusId == 4)
+        {
+            dateStatusText = "Terminated Date *";
+        }
+    }
+}
+
+    <script>
+
+    function saveData() {
+        var canSave = true;
+        var txtSiteDetailsId = $("#SiteDetailsId").val();
+
+        var txtPrefix = ""; //$("#selPrefix").val();
+
+        var txtFirstName = ""; //$("#FirstName").val();
+
+
+        var txtLastName = ""; //$("#LastName").val();
+
+
+        var txtCompanyName = ""; //$("#CompanyName").val();
+
+
+
+
+        var txtEmailAddress = ""; //$("#EmailAddress").val();
+
+
+        var txtAddress = ""; //$("#Address").val();
+        var txtCityName = ""; //$("#CityName").val();
+
+
+        var selStateId = 0; //$("#selState").val();
+
+        var txtZipCode = $("#ZipCode").val();
+        var txtContactNumber = ""; //$("#ContactNumber").val();
+
+
+        var txtSamsHoldingEmployee = 0;//$("#SamsHoldingEmployee").val();
+
+        //var marketNameList = $("#MarketName");
+        var selectedmarketId = '';
+
+        var txtPropertyHeader = $("#PropertyHeader").val();
+        if (txtPropertyHeader == '') {
+            canSave = false;
+            $("#errPropertyHeader").html("<font color='red'>Please enter Property Header</font>");
+            $("#PropertyHeader").focus();
+            return;
+        }
+        else {
+            $("#errPropertyHeader").html("");
+        }
+
+        var txtPropertyHeaderLine2 = $("#PropertyHeaderLine2").val();
+
+        //var selMarketId = $("#MarketName").val();
+
+        var txtSiteAddress = $("#searchTextField").val();
+        if (txtSiteAddress == '') {
+            canSave = false;
+            $("#errSiteAddress").html("<font color='red'>Please enter Address</font>");
+            $("#searchTextField").focus();
+            return;
+        }
+        else {
+            $("#errSiteAddress").html("");
+        }
+
+        var txtSiteCity = $("#SiteCity").val();
+        if (txtSiteCity == '') {
+            canSave = false;
+            $("#errSiteCity").html("<font color='red'>Please enter City</font>");
+            $("#SiteCity").focus();
+            return;
+        }
+        else {
+            $("#errSiteCity").html("");
+        }
+
+        var selSiteState = $("#selSiteState").val();
+        var txtSiteCounty = $("#SiteCounty").val();
+
+        var selPropertyStatus = $("#selPropertyStatus").val();
+
+        var txtSiteCrossStreetName = $("#SiteCrossStreetName").val();
+        var txtIsPropertyAvailable = 0;//$("#IsPropertyAvailable").val();
+        var txtZoning = $("#Zoning").val();
+
+        var selAssetTypeId = $("#AssetTypeId").val();
+
+        var txtLotSize = $("#LotSize").val();
+        if (txtLotSize == '') {
+            canSave = false;
+            $("#errLotSize").html("<font color='red'>Please enter lotsize</font>");
+            $("#LotSize").focus();
+            return;
+        }
+        else {
+            $("#errLotSize").html("");
+        }
+
+        var txtSalesPrice = $("#SalesPrice").val();
+        /*
+        if (txtSalesPrice == 0) {
+            canSave = false;
+            $("#errSalesPrice").html("<font color='red'>Please enter asking price</font>");
+            $("#SalesPrice").focus();
+            return;
+        }
+        else {
+            $("#errSalesPrice").html("");
+        }
+        */
+
+        var assetId = $("#AssetId").val();
+
+        var txtComments = $("#Comments").val();
+        var txtLatitude = $("#txtLatitude").val();
+        var txtLongitude = $("#txtLongitude").val();
+
+        var checkIfPropertyListed = $("#CheckIfPropertyListed").val();
+        var listingAgentName = $("#ListingAgentName").val();
+        var listingExpiry = $("#p_ListingExpiry").val();
+        var listingPrice = $("#ListingPrice").val();
+
+        var term = $("#Term").val();
+        var askingRent = $("#AskingRent").val();
+        var leaseType = $("#selLeaseType").val();
+
+        var statusChangedDate = $("#p_StatusUpdateDate").val();
+        if (selPropertyStatus > 1 && statusChangedDate == '') {
+            $("#errStatusUpdateDate").html("<font color='red'>Please enter a date</font>");
+            return;
+        }
+
+        var termOptionPurchase = $("#TermOptionPurchase").val();
+        var askingRentOptionPurchase = $("#AskingRentOptionPurchase").val();
+        var leaseTypePurchase = $("#selLeaseTypePurchase").val();
+        var optionPurchasePrice = $("#OptionPurchasePrice").val();
+        var txtPotentialUse = $("#PotentialUse").val();
+        var regionId = $("#selRegion").val();
+
+        
+
+        var siteDetails = {
+            SiteDetailsId: txtSiteDetailsId,
+            NamePrefix: txtPrefix,
+            FirstName: txtFirstName,
+            LastName: txtLastName,
+            CompanyName: txtCompanyName,
+            EmailAddress: txtEmailAddress,
+            Address: txtAddress,
+            CityName: txtCityName,
+            StateId: selStateId,
+            StateName: "",
+            ZipCode: txtZipCode,
+            ContactNumber: txtContactNumber,
+            SamsHoldingEmployee: txtSamsHoldingEmployee,
+            MarketId: selectedmarketId,
+            MarketName: "",
+            PropertyHeader: txtPropertyHeader,
+            PropertyHeaderLine2: txtPropertyHeaderLine2,
+            SiteAddress: txtSiteAddress,
+            SiteCity: txtSiteCity,
+            SiteStateId: selSiteState,
+            SiteStateName: "",
+            SiteCounty: txtSiteCounty,
+            SiteCrossStreetName: txtSiteCrossStreetName,
+            IsPropertyAvailable: txtIsPropertyAvailable,
+            Zoning: txtZoning,
+            LotSize: txtLotSize,
+            SalesPrice: txtSalesPrice,
+            Comments: txtComments,
+            AssetTypeId: selAssetTypeId,
+            AssetId: assetId,
+            Latitude: txtLatitude,
+            Longitude: txtLongitude,
+            SelectedPropertyStatusId: selPropertyStatus,
+
+            CheckIfPropertyListed: checkIfPropertyListed,
+            ListingAgentName: listingAgentName,
+            ListingExpiry: listingExpiry,
+            ListingPrice: listingPrice,
+            Term: term,
+            AskingRent: askingRent,
+            LeaseType: leaseType,
+            StatusChangedDate: statusChangedDate,
+            TermOptionPurchase: termOptionPurchase,
+            AskingRentOptionPurchase: askingRentOptionPurchase,
+            LeaseTypePurchase: leaseTypePurchase,
+            OptionPurchasePrice: optionPurchasePrice,
+            PotentialUse: txtPotentialUse,
+            RegionId: regionId
+        };
+
+
+
+        /*
+        if (canSave == true) {
+            var url = "submit_site";
+            alert("s");
+            $.ajax({
+                type: "POST",
+                data: siteDetails,
+                url: url,
+                dataType: "json"
+            }).done(function (res) {
+                // $("#SomeDivToShowTheResult").html(res);
+                alert(res);
+            });
+            */
+
+
+
+
+        $.ajax({
+            type: 'POST',
+            url: 'EditSurplusProperty',
+            data: siteDetails,
+            success: function (data) {
+
+                //location.href = "Index";
+                // location.href = "UploadImage/?propertyId=" + data;
+                //location.href = "ViewSurplusProperty?propertyId=" + data;
+                var baseUrl = "@Url.Action("ViewSurplusProperty", "SurplusProperties")/?propertyId=" + data;
+                location.href = baseUrl;
+            },
+            error: function (xhr, textStatus, error) {
+                alert(error);
+            }
+        });
+    }
+
+    function viewList() {
+        //location.href = "ViewSurplusProperty?propertyId=" + @Model.SiteDetailsId;
+        var baseUrl = "@Url.Action("ViewSurplusProperty", "SurplusProperties")/?propertyId=" + @Model.SiteDetailsId;
+        location.href = baseUrl;
+    }
+
+    function viewAllList() {
+        //location.href = "Index";
+        var baseUrl = "@Url.Action("Index", "SurplusProperties")";
+        location.href = baseUrl;
+    }
+
+    function checkClientRepresentation() {
+        var selected = document.querySelector('[id="radioIsPropertyListed"]:checked')
+        if (selected != null) {
+            $("#CheckIfPropertyListed").val("1");
+            $("#divClientPropertyListed").show();
+        }
+        else {
+            $("#CheckIfPropertyListed").val("0");
+            $("#divClientPropertyListed").hide();
+        }
+
+    }
+
+    function getSelectedAssetType() {
+        var assetTypeId = $("#AssetTypeId").val();
+        if (assetTypeId == 1) {
+            $("#divAssetType").show();
+            $("#divAssetTypeOptionToPrice").hide();
+            $("#lblAskingRent").text("Asking Rent");
+        }
+        else if (assetTypeId == 5) {
+            $("#divAssetType").hide();
+            $("#divAssetTypeOptionToPrice").show();
+        }
+        else if (assetTypeId == 6) {
+            $("#divAssetType").show();
+            $("#divAssetTypeOptionToPrice").hide();
+            $("#lblAskingRent").text("Rent");
+        }
+        else {
+            $("#divAssetType").hide();
+            $("#divAssetTypeOptionToPrice").hide();
+        }
+    }
+
+    function changeStatus() {
+        var stateId = $("#selPropertyStatus").val();
+        if (stateId == 2) {
+            $("#divStatusChangeDate").show();
+            $("#lblStatusUpdateDate").html("Under Contract Date *");
+        }
+        else if (stateId == 3) {
+            $("#divStatusChangeDate").show();
+            $("#lblStatusUpdateDate").html("Closing Date *");
+        }
+        else if (stateId == 4) {
+            $("#divStatusChangeDate").show();
+            $("#lblStatusUpdateDate").html("Terminated Date *");
+        }
+        else {
+            $("#divStatusChangeDate").hide();
+        }
+
+    }
+
+    function getRegionList() {
+        var stateId = $("#selSiteState").val();
+
+        $("select#selRegion").empty();
+        $.getJSON(`@Url.Action("GetRegionByStateId", "Region")?stateId=${stateId}`, function (data) {
+            $("select#selRegion").append(`<option value="0">--- Select ---</option>`);
+            $.each(data, function (i, item) {
+                //alert(JSON.stringify(item));
+                $("select#selRegion").append(`<option value="${item.id}">${item.name}</option>`);
+            });
+        });
+    }
+
+        
+        function showCharacters() {
+            if ($("#PropertyHeader").val().length > 40) {
+                return false;
+            }
+
+            $("#remainingC").text("Remaining characters : " + (40 - this.value.length));
+        }
+    </script>
+<div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Surplus Property Details</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        @if (Model.SiteDetailsId > 0)
+                        {
+                            @:<li class="breadcrumb-item"><a href="javascript:viewList();">View Details</a></li>
+                        }
+                        else
+                        {
+                            @:<li class="breadcrumb-item"><a href="javascript:viewAllList();">List</a></li>
+                        }
+
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <section class="content">
+
+        <div class="row">
+            <div class="col-12">
+                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByxJE-OM4Lv77gVdAYJAfKOiDpD6H9ofg&v=3.exp&sensor=false&libraries=places"></script>
+                <script>
+                                                    function initialize() {
+                                                        var marker;
+
+
+
+
+
+                                                        var mapOptions = {
+                                                            center: new google.maps.LatLng(@latt, @lonn),
+                                                            zoom: 17,
+                                                            mapTypeId: google.maps.MapTypeId.ROADMAP
+
+                                                        };
+                                                        map = new google.maps.Map(document.getElementById('map-canvas'),
+                                                            mapOptions);
+
+                                                        var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+                                                        var icon = new google.maps.MarkerImage("http://www.googlemapsmarkers.com/v1/BC03DC/");
+                                                        var ig = '../img/map/map_red.png';
+
+                                                        marker = new google.maps.Marker({
+                                                            // The below line is equivalent to writing:
+                                                            // position: new google.maps.LatLng(-34.397, 150.644)
+
+                                                            /*
+                                                            icon: {
+                                                                path: google.maps.SymbolPath.CIRCLE,
+                                                                scale: 10,
+                                                                strokeColor: '#939'
+                                                            },
+
+                                                            icon: ig,
+                                                            */
+                                                            position: { lat: @latt, lng: @lonn },
+                                                            map: map
+                                                        });
+
+                                                        var input = /** */(document.getElementById('searchTextField'));
+                                                        var autocomplete = new google.maps.places.Autocomplete(input);
+
+                                                        autocomplete.bindTo('bounds', map);
+
+
+
+                                                        var infowindow = new google.maps.InfoWindow();
+                                                        marker = new google.maps.Marker({
+                                                            map: map
+                                                        });
+
+
+
+
+                                                        google.maps.event.addListener(map, 'click', function (e) {
+
+                                                            marker.setMap(null);
+
+                                                            //Determine the location where the user has clicked.
+                                                            var location = e.latLng;
+
+                                                            //Create a marker and placed it on the map.
+
+                                                            marker = new google.maps.Marker({
+                                                                position: location,
+                                                                map: map
+                                                            });
+
+                                                            $("#txtLatitude").val(location.lat());
+                                                            $("#txtLongitude").val(location.lng());
+
+                                                            /*
+                                                                    marker = map.addMarker(mapOptions).position(new Latlng(31.647316, 74.763791));
+                                                            */
+
+                                                            //Attach click event handler to the marker.
+                                                            google.maps.event.addListener(marker, "click", function (e) {
+
+
+
+                                                                var infoWindow = new google.maps.InfoWindow({
+                                                                    //content: 'Latitude: ' + location.lat() + '<br />Longitude: ' + location.lng()
+                                                                    content: '@Model.PropertyHeader'
+                                                                });
+
+
+
+                                                                infoWindow.open(map, marker);
+
+                                                            });
+
+                                                        });
+
+
+                                                        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+                                                            infowindow.close();
+                                                            marker.setVisible(false);
+                                                            // input.className = '';
+                                                            var place = autocomplete.getPlace();
+                                                            if (!place.geometry) {
+                                                                // Inform the user that the place was not found and return.
+                                                                // input.className = 'notfound';
+                                                                return;
+                                                            }
+
+                                                            var location = place.geometry.location;
+
+                                                            $("#txtLatitude").val(location.lat());
+                                                            $("#txtLongitude").val(location.lng());
+
+                                                            // If the place has a geometry, then present it on a map.
+                                                            if (place.geometry.viewport) {
+                                                                map.fitBounds(place.geometry.viewport);
+                                                            } else {
+                                                                map.setCenter(place.geometry.location);
+                                                                map.setZoom(17);  // Why 17? Because it looks good.
+                                                            }
+
+                                                            marker.setPosition(place.geometry.location);
+                                                            marker.setVisible(true);
+
+                                                            var address = '';
+                                                            if (place.address_components) {
+                                                                address = [
+                                                                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                                                                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                                                                    (place.address_components[2] && place.address_components[2].short_name || '')
+                                                                ].join(' ');
+                                                            }
+
+                                                            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address + '<br>' + location.lng() + '<br>' + location.lat());
+
+
+                                                            infowindow.open(map, marker);
+                                                        });
+
+                                                        // Sets a listener on a radio button to change the filter type on Places
+                                                        // Autocomplete.
+                                                        function setupClickListener(id, types) {
+                                                            var radioButton = document.getElementById(id);
+                                                            google.maps.event.addDomListener(radioButton, 'click', function () {
+
+
+                                                                autocomplete.setTypes(types);
+                                                            });
+                                                        }
+
+                                                        setupClickListener('changetype-all', []);
+                                                        setupClickListener('changetype-establishment', ['establishment']);
+                                                        setupClickListener('changetype-geocode', ['geocode']);
+
+                                                    }
+
+                                                    google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+                </script>
+
+                <div class="card card-info">
+                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+
+                        <div class="row">
+                            <div class="col-10">
+                                <h3 class="card-title">Address And Map</h3>
+                            </div>
+                            <div class="col-2">
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            <input id="searchTextField" name="SiteAddress" type="text" class="form-control" value="@Model.SiteAddress" />
+                            <div id="errSiteAddress"></div>
+                        </div>
+
+                        <div id="map-canvas" style="height:400px;width:100%;">
+
+                        </div>
+
+
+                        <div class="form-group">
+                            <input type="hidden" name="Latitude" id="txtLatitude" value="@Model.Latitude" />
+                            <input type="hidden" name="Longitude" id="txtLongitude" value="@Model.Longitude" />
+
+                        </div>
+
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form asp-action="EditSurplusProperty">
+
+
+                            <input type="hidden" asp-for="SiteDetailsId" class="form-control" />
+
+
+                            <div class="row">
+                                <!-- <div class="col-lg-3"></div> -->
+                                
+
+                                <div class="col-lg-6">
+
+                                    <script>
+                                        function limitText() {
+                                            var txtHeader = $("#PropertyHeader").val();
+                                            var strLength = 40 - txtHeader.length;
+
+                                            $("#errTextIndicator").html("<font color='#1c1c1c'>You can enter " + strLength+" of 40 characters</font>");
+                                        }
+                                    </script>
+                                    
+
+                                    <!-- Input addon -->
+                                    <div class="card card-info">
+                                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                            <h3 class="card-title">Property Information</h3>
+                                        </div>
+                                        <div class="card-body">
+
+
+
+                                            <div class="form-group">
+                                                <label asp-for="PropertyHeader" class="control-label">Listing Header Line 1</label>
+
+                                                <input asp-for="PropertyHeader" class="form-control" maxlength="40"  />
+                                                <div id="errPropertyHeader"></div>
+                                                <div id="errTextIndicator"><i>You can enter upto 40 characters</i></div>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="PropertyHeaderLine2" class="control-label">Listing Header Line 2</label>
+                                                <input asp-for="PropertyHeaderLine2" class="form-control" maxlength="40"  />
+                                                <div id="errTextIndicator"><i>You can enter upto 40 characters</i></div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="AssetId" class="control-label">Asset Id</label>
+                                                <input asp-for="AssetId" class="form-control" />
+
+                                            </div>
+
+                                            <!--
+    <div class="form-group">
+        <label asp-for="SiteAddress" class="control-label">Address</label>
+        <input asp-for="SiteAddress" class="form-control" />
+        <div id="errSiteAddress"></div>
+    </div>
+    -->
+
+                                            <div class="form-group">
+                                                <label asp-for="SiteCity" class="control-label">City</label>
+                                                <input asp-for="SiteCity" class="form-control" />
+                                                <div id="errSiteCity"></div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="selSiteState" class="control-label">Select State</label>
+                                                <select id="selSiteState" name="selSiteState" class="form-select form-control" onchange="getRegionList()">
+                                                    <option value="0">--- Select ---</option>
+                                                    @if (Model != null)
+                                                    {
+                                                        foreach (var itemSel in Model.StateList)
+                                                        {
+                                                            if (Model.SiteStateId == itemSel.StateId)
+                                                            {
+                                                                <option selected value="@itemSel.StateId">@itemSel.StateName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="selRegion" class="control-label">Select Region</label>
+                                                <select id="selRegion" name="RegionId" class="form-select form-control">
+                                                    <option value="0">--- Select ---</option>
+                                                    @if (Model != null)
+                                                    {
+                                                        foreach (var itemSel in Model.RegionList)
+                                                        {
+                                                            if (Model.RegionId == itemSel.RegionId)
+                                                            {
+                                                                <option selected value="@itemSel.RegionId">@itemSel.RegionName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@itemSel.RegionId">@itemSel.RegionName</option>
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="ZipCode" class="control-label">ZIP Code</label>
+                                                <input asp-for="ZipCode" class="form-control" />
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="SiteCounty" class="control-label">County</label>
+                                                <input asp-for="SiteCounty" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="SiteCrossStreetName" class="control-label">Cross Street Name</label>
+                                                <input asp-for="SiteCrossStreetName" class="form-control" />
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="selPropertyStatus" class="control-label">Status</label>
+                                                <select id="selPropertyStatus" name="selSiteState" class="form-select form-control" onchange="changeStatus()">
+                                                    <option value="0">--- Select ---</option>
+                                                    @if (Model != null)
+                                                    {
+                                                        foreach (var itemSel in Model.propertyStatusList)
+                                                        {
+                                                            if (Model.SelectedPropertyStatusId == itemSel.PropertyStatusId)
+                                                            {
+                                                                <option selected value="@itemSel.PropertyStatusId">@itemSel.PropertyStatus</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@itemSel.PropertyStatusId">@itemSel.PropertyStatus</option>
+                                                            }
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+
+                                            @{
+                                                var dtStatusChangedDate = Model.StatusChangedDate == default(DateTime?) ? "" : Model.StatusChangedDate.Value.ToString("MM-dd-yyyy");
+                                            }
+
+
+                                            <div class="form-group" style="@hideStatusDateSection" id="divStatusChangeDate">
+                                                <label id="lblStatusUpdateDate" for="" class="control-label">@dateStatusText</label>
+                                                <!--
+                                                        <input type="text" value="dtDDPExtensionDisp" name="DDPExtension" class="form-control" id="p_DDPExtension" readonly />
+        -->
+                                                <input type="text" name="StatusUpdateDate" class="form-control" id="p_StatusUpdateDate" value="@dtStatusChangedDate" readonly />
+                                                <div id="errStatusUpdateDate"></div>
+                                            </div>
+
+
+
+
+
+                                            <!-- /input-group -->
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+                                    <!-- /.card -->
+
+
+
+
+
+
+
+                                </div>
+                                <div class="col-lg-6">
+
+                                    <!-- Input addon -->
+                                    <div class="card card-info">
+                                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                            <h3 class="card-title">Additional Details</h3>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <div class="form-group">
+                                                <label asp-for="Zoning" class="control-label">Zoning :</label>
+                                                <input asp-for="Zoning" class="form-control" />
+
+                                            </div>
+
+
+
+                                            <div class="form-group">
+                                                <label asp-for="LotSize" class="control-label">Lot Size</label>
+                                                <input asp-for="LotSize" class="form-control" />
+                                                <div id="errLotSize"></div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SalesPrice" class="control-label">Asking Price</label>
+                                                <div class="input-group mb-3">
+                                                    
+                                                    <input asp-for="SalesPrice" class="form-control" maxlength="50" />
+                                                </div>
+                                                
+                                                <div id="errSalesPrice"></div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="Comments" class="control-label"></label>
+                                                <textarea rows="4" asp-for="Comments" class="form-control"></textarea>
+                                            </div>
+
+
+
+
+                                            <div class="form-group">
+                                                <label for="AssetTypeId" class="control-label">Select Asset Type</label>
+                                                <select id="AssetTypeId" name="AssetTypeId" class="form-select form-control" onchange="getSelectedAssetType()">
+                                                    @if (Model != null)
+                                                    {
+                                                        foreach (var itemSel in Model.AssetTypeList)
+                                                        {
+                                                            if (Model.AssetTypeId == itemSel.AssetTypeId)
+                                                            {
+                                                                <option selected value="@itemSel.AssetTypeId">@itemSel.AssetTypeName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@itemSel.AssetTypeId">@itemSel.AssetTypeName</option>
+                                                            }
+                                                        }
+                                                    }
+
+                                                </select>
+
+                                                <div class="card card-info" id="divAssetType" @hideAssetTypeDetails>
+                                                    <div class="card-body">
+
+                                                        <div class="form-group">
+                                                            <label asp-for="Term" class="control-label">Term</label>
+                                                            <input asp-for="Term" class="form-control" />
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label asp-for="AskingRent" class="control-label" id="lblAskingRent">@rentText</label>
+
+                                                            <div class="input-group mb-3">
+
+                                                                <input asp-for="AskingRent" class="form-control" onkeypress="return numericFilter(this);" />
+                                                            </div>
+
+                                                        </div>
+
+
+
+                                                        <div class="form-group">
+                                                            <label for="selLeaseType" class="control-label">Lease Type</label>
+                                                            <select id="selLeaseType" name="selLeaseType" class="form-select form-control">
+                                                                <option value="0">--- Select ---</option>
+                                                                @if (Model != null)
+                                                                {
+                                                                    foreach (var itemSel in Model.LeaseTypeList)
+                                                                    {
+                                                                        if (Model.LeaseType == itemSel.LeaseTypeId)
+                                                                        {
+                                                                            <option selected value="@itemSel.LeaseTypeId">@itemSel.LeaseType</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@itemSel.LeaseTypeId">@itemSel.LeaseType</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+
+                                                        
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="card card-info" id="divAssetTypeOptionToPrice" @hideAssetTypeOptionPurchaseDetails>
+                                                    <div class="card-body">
+
+                                                        <div class="form-group">
+                                                            <label asp-for="TermOptionPurchase" class="control-label">Term</label>
+                                                            <input asp-for="TermOptionPurchase" class="form-control" />
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label asp-for="AskingRentOptionPurchase" class="control-label">Asking Rent</label>
+                                                            <div class="input-group mb-3">
+                                                                <input asp-for="AskingRentOptionPurchase" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="selLeaseTypePurchase" class="control-label">Lease Type</label>
+                                                            <select id="selLeaseTypePurchase" name="LeaseTypePurchase" class="form-select form-control">
+                                                                <option value="0">--- Select ---</option>
+                                                                @if (Model != null)
+                                                                {
+                                                                    foreach (var itemSel in Model.LeaseTypeList)
+                                                                    {
+                                                                        if (Model.LeaseTypePurchase == itemSel.LeaseTypeId)
+                                                                        {
+                                                                            <option selected value="@itemSel.LeaseTypeId">@itemSel.LeaseType</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@itemSel.LeaseTypeId">@itemSel.LeaseType</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label asp-for="OptionPurchasePrice" class="control-label">Option Purchase Price</label>
+                                                            <div class="input-group mb-3">
+                                                                <input asp-for="OptionPurchasePrice" class="form-control" maxlength="50" />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                
+                                                
+
+                                            </div>
+
+
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+                                    <!-- /.card -->
+
+
+                                    <div class="card card-info ">
+                                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="icheck-success d-inline">
+                                                        <input type="checkbox" name="ddpExtensionNotApplicable" id="radioIsPropertyListed" onchange="checkClientRepresentation(this.value)" @isBroker>
+                                                        <label for="radioIsPropertyListed">
+                                                            Check If Property Is Listed
+                                                        </label>
+                                                        <input type="hidden" asp-for="CheckIfPropertyListed" class="form-control" />
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                        <div class="card-body" id="divClientPropertyListed" @hideDiv>
+
+                                            <div class="form-group">
+                                                <label asp-for="ListingAgentName" class="control-label">Listing Agent Name</label>
+                                                <input asp-for="ListingAgentName" class="form-control" />
+                                            </div>
+
+                                            @{
+                                                var drListingExpiry = Model.ListingExpiry == default(DateTime?) ? "" : Model.ListingExpiry.Value.ToString("MM-dd-yyyy");
+                                            }
+
+                                            <div class="form-group">
+                                                <label for="p_ListingExpiry" class="control-label">Listing Expires</label>
+                                                <input name="ListingExpiry" value="@drListingExpiry" id="p_ListingExpiry" class="form-control" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label asp-for="ListingPrice" class="control-label">Listing Price</label>
+                                                <div class="input-group mb-3">
+                                                    <!--
+
+    <div class="input-group-prepend">
+        <span class="input-group-text">$</span>
+    </div>
+    <input asp-for="ListingPrice" class="form-control" onkeypress="return numericFilter(event);" />
+    -->
+                                                    <input asp-for="ListingPrice" class="form-control" maxlength="50" />
+
+                                                </div>
+                                                
+                                            </div>
+
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+
+
+                                    </div>
+                                    <div class="form-group">
+                                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 2).CanEdit)
+                                        {
+                                            <input type="button" id="btnSave" value="Save Changes" class="btn btn-primary" onclick="saveData();" />
+                                        }
+
+                                        @if (Model.SiteDetailsId == 0)
+                                        {
+                                            <input type="button" id="btnList" value="Cancel Edit" class="btn btn-success" onclick="viewAllList();" />
+                                        }
+                                        else
+                                        {
+                                            <input type="button" id="btnList" value="Cancel Edit" class="btn btn-success" onclick="viewList();" />
+                                        }
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+</div>
+
+

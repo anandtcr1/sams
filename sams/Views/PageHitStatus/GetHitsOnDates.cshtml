@@ -1,0 +1,145 @@
+﻿@model IEnumerable<sams.Models.PageHitViewModel>
+
+@{
+    ViewData["Title"] = "GetHitsOnDates";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    DateTime fromDate = (DateTime)ViewData["FromDate"];
+    DateTime toDate = (DateTime)ViewData["ToDate"];
+
+    //string strFromDate = fromDate.ToString("yyyy-MM-dd");
+    //string strToDate = toDate.ToString("yyyy-MM-dd");
+
+    string strFromDate = fromDate.ToString("MM-dd-yyyy");
+    string strToDate = toDate.ToString("MM-dd-yyyy");
+}
+
+    <script>
+
+    function searchHits() {
+        var fromDate = $("#p_HitFromDate").val();
+        var toDate = $("#p_HitToDate").val();
+
+        if (fromDate == '') {
+            $("#errHitFromDate").html("<font color='red'>Please Select From Date</font>");
+            return;
+        }
+
+        if (toDate == '') {
+            $("#errHitToDate").html("<font color='red'>Please Select To Date</font>");
+            return;
+        }
+
+        $("#GetHitsOnDates").submit();
+    }
+
+    function goDashboard() {
+            var baseUrl = "@Url.Action("Index", "Admin")?propertyType=all";
+            location.href = baseUrl;
+        }
+
+    </script>
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Page Hit Details</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:goDashboard()">Home</a></li>
+                        <li class="breadcrumb-item active">Page Hit Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="card-body">
+                        <form asp-action="GetHitsOnDates" id="GetHitsOnDates" name="GetHitsOnDates" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="p_HitFromDate" class="control-label">From </label>
+                                        <input type="text" name="fromDate" class="form-control" id="p_HitFromDate" value="@strFromDate" readonly />
+                                        <div id="errHitFromDate"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="p_HitToDate" class="control-label">To </label>
+                                        <input type="text" name="toDate" class="form-control" id="p_HitToDate" value="@strToDate" readonly />
+                                        <div id="errHitToDate"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" onclick="searchHits()">Search</button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Page Hit List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Asset Id</th>
+                                    <th>Asset Type</th>
+                                    <th>Header</th>
+                                    <th>Total Hits</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>@item.AssetType</td>
+                                        <td>@item.PropertyHeader</td>
+                                        <td>@item.TotalPageHit</td>
+
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>

@@ -1,0 +1,17 @@
+﻿@import url(https://fonts.googleapis.com/css?family=Lobster);
+
+@font-face {
+    font-family: SamsSignature;
+    src: url("../fonts/LearningCurve.ttf");
+}
+
+.signature_font {
+    font-family: SamsSignature;
+}
+
+@media print {
+    .signature_font {
+        font-family: SamsSignature;
+    }
+}
+

@@ -1,0 +1,106 @@
+﻿@model sams.Models.UserViewModel
+
+@{
+    ViewData["Title"] = "DoLogin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+    <script>
+    function doLogin() {
+        var userName = $("#UserName").val();
+        var password = $("#Password").val();
+
+        if (userName == '') {
+            alert("Please enter User name");
+        }
+        else if (password == '') {
+            alert("Please enter password");
+        }
+        else {
+
+            $("#CheckUser").submit();
+            /*
+            var userDetails = {
+                UserName: userName,
+                Password: password
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: 'DoLogin',
+                data: userDetails,
+                success: function (data) {
+                    alert(data);
+                },
+                error: function (xhr, textStatus, error) {
+                    alert(error);
+                }
+            });
+            */
+        }
+    }
+
+        function goDashboard() {
+            var baseUrl = "@Url.Action("Index", "Home")";
+            location.href = baseUrl;
+        }
+
+    </script>
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_login">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3>Login</h3>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="destination_details_info">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-9">
+                <div class="destination_info">
+
+                    <h3 class="mb-30">Administration Panel Login</h3>
+                    <form action="CheckUser" name="CheckUser" id="CheckUser" method="post">
+                        <div class="mt-10">
+                            
+                            
+                            <input asp-for="UserName" class="single-input" placeholder="User Name" onfocus="this.placeholder = ''" 
+                                   onblur="this.placeholder = 'User Name'"/>
+
+                        </div>
+                        <div class="mt-10">
+                            
+
+                            <input type="password" asp-for="Password" class="single-input" placeholder="Password" onfocus="this.placeholder = ''" 
+                                   onblur="this.placeholder = 'Password'"
+                                   />
+
+                        </div>
+
+                        <div class="mt-10">
+                            <a href="javascript:doLogin()" class="boxed-btn4" style="background-color:#57328E; margin-top:3px;">Login</a>
+                            <a href="javascript:goDashboard()" class="boxed-btn4">Cancel</a>
+                        </div>
+
+                        <div><font color='red'>@ViewBag.Name</font></div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

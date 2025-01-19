@@ -1,0 +1,83 @@
+﻿@model IEnumerable<sams.Models.SiteDetails>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+    function editProperty(siteDetailsId) {
+        location.href = "EditProperty?propertyId=" + siteDetailsId;
+    }
+
+    
+</script>
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Property List From Website</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Contact Number</th>
+                                    <th>State</th>
+                                    <th>County</th>
+                                    <th>Lot size</th>
+                                    <th>Price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.FirstName</td>
+                                        <td>@item.ContactNumber</td>
+                                        <td>@item.StateName</td>
+                                        <td>@item.SiteCounty</td>
+                                        <td>@item.LotSize</td>
+                                        <td>@item.SalesPrice</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="editProperty(@item.SiteDetailsId)"><i class="fas fa-edit"></i></button>
+                                            <button type="button" class="btn btn-danger"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                        <!--
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" onclick="addProperty()">Add New Property</button>
+                        </div>
+                        -->
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

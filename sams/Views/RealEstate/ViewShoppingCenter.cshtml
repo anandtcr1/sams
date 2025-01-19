@@ -1,0 +1,295 @@
+﻿@model sams.Models.ShoppingCenterViewModel
+
+@{
+    ViewData["Title"] = "ViewShoppingCenter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
+<div class="bradcam_area" id="map_canvas" style="height:350px;">
+
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map_canvas'), {
+                center: { lat: -33.866, lng: 151.196 },
+                zoom: 15
+            });
+
+            var request = {
+                placeId: 'ChIJN1t_tDeuEmsRUsoyG83frY4',
+                fields: ['name', 'formatted_address', 'place_id', 'geometry']
+            };
+
+            var infowindow = new google.maps.InfoWindow();
+            var service = new google.maps.places.PlacesService(map);
+
+            service.getDetails(request, function (place, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: place.geometry.location
+
+                    });
+                    google.maps.event.addListener(marker, 'click', function () {
+                        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+                            'Place ID: ' + place.place_id + '<br>' +
+                            place.formatted_address + '</div>');
+                        infowindow.open(map, this);
+                    });
+                }
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDo6qUeMWxZe5W2-LHtlT4kxvZIsNK6Luk&amp;callback=initMap">
+    </script>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="recent_trip_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="single_trip">
+
+                    <!--
+    @foreach (var imgItem in Model.ImageList)
+    {
+        <div class="thumb" style="margin-top:5px; margin-bottom:5px;">
+            <img src="@Url.Content("~/" +imgItem.ImageName)" alt="@Model.ShoppingCenterName">
+        </div>
+    }-->
+
+
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h4 class="footer_title" style="color:#ffffff;">
+                                Contact For Additional Information
+                            </h4>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+                            <p>
+                                Paul K Joseph
+                            </p>
+                            <p>
+                                Real Estate Director
+                            </p>
+                            <p>
+                                Direct: 704-940-3704
+                            </p>
+                            <p>
+                                <a href="mailto:pjoseph@samsholdings.com">pjoseph@samsholdings.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-8 col-md-12">
+
+
+
+                <div class="row gallery-item">
+
+                    @foreach (var imgItem in Model.ImageList)
+                    {
+
+                        <div class="col-md-4 property_image_border">
+                            <a href="@Url.Content("~/" +imgItem.ImageName)" class="img-pop-up">
+                                <div class="single-gallery-image" style="background: url(@Url.Content("~/" +imgItem.ImageName)); margin-top: 2px;"></div>
+                            </a>
+                        </div>
+                    }
+
+
+                </div>
+
+
+                <div class="single_trip">
+
+
+                    <div class="column_inner_right">
+                        @Model.ShoppingCenterName
+                    </div>
+
+
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h3 class="footer_title" style="color:#ffffff;">
+                                Details
+                            </h3>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+
+                            
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Shopping Center Name : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.ShoppingCenterName
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Price : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    $@Model.RentAmount
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h3 class="footer_title" style="color:#ffffff;">
+                                Address Details
+                            </h3>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>City :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.CityName
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>State :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.StateName
+                                </div>
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>ZIP code :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.Zipcode
+                                </div>
+                            </div>
+
+
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Property Type : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.PropertyTypeName
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Spaces :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.Spaces
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Spaces Available :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.SpacesAvailable
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Building Size :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.BuildingSize
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Description :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.ShopDescription
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

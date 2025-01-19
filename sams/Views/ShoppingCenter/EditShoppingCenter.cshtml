@@ -1,0 +1,261 @@
+﻿@model sams.Models.ShoppingCenterViewModel
+
+@{
+    ViewData["Title"] = "EditShoppingCenter";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+    function Save() {
+        var shoppingCenterName = $("#ShoppingCenterName").val();
+        if (shoppingCenterName.trim() == '') {
+            $("#errShoppingCenterName").html("<font color='red'>Please enter Shopping center name</font>");
+            $("#ShoppingCenterName").focus();
+            return;
+        }
+        else {
+            $("#errShoppingCenterName").html();
+        }
+
+        var cityName = $("#CityName").val();
+        if (cityName.trim() == '') {
+            $("#errCityName").html("<font color='red'>Please enter City Name</font>");
+            $("#CityName").focus();
+            return;
+        }
+        else {
+            $("#errCityName").html();
+        }
+
+
+        var zipcode = $("#Zipcode").val();
+        if (zipcode.trim() == '') {
+            $("#errZipcode").html("<font color='red'>Please enter Zipcode</font>");
+            $("#Zipcode").focus();
+            return;
+        }
+        else {
+            $("#errZipcode").html();
+        }
+
+        var rentAmount = $("#RentAmount").val();
+        if (rentAmount.trim() == '') {
+            $("#errRentAmount").html("<font color='red'>Please enter Rent Amount</font>");
+            $("#RentAmount").focus();
+            return;
+        }
+        else {
+            $("#errRentAmount").html();
+        }
+
+        $("#SaveShoppingCenter").submit();
+
+    }
+</script>
+
+
+<div class="content-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Shopping Center Details</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:viewList();">View Details</a></li>
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <section class="content">
+        <form id="SaveShoppingCenter" name="SaveShoppingCenter" action="SaveShoppingCenter" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-6">
+
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Shopping Center Details</h3>
+                        </div>
+                        <div class="card-body">
+
+
+                            <div class="row">
+                                <div class="col-lg-12">
+
+
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="ShoppingCenterId" class="form-control" />
+
+                                        <label asp-for="ShoppingCenterName" class="control-label">Shopping Center Name *</label>
+                                        <input asp-for="ShoppingCenterName" class="form-control" />
+                                        <div id="errShoppingCenterName"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="selState" class="control-label">Select State</label>
+                                        <select id="StateId" name="StateId" class="form-select form-control">
+                                            @if (Model != null)
+                                            {
+                                                foreach (var itemSel in Model.StateList)
+                                                {
+                                                    if (Model.StateId == itemSel.StateId)
+                                                    {
+                                                        <option selected value="@itemSel.StateId">@itemSel.StateName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                                    }
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label asp-for="CityName" class="control-label">City *</label>
+                                        <input asp-for="CityName" class="form-control" />
+                                        <div id="errCityName"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Zipcode" class="control-label">Zipcode *</label>
+                                        <input asp-for="Zipcode" class="form-control" />
+                                        <div id="errZipcode"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="PropertyTypeId" class="control-label">Select Asset Type</label>
+                                        <select id="PropertyTypeId" name="PropertyTypeId" class="form-select form-control">
+                                            @if (Model != null)
+                                            {
+                                                foreach (var itemSel in Model.AssetTypeList)
+                                                {
+                                                    if (Model.PropertyTypeId == itemSel.AssetTypeId)
+                                                    {
+                                                        <option selected value="@itemSel.AssetTypeId">@itemSel.AssetTypeName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@itemSel.AssetTypeId">@itemSel.AssetTypeName</option>
+                                                    }
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="RentAmount" class="control-label">RentAmount *</label>
+                                        <input asp-for="RentAmount" class="form-control" />
+                                        <div id="errRentAmount"></div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+
+                    <!-- /.card -->
+                </div>
+
+
+
+
+
+
+
+
+
+                <div class="col-6">
+
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">Additional Details</h3>
+                        </div>
+                        <div class="card-body">
+
+
+                            <div class="row">
+                                <div class="col-lg-12">
+
+
+                                    <div class="form-group">
+                                        <label asp-for="Spaces" class="control-label">Spaces </label>
+                                        <input asp-for="Spaces" class="form-control" />
+                                        <div id="errSpaces"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="SpacesAvailable" class="control-label">Spaces Available </label>
+                                        <input asp-for="SpacesAvailable" class="form-control" />
+                                        <div id="errSpacesAvailable"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="BuildingSize" class="control-label">Building Size </label>
+                                        <input asp-for="BuildingSize" class="form-control" />
+                                        <div id="errBuildingSize"></div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label asp-for="ShopDescription" class="control-label">Description</label>
+                                        <textarea asp-for="ShopDescription" class="form-control" rows="6"></textarea>
+                                        <div id="errShopDescription"></div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+
+                    <!-- /.card -->
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <input type="button" id="btnSave" value="Save Changes" class="btn btn-primary" onclick="Save();" />
+                    <input type="button" id="btnList" value="Cancel Edit" class="btn btn-success" onclick="viewDetails();" />
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+

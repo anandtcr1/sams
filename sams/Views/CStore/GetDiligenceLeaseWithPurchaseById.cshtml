@@ -1,0 +1,879 @@
+﻿@model sams.Models.DiligenceLeaseWithPurchaseViewModel
+
+@using sams.Common;
+
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "GetDiligenceLeaseWithPurchaseById";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var selpropertyId = ViewData["propertyId"];
+    var selAssetTypeId = (int)ViewData["assetTypeId"];
+
+    var currentAssetStatusId = (int)ViewData["currentAssetStatusId"];
+    var selTransactionHide = "";
+
+    if ((int)currentAssetStatusId != Model.SelectedTransactionStatusId)
+    {
+        if (((int)currentAssetStatusId == (int)sams.Common.SamsTransactionStatus.Closed_Dispositions) ||
+        ((int)currentAssetStatusId == (int)sams.Common.SamsTransactionStatus.Under_Contract) ||
+        ((int)currentAssetStatusId == (int)sams.Common.SamsTransactionStatus.Under_LOI)
+        )
+        {
+            selTransactionHide = " disabled ";
+        }
+    }
+
+    string disableEdit = "";
+    if ((Model.SelectedTransactionStatusId == (int)sams.Common.SamsTransactionStatus.Terminated_Dispositions ||
+        Model.SelectedTransactionStatusId == (int)sams.Common.SamsTransactionStatus.Closed_Dispositions) ||
+        currentAssetStatusId == (int)sams.Common.SamsTransactionStatus.Closed_Dispositions)
+    {
+        disableEdit = " disabled ";
+    }
+}
+
+<script>
+        function saveDiligenceLease() {
+            var notes = $("#txtTransactionDescription").val().trim();
+            if (notes == '') {
+                $("#errTransactionDescription").html("<font color='red'>Please Enter Notes</font>");
+                $("#txtTransactionDescription").focus();
+                return;
+            }
+
+            if (confirm("Do you want to proceed?")) {
+                $("#SaveDiligenceLeaseWithPurchase").submit();
+            }
+        }
+
+    function navigateBack() {
+        var baseUrl = "@Url.Action("ViewCStore", "CStore")/?propertyId=@selpropertyId";
+        location.href = baseUrl;
+    }
+
+    function removeTransactionFile(transactionFileId, transactionId, propertyId) {
+        if (confirm("Do you want to delete?")) {
+            var baseUrl = "@Url.Action("DeleteLeaseWithPurchaseTransactionFile", "CStore")/?transactionFiled=" + transactionFileId + "&transactionId=" + transactionId + "&propertyId=" + propertyId;
+            location.href = baseUrl;
+        }
+    }
+
+    function viewList() {
+        var baseUrl = "@Url.Action("Index", "CStore")";
+        location.href = baseUrl;
+    }
+
+    
+
+</script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Lease With Purchase Option</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="javascript:viewList()">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <section class="content">
+        <form asp-action="SaveDiligenceLeaseWithPurchase" id="SaveDiligenceLeaseWithPurchase" name="SaveDiligenceLeaseWithPurchase" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-6">
+                    <div class="card card-info ">
+                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3 class="card-title">&nbsp;</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label for="Tenant" class="control-label">Tenant</label>
+                                <input type="text" name="Tenant" value="@Model.Tenant" class="form-control" @disableEdit />
+                                <div id="errPurchasePrice"></div>
+                                <input type="hidden" value="@Model.DiligenceLeaseWithPurchaseId" name="DiligenceLeaseWithPurchaseId" class="form-control" />
+                                <input type="hidden" value="@Model.PropertyType" name="PropertyType" class="form-control" />
+                                <input type="hidden" value="@Model.PropertyId" name="PropertyId" class="form-control" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Rent" class="control-label">Rent</label>
+                                <div class="input-group mb-3">
+                                    <!--
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" name="Rent" value="@Model.Rent" class="form-control" @disableEdit onkeypress="return numericFilter(event);" />
+                                    -->
+                                    <input type="text" name="Rent" value="@Model.Rent" class="form-control" @disableEdit />
+
+                                </div>
+
+                            </div>
+
+
+
+                            @{
+                                //var dtUnderContractDateLease = Model.UnderContractDate == default(DateTime?) ? "" : Model.UnderContractDate.Value.ToString("yyyy-MM-dd");
+                                var dtUnderContractDateLease = Model.UnderContractDate == default(DateTime?) ? "" : Model.UnderContractDate.Value.ToString("MM-dd-yyyy");
+                            }
+
+                        <div class="form-group">
+                            <label for="p_UnderContractDate_lease" class="control-label">Under Contract Date </label>
+                            <input type="text" name="UnderContractDate" value="@dtUnderContractDateLease" class="form-control" id="p_UnderContractDate_lease" readonly @disableEdit />
+                            
+                            <a href="javascript:clearLeaseUnderContractDate()">Clear Date</a>
+                        </div>
+                            <script>
+                                function clearLeaseUnderContractDate() {
+                                    $("#p_UnderContractDate_lease").val('');
+                                }
+                            </script>
+
+
+                            @{
+                                //var dtDueDiligenceExpiryDateLease = Model.DueDiligenceExpiryDate == default(DateTime?) ? "" : Model.DueDiligenceExpiryDate.Value.ToString("yyyy-MM-dd");
+                                var dtDueDiligenceExpiryDateLease = Model.DueDiligenceExpiryDate == default(DateTime?) ? "" : Model.DueDiligenceExpiryDate.Value.ToString("MM-dd-yyyy");
+                            }
+                        <div class="form-group">
+                            <label for="p_DueDiligenceExpairyDate_lease" class="control-label">DDP Expiration Date</label>
+                            <input type="text" value="@dtDueDiligenceExpiryDateLease" name="DueDiligenceExpiryDate" class="form-control" id="p_DueDiligenceExpairyDate_lease" readonly @disableEdit />
+                            <a href="javascript:markDate('p_DueDiligenceExpairyDate_lease')">Mark Date</a> |
+                            <a href="javascript:clearDueDiligenceExpairyDate_lease()">Clear Date</a>
+                        </div>
+                            <script>
+                                function clearDueDiligenceExpairyDate_lease() {
+                                    $("#p_DueDiligenceExpairyDate_lease").val('');
+                                }
+                            </script>
+
+
+                            <div class="form-group">
+                                <label asp-for="EarnestMoneyDeposit" class="control-label">Earnest Money Deposit</label>
+
+                                <div class="input-group mb-3">
+                                    <!--
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" value="@Model.EarnestMoneyDeposit" name="EarnestMoneyDeposit" class="form-control" @disableEdit onkeypress="return numericFilter(event);" />
+                                    -->
+                                    <input type="text" value="@Model.EarnestMoneyDeposit" name="EarnestMoneyDeposit" class="form-control" @disableEdit />
+
+                                </div>
+                            </div>
+
+
+                            @{
+                                //var dtLeaseCommencementDate = Model.LeaseCommencementDate == default(DateTime?) ? "" : Model.LeaseCommencementDate.Value.ToString("yyyy-MM-dd");
+                                var dtLeaseCommencementDate = Model.LeaseCommencementDate == default(DateTime?) ? "" : Model.LeaseCommencementDate.Value.ToString("MM-dd-yyyy");
+                                                        <div class="form-group">
+                                                            <label for="p_LeaseCommencementDate" class="control-label">Lease Commencement Date</label>
+                                                            <input type="text" value="@dtLeaseCommencementDate" name="LeaseCommencementDate" class="form-control" id="p_LeaseCommencementDate" readonly @disableEdit />
+                                                            <a href="javascript:markDate('p_LeaseCommencementDate')">Mark Date</a> |
+                                                            <a href="javascript:clearLeaseCommencementDate()">Clear Date</a>
+                                                        </div>
+                                <script>
+                                    function clearLeaseCommencementDate() {
+                                        $("#p_LeaseCommencementDate").val('');
+                                    }
+                                </script>
+
+                            }
+
+
+                            <div class="form-group">
+                                <label asp-for="OptionPrice" class="control-label">Option Price</label>
+
+                                <div class="input-group mb-3">
+                                    <input type="text" value="@Model.OptionPrice" name="OptionPrice" class="form-control" @disableEdit />
+                                </div>
+                            </div>
+
+                            @{
+                                //var dtOptionPurchaseDate = Model.OptionPurchaseDate == default(DateTime?) ? "" : Model.OptionPurchaseDate.Value.ToString("yyyy-MM-dd");
+                                var dtOptionPurchaseDate = Model.OptionPurchaseDate == default(DateTime?) ? "" : Model.OptionPurchaseDate.Value.ToString("MM-dd-yyyy");
+                            }
+                        <div class="form-group">
+                            <label for="p_OptionPurchaseDate" class="control-label">Option Purchase Date</label>
+                            <input type="text" value="@dtOptionPurchaseDate" name="OptionPurchaseDate" class="form-control" id="p_OptionPurchaseDate" readonly @disableEdit />
+                            <a href="javascript:markDate('p_OptionPurchaseDate')">Mark Date</a> |
+                            <a href="javascript:clearOptionPurchaseDate()">Clear Date</a>
+                        </div>
+                            <script>
+                                function clearOptionPurchaseDate() {
+                                    $("#p_OptionPurchaseDate").val('');
+                                }
+                            </script>
+
+                            @{
+                                //var dtclosingDateDisp = Model.ClosingDate == default(DateTime?) ? "" : Model.ClosingDate.Value.ToString("yyyy-MM-dd");
+                                var dtclosingDateDisp = Model.ClosingDate == default(DateTime?) ? "" : Model.ClosingDate.Value.ToString("MM-dd-yyyy");
+                            }
+                            <!-- /.Due diligence new fields -->
+                        <div class="form-group">
+                            <label for="p_ClosingDate" class="control-label">Closing Date </label>
+                            <input type="text" name="ClosingDate" value="@dtclosingDateDisp" class="form-control" id="p_ClosingDate" readonly />
+                            <a href="javascript:markDate('p_ClosingDate')">Mark Date</a> |
+                            <a href="javascript:clearClosingDate()">Clear Date</a>
+                        </div>
+                            <script>
+                                function clearClosingDate() {
+                                    $("#p_ClosingDate").val('');
+                                }
+                            </script>
+
+
+
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="col-6">
+
+                    <div class="card card-info ">
+                        <div class="card-header @sams.Common.Helper.PrimaryColor">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3 class="card-title">&nbsp;</h3>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label for="@Model.TenantAttorney" class="control-label">Tenant Attorney</label>
+                                <input type="text" value="@Model.TenantAttorney" name="TenantAttorney" class="form-control" @disableEdit />
+                            </div>
+
+                            @{
+                                //var dtDDPExtensionLease = Model.DDPExtension == default(DateTime?) ? "" : Model.DDPExtension.Value.ToString("yyyy-MM-dd");
+                                var dtDDPExtensionLease = Model.DDPExtension == default(DateTime?) ? "" : Model.DDPExtension.Value.ToString("MM-dd-yyyy");
+                            }
+                        <div class="form-group">
+                            <label asp-for="DDPExtension" class="control-label">DDP Extension</label>
+                            <input type="text" value="@dtDDPExtensionLease" name="DDPExtension" class="form-control" id="p_DDPExtension_lease" readonly @disableEdit />
+                            <a href="javascript:markDate('p_DDPExtension_lease')">Mark Date</a> |
+                            <a href="javascript:clearDDPExtension_lease()">Clear Date</a>
+                        </div>
+                            <script>
+                                function clearDDPExtension_lease() {
+                                    $("#p_DDPExtension_lease").val('');
+                                }
+                            </script>
+
+
+
+
+
+                            <div class="form-group">
+                                <label for="@Model.TenantAgentCommission" class="control-label">Tenant Agent/ Commission</label>
+                                <input type="text" value="@Model.TenantAgentCommission" name="TenantAgentCommission" class="form-control" @disableEdit />
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="@Model.LandlordAgentCommission" class="control-label">Landlord Agent/ Commission</label>
+                                <input type="text" value="@Model.LandlordAgentCommission" name="LandlordAgentCommission" class="form-control" @disableEdit />
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="@Model.LeaseSecurityDeposit" class="control-label">Lease Security Deposit</label>
+                                <div class="input-group mb-3">
+                                    <!--
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="text" value="@Model.LeaseSecurityDeposit" name="LeaseSecurityDeposit" class="form-control" @disableEdit onkeypress="return numericFilter(event);" />
+                                    -->
+                                    <input type="text" value="@Model.LeaseSecurityDeposit" name="LeaseSecurityDeposit" class="form-control" @disableEdit />
+
+                                </div>
+
+                            </div>
+
+
+
+                            @if (selTransactionHide.Trim().Length == 0)
+                            {
+                                <div class="form-group">
+                                    <label for="selPropertyStatus" class="control-label">Transaction Status</label>
+                                    <select id="selTransactionStatusId" name="SelectedTransactionStatusId" class="form-select form-control" @selTransactionHide @disableEdit>
+                                        <option value="0">--- Select ---</option>
+                                        @if (Model != null)
+                                        {
+                                            foreach (var itemSel in Model.TransactionStatusList)
+                                            {
+                                                if (Model.SelectedTransactionStatusId == itemSel.TransactionStatusId)
+                                                {
+                                                    <option selected value="@itemSel.TransactionStatusId">@itemSel.TransactionStatusName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@itemSel.TransactionStatusId">@itemSel.TransactionStatusName</option>
+                                                }
+
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <label for="selPropertyStatus" class="control-label">Transaction Status : </label>
+                                    @{
+                                        var selValue = 0;
+                                        var selText = "";
+
+                                    }
+                                    @if (Model != null)
+                                    {
+
+                                        foreach (var itemSel in Model.TransactionStatusList)
+                                        {
+                                            if (Model.SelectedTransactionStatusId == itemSel.TransactionStatusId)
+                                            {
+                                                selText = itemSel.TransactionStatusName;
+                                                selValue = itemSel.TransactionStatusId;
+                                            }
+
+
+                                        }
+                                    }
+                                    @selText
+                                    <input type="hidden" value="@selValue" name="SelectedTransactionStatusId" />
+                                </div>
+                            }
+
+                            @{
+                                //var dtTransactionStatusChangeDate = Model.SelectedTransactionDate == default(DateTime?) ? "" : Model.SelectedTransactionDate.Value.ToString("yyyy-MM-dd");
+                                var dtTransactionStatusChangeDate = Model.SelectedTransactionDate == default(DateTime?) ? "" : Model.SelectedTransactionDate.Value.ToString("MM-dd-yyyy");
+                            }
+                            <div class="form-group">
+                                <label asp-for="DispositionTerminatedDate" class="control-label">Status Change Date</label>
+                                <input type="text" value="@dtTransactionStatusChangeDate" name="SelectedTransactionDate" class="form-control" id="p_SelectedTransactionDate" readonly @disableEdit />
+
+                                <a href="javascript:cleaStatusChangeDate()">Clear Date</a>
+                            </div>
+                            <script>
+                                function cleaStatusChangeDate() {
+                                    $("#p_SelectedTransactionDate").val('');
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label for="txtTransactionDescription" class="control-label">Notes *</label>
+                                <textarea name="TransactionDescription" id="txtTransactionDescription" class="form-control"></textarea>
+                                <div id="errTransactionDescription"></div>
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        @{
+                            if (Model.DiligenceLeaseWithPurchaseId > 0)
+                            {
+                                <div class="card card-info ">
+                                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                        <h3 class="card-title">Files</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+
+                                            <div class="col-lg-12">
+                                                <ul class="list-unstyled">
+                                                    @foreach (var transactionFile in Model.TransactionFileList)
+                                                    {
+                                                        <li>
+                                                            <div class="row">
+                                                                <div class="col-lg-8">
+                                                                    <b>@transactionFile.FileHeader</b>
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 2).CanEdit)
+                                                                    {
+                                                                        <button type="button" class="btn btn-xs btn-danger" onclick="removeTransactionFile(@transactionFile.TransactionFilesId, @Model.DiligenceLeaseWithPurchaseId, @Model.PropertyId)">
+                                                                            Delete
+                                                                        </button>
+                                                                    }
+
+                                                                </div>
+
+
+                                                                <div class="col-lg-12">
+                                                                    <a href="@Url.Content("~/transaction_files/" + transactionFile.FileFullName)" class="btn-link text-secondary" target="_blank">
+                                                                        <i class="far fa-fw fa-file-word"></i>@transactionFile.FileName
+                                                                    </a>
+                                                                </div>
+
+                                                                <div class="col-lg-8">
+                                                                    <b>Note :</b> @transactionFile.Notes
+                                                                </div>
+
+                                                                <div class="col-lg-8">
+                                                                    <b>On @transactionFile.UploadedDate.ToString("MM-dd-yyyy")</b>
+                                                                </div>
+
+                                                                <div class="col-lg-8">
+                                                                    <b>By :</b> @transactionFile.UploadedByName
+                                                                </div>
+
+                                                            </div>
+                                                            <hr />
+                                                        </li>
+                                                    }
+
+                                                </ul>
+                                            </div>
+
+
+                                        </div>
+
+                                        <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modal-default">
+                                            Upload File
+                                        </button>
+
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                            }
+
+                        }
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            @{
+                if (Model.DiligenceLeaseWithPurchaseId > 0)
+                {
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="col-sm-12">
+                                <div class="card card-info ">
+                                    <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h3 class="card-title">Critical Date Tracker</h3>
+                                            </div>
+                                            <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#modal-new-period">
+                                                Add New
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+
+
+
+                                        <table id="example1_" class="table table-sm text-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Critical Item</th>
+                                                    <th>Start Date</th>
+                                                    <th>Duration</th>
+
+                                                    <th>End Date</th>
+                                                    <th>Days To Expire</th>
+                                                    <th>Notes</th>
+                                                    <th>Alert Date</th>
+                                                    <th>Email</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.DispositionCriticalItems)
+                                                {
+                                                    var dtAlertDate = item.AlertDate == default(DateTime?) ? "" : item.AlertDate.Value.ToString("MM-dd-yyyy");
+                                                    <tr>
+                                                        <td>@item.PeriodMaster</td>
+                                                        <td>@item.StartDate.ToString("MM/dd/yyyy")</td>
+                                                        <td>@item.Duration</td>
+
+                                                        <td>@item.EndDate.ToString("MM/dd/yyyy")</td>
+                                                        <td>@item.DaysToExpire</td>
+                                                        <td>@item.PeriodNotes</td>
+                                                        <td>@dtAlertDate</td>
+                                                        <td>@item.OtherEmailAddress</td>
+                                                        <td>
+                                                            <div class="btn-group btn-group-sm">
+                                                                <a href="javascript:editPeriod(@item.PeriodId, '@item.PeriodMaster', '@item.StartDate.ToString("MM-dd-yyyy")', '@item.Duration', '@item.PeriodNotes', '@dtAlertDate', '@item.OtherEmailAddress');" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                                                                <a href="javascript:deletePeriod(@item.PeriodId, @item.PropertyId)" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            </tbody>
+                                        </table>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+        </form>
+
+        <div class="row">
+            <div class="col-12 col-sm-12">
+                <div class="form-group">
+                    <input type="button" id="btnSave" value="Save" class="btn btn-primary" onclick="saveDiligenceLease();" @disableEdit />
+                    <input type="button" id="btnSave" value="Back" class="btn btn-info" onclick="navigateBack();" />
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+</div>
+
+<div class="modal fade" id="modal-default">
+
+    <script>
+        function submitValues() {
+            //$("#SaveTransactionFile").submit();
+
+
+            var txtFileHeader = $("#FileHeader").val();
+            if (txtFileHeader == "") {
+                $("#errFileHeader").html("<font color='red'>Please Enter Header</font>");
+                $("#FileHeader").focus();
+                return;
+            }
+            else {
+                $("#errFileHeader").html("");
+            }
+            var fileName = $("#SelectedFile").val();
+            if (!fileName) {
+                $("#errUploadedFile").html("<font color='red'>Please Select a file</font>");
+                return;
+            }
+            else {
+                $("#errUploadedFile").html("");
+            }
+
+            var txtNote = $("#Notes").val();
+            if (txtNote == "") {
+                $("#errNotes").html("<font color='red'>Please Add Note</font>");
+                return;
+            }
+            else {
+                $("#errNotes").html("");
+            }
+
+
+            $("#SaveLeaseWithPurchaseTransactionFile").submit();
+
+        }
+
+
+    </script>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Select File</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("SaveLeaseWithPurchaseTransactionFile", "CStore")" id="SaveLeaseWithPurchaseTransactionFile" name="SaveLeaseWithPurchaseTransactionFile" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <label for="FileHeader" class="control-label">Header *</label>
+                                <input id="FileHeader" name="FileHeader" class="form-control" />
+                                <div id="errFileHeader"></div>
+
+                                <input name="TransactionId" class="form-control" value="@Model.DiligenceLeaseWithPurchaseId" type="hidden" />
+                                <input name="PropertyId" class="form-control" value="@Model.PropertyId" type="hidden" />
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="SelectedFile" class="control-label">Select File *</label>
+                                <input type="file" id="SelectedFile" name="SelectedFile" class="form-control" />
+                                <div id="errUploadedFile"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label id="" class="control-label">Note *</label>
+                                <input id="Notes" name="Notes" class="form-control" />
+
+                                <div id="errNotes"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 2).CanEdit)
+                {
+                    <button type="button" class="btn btn-primary" onclick="submitValues()">Save changes</button>
+                }
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+<div class="modal fade" id="modal-new-period">
+
+    <script>
+        function submitPeriod() {
+
+            var periodMaster = $("#p_PeriodMaster").val().trim();
+            var sDate = $("#p_StartDate").val().trim();
+            //var eDate = $("#p_EndDate").val().trim();
+            var duration = $("#txtDuration").val().trim();
+            var nTes = $("#p_PeriodNotes").val().trim();
+
+            $("#errPeriodMaster").html("");
+            $("#errStartDate").html("");
+            $("#errDuration").html("");
+            $("#errPeriodNotes").html("");
+            $("#errOtherEmailAddress").html("");
+
+            if (periodMaster == "") {
+                $("#errPeriodMaster").html("<font color='red'>Please Enter Critical Item</font>");
+                return;
+            }
+            else {
+                $("#errPeriodMaster").html("");
+            }
+
+            if (sDate == '') {
+                $("#errStartDate").html("<font color='red'>Please Enter Start Date</font>");
+                return;
+            }
+            else {
+                $("#errStartDate").html("");
+            }
+
+            /*
+            if (eDate == '') {
+                $("#errEndDate").html("<font color='red'>Please Enter End Date</font>");
+                return;
+            }
+            else {
+                $("#errEndDate").html("");
+            }
+            */
+
+            if (duration == '') {
+                $("#errDuration").html("<font color='red'>Please Enter Duration</font>");
+                return;
+            }
+            else {
+                $("#errDuration").html("");
+            }
+
+            if (nTes == '') {
+                $("#errPeriodNotes").html("<font color='red'>Please Enter Notes</font>");
+                return;
+            }
+            else {
+                $("#errPeriodNotes").html("");
+            }
+
+            var otherEmailAddress = $("#OtherEmailAddress").val().trim();
+            /*
+            if (otherEmailAddress != '') {
+                if (!ValidateEmail(otherEmailAddress)) {
+                    canSave = false;
+                    $("#errOtherEmailAddress").html("<font color='red'>Please enter Valid Email Address</font>");
+                    $("#OtherEmailAddress").focus();
+                    return;
+                }
+                else {
+                    $("#errOtherEmailAddress").html("");
+                }
+            }
+            */
+
+            $("#SavePeriod").submit();
+        }
+
+        function calculateEndDate(ctrl) {
+            alerty(ctrl);
+        }
+
+
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+
+            return true;
+        }
+
+        function editPeriod(periodId, periodMaster, startDate, duration, periodNotes, alertDate, emailAddress) {
+            $("#p_PeriodId").val(periodId);
+            $("#p_PropertyId").val(@Model.PropertyId);
+            $("#p_PeriodMaster").val(periodMaster);
+            $("#p_StartDate").val(startDate);
+            $("#txtDuration").val(duration);
+            $("#p_PeriodNotes").val(periodNotes);
+
+            $("#p_AlertDate").val(alertDate);
+            $("#OtherEmailAddress").val(emailAddress);
+
+            $('#modal-new-period').modal('show');
+
+        }
+
+        function deletePeriod(periodId, propertyId) {
+            if (confirm("Confirm Delete?")) {
+                window.location.href = '@Url.Action("DeletePeriod", "CStore")?periodId=' + periodId + '&propertyId=' + propertyId;
+            }
+        }
+
+
+    </script>
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Critical Item</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("SavePeriod", "CStore")" id="SavePeriod" name="SavePeriod" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="selSiteState" class="control-label">Critical Item *</label>
+                                    <input type="text" value="" name="PeriodMaster" id="p_PeriodMaster" class="form-control" />
+                                    <div id="errPeriodMaster"></div>
+                                </div>
+
+
+                                <input type="hidden" name="PropertyId" value="@Model.PropertyId" id="PropertyId" />
+                                <input type="hidden" name="TransactionId" value="@Model.DiligenceLeaseWithPurchaseId" id="TransactionId" />
+                                <input type="hidden" name="PropertyType" id="p_PropertyId" />
+                                <input type="hidden" name="PeriodId" value="0" id="p_PeriodId" />
+                                <input type="hidden" name="PeriodType" id="periodType" value="@sams.Common.PeriodType.LeaseWithPurchase" />
+                                <input name="CurrentAssetStatusId" class="form-control" value="@currentAssetStatusId" type="hidden" />
+
+                                <div id="errTodoText"></div>
+                            </div>
+
+
+                            <!-- /.input group -->
+                            <div class="form-group">
+                                <label for="p_StartDate" class="control-label">Start Date *</label>
+                                <input type="text" value="" name="StartDate" class="form-control" id="p_StartDate" readonly />
+                                <div id="errStartDate"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Duration" class="control-label">Duration *</label>
+                                <input type="text" value="" name="AddedDuration" class="form-control" id="txtDuration" onkeypress="return isNumberKey(event)" />
+                                <div id="errDuration"></div>
+                            </div>
+
+                            <!--
+                            <div class="form-group">
+                                <label for="EarnestMoney" class="control-label">End Date</label>
+                                <input type="text" value="" name="EndDate" class="form-control" id="p_EndDate" readonly />
+                                <div id="errPurchasePrice"></div>
+                            </div>
+                            -->
+
+                            <div class="form-group">
+                                <label for="PeriodNotes" class="control-label">Notes *</label>
+                                <textarea name="PeriodNotes" class="form-control" rows="5" id="p_PeriodNotes"></textarea>
+                                <div id="errPeriodNotes"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="p_AlertDate" class="control-label">Alert Date</label>
+                                <input type="text" value="" name="AlertDate" class="form-control" id="p_AlertDate" readonly />
+                                <a href="javascript:clearAlertDate()">Clear Date</a>
+                            </div>
+                            <script>
+                                function clearAlertDate() {
+                                    $("#p_AlertDate").val('');
+                                }
+                            </script>
+
+                            <div class="form-group">
+                                <label for="OtherEmailAddress" class="control-label">Email Address (If Multiple Emails, Please Seperate By Comma)</label>
+                                <input type="text" value="" name="OtherEmailAddress" class="form-control" id="OtherEmailAddress" />
+                                <div id="errOtherEmailAddress"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitPeriod()">Save</button>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+

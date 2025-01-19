@@ -1,0 +1,236 @@
+﻿@model sams.Models.FutureTenantModel
+
+@{
+    ViewData["Title"] = "GetFutureTenantById";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+    var isRentFreePeriod = "";
+    var canShow = " display:none; ";
+    if(Model.RentFreePeriod == 1)
+    {
+        isRentFreePeriod = " checked ";
+        canShow = "";
+    }
+
+}
+
+    <script>
+    function saveData() {
+        $("#errTenantName").html("");
+        var tenantName = $("#Tenant").val().trim();
+
+        if (tenantName == '') {
+            $("#errTenantName").html("<font color='red'>Please Enter Tenant Name</font>");
+            $("#Tenant").focus();
+            return;
+        }
+
+        $("#frmSaveFutureTenant").submit();
+    }
+
+    function checkClientRepresentation() {
+        var selected = document.querySelector('[id="radioRentFreePeriod"]:checked')
+        if (selected != null) {
+            $("#RentFreePeriod").val("1");
+            $("#rentFreePeriodDescription").show();
+        }
+        else {
+            $("#RentFreePeriod").val("0");
+            $("#rentFreePeriodDescription").hide();
+        }
+    }
+
+        function cancelEdit(netleaseId) {
+            var baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + netleaseId;
+            location.href = baseUrl;
+        }
+    </script>
+
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Future Tenant List</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                            <li class="breadcrumb-item active">View Details</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <section class="content">
+            <form asp-action="SaveFutureTenant" id="frmSaveFutureTenant" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <!--First column-->
+                    <div class="col-6">
+
+                        <div class="card card-info">
+                            <div class="card-header @sams.Common.Helper.PrimaryColor" >
+                                <h3 class="card-title ">&nbsp;</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group">
+                                    <label asp-for="Tenant" class="control-label">Tenant Name *</label>
+                                    <input asp-for="Tenant" class="form-control" />
+                                    <input type="hidden" name="FutureTenantId" value="@Model.FutureTenantId" />
+                                    <input type="hidden" name="NetLeaseId" value="@Model.NetLeaseId" />
+                                    <div id="errTenantName"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Unit" class="control-label">Unit #</label>
+                                    <input asp-for="Unit" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Term" class="control-label">Term</label>
+                                    <input asp-for="Term" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Rent" class="control-label">Rent</label>
+                                    <input asp-for="Rent" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="CAM" class="control-label">CAM</label>
+                                    <input asp-for="CAM" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="UnderContractDate" class="control-label">Under Contract Date</label>
+                                    <input type="text" name="UnderContractDate" class="form-control" id="p_UnderContractDate" readonly value="@Model.UnderContractDate" />
+                                    <a href="javascript:clearUnderContractDate()">Clear Date</a>
+                                </div>
+                                <script>
+                                    function clearUnderContractDate() {
+                                        $("#p_UnderContractDate").val('');
+                                    }
+                                </script>
+
+                                <div class="form-group">
+                                    <label asp-for="DDP" class="control-label">DDP</label>
+                                    <input asp-for="DDP" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="TenantUpfitConcession" class="control-label">Tenant Upfit Concession</label>
+                                    <input asp-for="TenantUpfitConcession" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+
+                                    <div class="icheck-success d-inline">
+                                        <input type="checkbox" name="ddpRentFreePeriod" id="radioRentFreePeriod" onchange="checkClientRepresentation(this.value)" @isRentFreePeriod>
+                                        <label for="radioRentFreePeriod">
+                                            Rent Free Period
+                                        </label>
+                                        <input type="hidden" asp-for="RentFreePeriod" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="rentFreePeriodDescription" style="@canShow">
+                                    <label asp-for="FreeRentPeriodDescription" class="control-label">Description</label>
+                                    <input asp-for="FreeRentPeriodDescription" class="form-control" />
+                                </div>
+
+
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+
+                    </div>
+
+                    <!--Second column-->
+                    <div class="col-6">
+
+                        <div class="card card-info">
+                            <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                <h3 class="card-title ">&nbsp;</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="form-group">
+
+                                    <label asp-for="LeaseCommencementDate" class="control-label">Lease Commencement Date</label>
+                                    <input type="text" value="@Model.LeaseCommencementDate" name="LeaseCommencementDate" class="form-control" id="p_LeaseCommencementDate" readonly />
+                                    <a href="javascript:clearLeaseCommencementDate()">Clear Date</a>
+                                </div>
+                                <script>
+                                    function clearLeaseCommencementDate() {
+                                        $("#p_LeaseCommencementDate").val('');
+                                    }
+                                </script>
+
+                                <div class="form-group">
+                                    <label asp-for="LeaseExpirationDate" class="control-label">Lease Expiration Date</label>
+                                    <input type="text" value="@Model.LeaseExpirationDate" name="LeaseExpirationDate" class="form-control" id="p_LeaseExpirationDate" readonly />
+                                    <a href="javascript:clearLeaseExpirationDate()">Clear Date</a>
+                                </div>
+                                <script>
+                                    function clearLeaseExpirationDate() {
+                                        $("#p_LeaseExpirationDate").val('');
+                                    }
+                                </script>
+
+                                <div class="form-group">
+                                    <label asp-for="LeaseOptions" class="control-label">Lease Options</label>
+                                    <input asp-for="LeaseOptions" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="RentEscalation" class="control-label">Rent Escalation</label>
+                                    <input asp-for="RentEscalation" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="TenantAttorney" class="control-label">Tenant Attorney</label>
+                                    <input asp-for="TenantAttorney" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="TenantAgentCommission" class="control-label">Tenant Agent Commission</label>
+                                    <input asp-for="TenantAgentCommission" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="LandlordAgentCommission" class="control-label">Landlord Agent Commission</label>
+                                    <input asp-for="LandlordAgentCommission" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="LeaseSecurityDeposit" class="control-label">Lease Security Deposit</label>
+                                    <input asp-for="LeaseSecurityDeposit" class="form-control" />
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                </div>
+            </form>
+
+            <div class="row">
+                <div class="col-12">
+                    <input type="button" id="btnSave" value="Save Tenant" class="btn btn-success" onclick="saveData();" />
+                    <input type="button" id="btnCancel" value="Cancel Edit" class="btn btn-danger" onclick="cancelEdit(@Model.NetLeaseId);" />
+                </div>
+            </div>
+
+        </section>
+    </div>

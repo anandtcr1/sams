@@ -1,0 +1,96 @@
+﻿@model IEnumerable<sams.Models.RegionViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+    <script>
+    function editRegion(regionId) {
+        //location.href = "AddState?stateId=" + stateId;
+        var baseUrl = "@Url.Action("ManageRegion", "Region")/?regionId=" + regionId;
+        location.href = baseUrl;
+    }
+
+    function deleteRegion(regionId) {
+        if (confirm('Confirm Delete?')) {
+            var baseUrl = "@Url.Action("DeleteRegion", "Region")/?regionId=" + regionId;
+            location.href = baseUrl;
+        }
+    }
+    </script>
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Region List</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Region Name</th>
+                                    <th>State Name</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.RegionName</td>
+                                        <td>@item.StateName</td>
+                                        <td>
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 14).CanEdit)
+                                            {
+                                                <button type="button" class="btn btn-success" onclick="editRegion(@item.RegionId)"><i class="fas fa-edit"></i></button>
+                                                <button type="button" class="btn btn-danger" onclick="deleteRegion(@item.RegionId)"><i class="fas fa-minus-square"></i></button>
+                                            }
+
+
+
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 14).CanCreate)
+                        {
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success" onclick="editRegion(0)">Add Region</button>
+                            </div>
+                        }
+
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

@@ -1,0 +1,739 @@
+﻿@model sams.Models.CustomerViewModel
+
+@{
+    ViewData["Title"] = "GetCustomerAgreement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script>
+    function PrintAgreement() {
+        var divToPrint = document.getElementById('to_print');
+        var popupWin = window.open('', '_blank', 'width=500,height=700,location=no,left=200px');
+        popupWin.document.open();
+        popupWin.document.write('<html>');
+
+        popupWin.document.write('<head>');
+
+        popupWin.document.write('<link rel="stylesheet" href="css/bootstrap.min.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/owl.carousel.min.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/magnific-popup.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/font-awesome.min.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/themify-icons.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/nice-select.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/flaticon.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/gijgo.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/animate.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/slick.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/slicknav.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href="css/style.css?r49=2">');
+        popupWin.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" media="all">');
+        popupWin.document.write('<link rel="stylesheet" href=@Url.Content("~/css/signature_font.css?a3=1")" media="all">');
+
+        popupWin.document.write('</head>');
+
+        popupWin.document.write('<body onload="window.print()">');
+        popupWin.document.write(divToPrint.innerHTML);
+        popupWin.document.write('</html>');
+        popupWin.document.close();
+        }
+
+        function agreeDocument(customerId) {
+            var baseUrl = "@Url.Action("CustomerSign", "RealEstate")?customerId=" + customerId;
+            location.href = baseUrl;
+        }
+</script>
+
+
+
+<section class="blog_area single-post-area section-padding">
+    <div class="container" id="to_print">
+        <div class="row align-items-center ">
+            <div class="col-lg-12 posts-list  ">
+
+
+
+                <div class="single-post">
+
+                    <div class="blog_details">
+                        <h2 class="text-center">
+                            <img src="~/img/logo.png" alt="">
+                            <br />
+                            <br />
+                            CONFIDENTIALITY AND NONDISCLOSURE AGREEMENT
+                        </h2>
+
+                        <p class="excert">
+                            This Confidentiality and Nondisclosure Agreement (this "Agreement"), is made, entered
+                            into and effective as of <u> @DateTime.Now.ToString("MM/dd/yyyy") </u> (the “Effective Date”), by and among
+                            <u>@Model.FullName </u>, an (individual/corporation) referred to
+                            herein as (“Buyer”) and SAM’S HOLDINGS<sup style="font-size: 7px; vertical-align:middle;">SM</sup>, LLC, a North Carolina limited liability company
+                            (on behalf of itself and all of its affiliates and subsidiaries, collectively referred to herein as
+                            “Sam’s”) having its principal address at 7935 Council Place, Suite 200, Matthews, North
+                            Carolina 28105.
+
+                        </p>
+
+                        <h2 class="text-center">
+                            RECITALS
+                            <br />
+                        </h2>
+
+                        <p class="excert">
+                            The parties are currently discussing the possibility of a negotiated and mutually agreeable
+                            business relationship and/or transaction between them (the “Transaction”), and in connection
+                            with such potential Transaction, the parties wish to exchange information that they consider to be
+                            confidential for the purposes of facilitating their discussions and evaluation regarding the
+                            Transaction, and they wish to provide for the confidentiality of such information.
+                        </p>
+
+                        <p class="excert">
+                            Neither party would disclose such confidential information without the assurances of this
+                            Agreement.
+                        </p>
+
+                        <p class="excert">
+                            NOW, THEREFORE, the parties agree as follows:
+                        </p>
+
+                        <p class="excert">
+                            <h3>1.	Definition of Confidential Information.</h3>
+                        </p>
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(a)&nbsp;&nbsp;&nbsp;&nbsp;For purposes of this Agreement, “Confidential Information” means any data,
+                            knowledge or information that is proprietary and is disclosed by one party (“Disclosing Party”)
+                            to the other party (“Receiving Party”) and not generally known to the public, whether in
+                            tangible or intangible form, in whatever medium provided, whether unmodified or modified by
+                            Receiving Party or its Representatives (as defined herein), whenever (including prior to the
+                            Effective Date, if and as applicable) and however disclosed, including, but not limited to: (i) any
+                            marketing analyses or strategies, plans, investors, lenders, financial information, or projections,
+                            operations, sales estimates and data, business plans, project lists and performance results relating
+                            to the past, present or future business activities of such party, its affiliates, subsidiaries and
+                            affiliated companies; (ii) plans for products or services, and customer, client or supplier lists; (iii)
+                            any scientific or technical information, invention, design, process, procedure, formula,
+                            improvement, technology or method; (iv) any concepts, reports, data, know-how, works-in progress, designs, development tools, specifications, computer software, source code, object
+                            code, flow charts, databases, inventions, information and trade secrets; (v) any other information
+                            that should reasonably be recognized as confidential information of Disclosing Party because of
+                            their expertise in the areas of commercial real estate; and (vi) any information generated by
+                            Receiving Party or by its Representatives that contains, reflects, or is derived from any of the
+                            foregoing. Confidential Information need not be novel, unique, patentable, or copyrightable, or
+                            otherwise constitute a trade secret, nor shall it need to be marked or otherwise declared
+                            confidential, in order to be designated or otherwise deemed Confidential Information. Receiving
+                            Party acknowledges that the Confidential Information is proprietary to Disclosing Party, has
+                            been developed and obtained through great efforts by Disclosing Party and that Disclosing Party
+                            regards all of its Confidential Information as trade secrets. Moreover, the parties acknowledge
+                            and agree that Confidential Information shall also include all discussions between the parties and
+                            their respective representatives, including the Representatives (defined below), and the fact of
+                            the parties having discussions concerning the potential Transaction.
+                        </p>
+
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(b)&nbsp;&nbsp;&nbsp;&nbsp;Notwithstanding anything in the foregoing to the contrary, Confidential
+                            Information shall not include information which: a) was lawfully possessed, as evidenced by
+                            Receiving Party’s records, by Receiving Party prior to receiving the Confidential Information
+                            from Disclosing Party; (b) becomes rightfully known by Receiving Party from a third-party
+                            source not under an obligation to Disclosing Party to maintain confidentiality; (c) is generally
+                            known by the public through no fault of or failure to act by Receiving Party inconsistent with its
+                            obligations under this Agreement; (d) is required to be disclosed in a judicial or administrative
+                            proceeding, or is otherwise requested or required to be disclosed by law or regulation, although
+                            the requirements of Section 4 below shall apply prior to any disclosure being made; and (e) is or
+                            has been independently developed by employees, consultants or agents of Receiving Party
+                            without violation of the terms of this Agreement, as evidenced by Receiving Party’s records, and
+                            without reference or access to any Confidential Information.
+                        </p>
+
+                        <p class="excert">
+                            <h3>2.	Disclosure of Confidential Information.</h3>
+                        </p>
+
+                        <p class="excert">
+                            From time to time, Disclosing Party may disclose Confidential Information to Receiving Party.
+                            Receiving Party shall: (a) limit disclosure of any Confidential Information to its directors,
+                            officers, employees, agents, advisors or representatives (collectively “Representatives”) who
+                            have a need to know such Confidential Information in connection with the potential Transaction
+                            to which this Agreement relates, and only for such purpose; (b) advise its Representatives of the
+                            proprietary nature of the Confidential Information and of the obligations set forth in this
+                            Agreement, require such Representatives to be bound by written confidentiality restrictions no
+                            less stringent than those contained herein, and assume full liability for acts or omissions by its
+                            Representatives that are inconsistent with Receiving Party’s obligations under this Agreement;
+                            (c) keep all Confidential Information strictly confidential by using a reasonable degree of care,
+                            but not less than the degree of care used by it in safeguarding its own confidential information;
+                            and (d) not disclose any Confidential Information received by it to any third parties (except as
+                            otherwise provided for and required herein).
+                        </p>
+
+                        <p class="excert">
+                            <h3>3.	Use of Confidential Information.</h3>
+                        </p>
+
+                        <p class="excert">
+                            Receiving Party agrees to, and shall, use the Confidential Information solely in connection with
+                            its assessment concerning the potential Transaction, and not for any purpose other than as
+                            authorized by this Agreement, without the prior written consent of an authorized representative
+                            of Disclosing Party. No license or any other right, whether expressed or implied, in the
+                            Confidential Information is granted to Receiving Party hereunder. Disclosing Party shall retain
+                            sole and exclusive ownership of, and title to, the Confidential Information. All use of
+                            Confidential Information by Receiving Party shall be for the benefit of Disclosing Party and any
+                            modifications and improvements thereof by Receiving Party shall be the sole and exclusive
+                            property of Disclosing Party.
+                        </p>
+
+                        <p class="excert">
+                            <h3>4.	Compelled Disclosure of Confidential Information.</h3>
+                        </p>
+
+                        <p class="excert">
+                            Notwithstanding anything in the foregoing to the contrary, if Receiving Party or its
+                            Representatives are requested or required (by any governmental, judicial, or administrative order,
+                            subpoena, oral questions, interrogatories, other discovery request, civil investigative demand, or
+                            similar legal process, including stock exchange or other regulatory request or similar method) to
+                            disclose any of Disclosing Party’s Confidential Information or make any other disclosure
+                            prohibited herein, Receiving Party agrees to provide Disclosing Party with prompt written notice
+                            of each such request, to the extent practicable, so that Disclosing Party, at its sole expense, may
+                            seek to make such disclosure subject to a protective order or other appropriate remedy to
+                            preserve the confidentiality of the Confidential Information; provided that Receiving Party shall
+                            limit its disclosure to that portion of the requested Confidential Information that, in the written
+                            opinion of its legal counsel, it is required to disclose. Receiving Party agrees that it shall not
+                            oppose, and shall cooperate with efforts by, to the extent practicable, Disclosing Party with
+                            respect to any such request for a protective order or other relief. Notwithstanding the foregoing,
+                            if Disclosing Party is unable to obtain or does not seek a protective order and Receiving Party is
+                            legally requested or required to disclose such Confidential Information, disclosure of such
+                            Confidential Information may be made without liability under this Agreement.
+                        </p>
+
+
+                        <p class="excert">
+                            <h3>5.	Term.</h3>
+                        </p>
+
+                        <p class="excert">
+                            This Agreement shall remain in effect for a period of two (2) years, commencing on the
+                            Effective Date, unless earlier terminated by either party, in such party’s sole discretion, upon
+                            written notice to the other party; in such event, termination shall be effective immediately upon
+                            delivery of such notice to such receiving party. Notwithstanding the foregoing, Receiving Party’s
+                            duty to hold in confidence Confidential Information that was disclosed during the term of this
+                            Agreement (and such Confidential Information disclosed prior to the Effective Date as
+                            contemplated above) shall survive the termination of this Agreement, regardless of the reason,
+                            and shall remain in effect and shall continue: (i) indefinitely (i.e., such obligation shall not
+                            cease), including following the termination of this Agreement, concerning all Confidential
+                            Information that constitute “trade secrets” under North Carolina General Statutes Sections 66- 152(3) and 132-1.2; and (ii) for ten (10) years following the termination of this Agreement,
+                            concerning all Confidential Information that does not constitute “trade secrets” under North
+                            Carolina General Statutes Sections 66-152(3) and 132-1.2.
+                        </p>
+
+                        <p class="excert">
+                            <h3>6.	Remedies.</h3>
+                        </p>
+
+                        <p class="excert">
+                            The parties acknowledge and agree that Confidential Information to be disclosed hereunder is of
+                            a unique and valuable character to Disclosing Party, and that the unauthorized dissemination of
+                            the Confidential Information would destroy or diminish the value of such information and cause
+                            immediate and irreparable harm to Disclosing Party; additionally, the damages to Disclosing
+                            Party that would result from the unauthorized dissemination of the Confidential Information
+                            would be impossible to calculate. Therefore, both parties hereby acknowledge and agree, in the
+                            case of breach of this Agreement, that Disclosing Party shall be entitled to equitable relief,
+                            including injunctive relief, without the necessity of a bond, to prevent the dissemination of any
+                            Confidential Information, and/or specific performance concerning the return and/or destruction
+                            of the Confidential Information to the extent required under this Agreement. Such injunctive
+                            relief and specific performance shall be in addition to any other remedies available hereunder, or
+                            at law or in equity; each such remedy to be cumulative with, and not exclusive of, all other such
+                            remedies.
+                        </p>
+
+                        <p class="excert">
+                            <h3>7.	Return of Confidential Information.</h3>
+                        </p>
+
+
+                        <p class="excert">
+                            Receiving Party shall immediately return and redeliver to Disclosing Party all tangible material
+                            embodying any Confidential Information provided hereunder and all notes, summaries,
+                            memoranda, drawings, manuals, records, excerpts or derivative information deriving therefrom,
+                            and all other documents or materials (“Notes”) (and all copies of any of the foregoing, including
+                            “copies” that have been converted to computerized media in the form of image, data, word
+                            processing, or other types of files either manually or by image capture) based on or including any
+                            Confidential Information, in whatever form of storage or retrieval, upon the earlier of (i) the
+                            completion or termination of discussion concerning the potential transaction; (ii) the termination
+                            of this Agreement; or (iii) at such time as Disclosing Party may so request; provided, however,
+                            that Receiving Party may retain such of its documents as is necessary to enable it to comply with
+                            its reasonable document retention policies as evidenced to Disclosing Party, provided, further,
+                            however, to the extent that Receiving Party retains any Confidential Information based on the
+                            foregoing, such Confidential Information shall be held by Receiving Party’s outside counsel, as
+                            confirmed and certified to, in writing, by Receiving Party to Disclosing Party Alternatively,
+                            Receiving Party, with the written consent of Disclosing Party, shall destroy immediately any of
+                            the foregoing embodying Confidential Information (and the reasonably non-recoverable data
+                            erasure of computerized data) and, upon request, Receiving Party shall certify in writing to
+                            Disclosing Party such destruction by an authorized officer of Receiving Party supervising the
+                            destruction).
+                        </p>
+
+
+                        <p class="excert">
+                            <h3>8.	Notice of Breach.</h3>
+                        </p>
+
+                        <p class="excert">
+                            Receiving Party shall notify Disclosing Party immediately upon discovery of, or suspicion of, (1)
+                            any unauthorized use or disclosure of Confidential Information by Receiving Party or its
+                            Representatives; or (2) any actions by Receiving Party or its Representatives inconsistent with
+                            their respective obligations under this Agreement, Receiving Party shall cooperate with any and
+                            all efforts of Disclosing Party to help Disclosing Party regain possession of Confidential
+                            Information and prevent its further unauthorized use.
+                        </p>
+
+
+                        <p class="excert">
+                            <h3>9.	No Binding Agreement for Transaction.</h3>
+                        </p>
+
+                        <p class="excert">
+                            The parties acknowledge and agree that neither party will be under any legal obligation of any
+                            kind whatsoever with respect to effectuating, or otherwise concerning, the potential Transaction
+                            by virtue of this Agreement, except for the matters specifically agreed to herein. The parties
+                            further acknowledge and agree that each reserves the right, in such party’s sole and absolute
+                            discretion, to reject any and all proposals and to terminate discussions and negotiations with
+                            respect to the potential Transaction at any time. This Agreement does not create a joint venture
+                            or partnership between the parties. If a Transaction goes forward, the non-disclosure provisions
+                            of any applicable transaction documents entered into between the parties (or their respective
+                            affiliates) concerning the Transaction shall supersede this Agreement; in the event that such
+                            provisions contained herein are not provided for in such transaction documents, this Agreement
+                            shall control.
+                        </p>
+
+                        <p class="excert">
+                            <h3>10.	Warranty.</h3>
+                        </p>
+
+                        <p class="excert">
+                            <h3>
+                                NO REPRESENTATIONS OR WARRANTIES ARE MADE BY DISCLOSING PARTY
+                                OR ITS REPRESENTATIVES UNDER THIS AGREEMENT WHATSOEVER,
+                                EXPRESS OR IMPLIED.
+                            </h3>
+                            The parties acknowledge and agree that no representation or
+                            warranty as to the accuracy or completeness of the Confidential Information is being made by
+                            Disclosing Party. Disclosing Party shall have no liability to Receiving Party or its
+                            Representatives concerning any use of the Confidential Information. Any such representation or
+                            warranty of Disclosing Party shall be limited to as set forth by the parties if, subsequently, they
+                            negotiate and enter into a mutually agreeable definitive agreement concerning the Transaction,
+                            although there is no obligation for the parties to do so hereunder.
+                        </p>
+
+                        <p class="excert">
+                            <h3>11.	Non-solicitation; Other Actions.</h3>
+                        </p>
+
+                        <p class="excert">
+                            From the Effective Date to the earlier of: (1) the date of execution of a definitive agreement in
+                            respect of the Transaction, if applicable; and (2) the second (2nd) anniversary of this Agreement,
+                            each party covenants not to and shall not, directly or indirectly, alone, jointly or in concert with
+                            any other person, entity, partnership, association or otherwise, without the express prior written
+                            consent of the other party, in the sole discretion of such party, use the Confidential Information,
+                            or take any action based upon the Confidential Information, to:
+                        </p>
+
+
+                        <p class="excert">
+                            (i) interfere in any way with any contractual or other business of the other party;
+                        </p>
+
+
+                        <p class="excert">
+                            (ii) solicit for hire or employ, directly or indirectly, any officer, director or employee of
+                            Disclosing Party or its affiliates, who is or was an officer, director or employee of the disclosing
+                            party during the term of this Agreement; or
+                        </p>
+
+
+                        <p class="excert">
+                            (iii) in any capacity, either separately or jointly or in association with others, directly or
+                            indirectly, solicit or contact in connection with, or in furtherance of, such party’s business or
+                            interests, or in competition with the other party, any of the other party’s vendors (collectively,
+                            the <b>“Restricted Parties”</b> and each a <b>“Restricted Party”</b>). Additionally, during such time, such
+                            party shall not at any time contact, or permit any of its employees, officers, or other agents or
+                            Representatives, to contact, directly or indirectly, without the prior written consent of the other
+                            party, which consent may be withheld by the other party, in its sole and absolute discretion, any
+                            of the Restricted Parties, including any employee, officer or other agent of any Restricted Party
+                            or any affiliate of same. This subsection specifically excludes and shall not apply to those
+                            certain vendors that Buyer has engaged, employed or contracted with previously in
+                            contemplation or furtherance of separate business relationships or transactions, which may
+                            continue to be solicited or contacted in the normal course of business.
+                        </p>
+
+                        <p class="excert">
+                            The covenants set forth above in this Section 11 shall survive the termination of this Agreement,
+                            regardless of the reason for such termination, for the applicable period of time contemplated
+                            above in this Section 11.
+                        </p>
+
+                        <p class="excert">
+                            <h3>12.	Authorization.</h3>
+                        </p>
+
+                        <p class="excert">
+                            Each party represents that it has the right to enter into this Agreement without any breach of any
+                            obligation to others. The parties further acknowledge and agree that the evaluation of
+                            Confidential Information of Disclosing Party shall be at the sole risk of Receiving Party.
+                        </p>
+
+                        <p class="excert">
+                            <h3>13.	Miscellaneous.</h3>
+                        </p>
+
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(a)&nbsp;&nbsp;&nbsp;&nbsp;This Agreement represents the final and complete agreement between the parties
+                            regarding the subject matter hereof; and supersedes all previous and contemporaneous
+                            communications, representations, understandings and agreements, whether oral or written,
+                            between them with respect to the Confidential Information, disclosed or obtained after the
+                            execution of this Agreement.
+                        </p>
+
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(b)&nbsp;&nbsp;&nbsp;&nbsp;No change, modification, extension, termination or waiver of any provision of this
+                            Agreement shall be valid unless made in writing and signed by a duly authorized representative
+                            of the party to be bound thereby.
+                        </p>
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(c)&nbsp;&nbsp;&nbsp;&nbsp;If any provision of this Agreement is held to be illegal, invalid or unenforceable, such
+                            provision shall be modified, rewritten or interpreted to include as much of its nature and scope as
+                            will render it enforceable; if it cannot be so modified, rewritten or interpreted to be enforceable
+                            in any respect, it will not be given effect, and the remaining provisions hereof shall remain in full
+                            force and effect and shall not be affected by the illegal, invalid or unenforceable provision or by
+                            its severance.
+                        </p>
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(d)&nbsp;&nbsp;&nbsp;&nbsp;
+                            In the event of litigation or other enforcement actions concerning this Agreement,
+                            including, without limitation, if Disclosing Party brings an action to enforce the terms of this
+                            Agreement, including concerning the protection of any Confidential Information, including,
+                            without limitation, injunctive relief or specific performance, and/or concerning damages
+                            associated with any breach of this Agreement or concerning any other matter, the prevailing
+                            party in such action (whether Receiving Party or Disclosing Party or any successor-in-interest),
+                            in addition to all remedies available at law or in equity, shall be entitled to costs and expenses
+                            associated therewith, including, without limitation, reasonable attorneys’ fees. The parties
+                            acknowledge and agree that all liabilities concerning all relief, including, without limitation,
+                            concerning damages and costs and expenses arising from this Agreement, shall be joint and
+                            several by and among the entities and affiliates constituting, collectively, the Buyer, if against a
+                            Buyer, and shall be joint and several by and among the entities and affiliates constituting,
+                            collectively, the “Seller”, if against Seller.
+                        </p>
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(e)&nbsp;&nbsp;&nbsp;&nbsp;
+                            The validity, construction and performance of this Agreement shall be governed and
+                            construed in accordance with the laws of North Carolina, without giving effect to any conflicts of
+                            law provisions. The Federal and state courts located in North Carolina shall have sole and
+                            exclusive jurisdiction over any disputes arising under, or in any way connected with or related to,
+                            the terms of this Agreement, and Receiving Party: (i) consents to personal jurisdiction therein;
+                            and (ii) waives the right to raise <i>forum non conveniens</i> or any similar objection.
+                        </p>
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(f)&nbsp;&nbsp;&nbsp;&nbsp;
+                            Any notices or communications required or permitted to be given hereunder may be
+                            delivered by hand, deposited with a nationally recognized overnight carrier for overnight or next
+                            business day delivery, electronic mail (marked as “Important” in the subject line), or mailed by
+                            certified mail, return receipt requested, postage prepaid, in each case, to the address of the other
+                            party first indicated above (or such other addressee as may be furnished by a party in accordance
+                            with this paragraph). All such notices or communications shall be deemed to have been given
+                            and received (a) in the case of personal delivery, or electronic mail on the date of such delivery,
+                            (b) in the case of delivery by a nationally recognized overnight carrier, on the next business day,
+                            and (c) in the case of mailing, on the third business day following such mailing.
+                        </p>
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(g)&nbsp;&nbsp;&nbsp;&nbsp;
+                            This Agreement is personal in nature, and neither party may directly or indirectly
+                            assign or transfer it by operation of law or otherwise without the prior written consent of the
+                            other party, which consent will not be unreasonably withheld. All obligations contained in this
+                            Agreement shall extend to and be binding upon the parties to this Agreement and their respective
+                            successors and permitted assigns and designees.
+                        </p>
+
+                        <p class="excert">
+                            &nbsp;&nbsp;&nbsp;&nbsp;(h)&nbsp;&nbsp;&nbsp;&nbsp;
+                            This Agreement may be signed in counterparts, and electronic signatures (including
+                            pdfs) shall be deemed original signatures for all purposes.
+                        </p>
+
+
+                        <h2 class="text-center">
+
+                            <br />
+                            [Separate Signature Page Follows]
+                            <br />
+                        </h2>
+
+
+                        <h2 class="text-center">
+
+                            <br />
+                            SEPARATE SIGNATURE PAGE TO <br />
+                            CONFIDENTIALITY AND NONDISCLOSURE AGREEMENT
+                            <br />
+                        </h2>
+
+                        <p class="excert text-center">
+                            In Witness Whereof, the parties have executed this Agreement by their respective officers
+                            thereunto duly authorized as of the Effective Date.
+                        </p>
+
+
+
+
+
+
+
+                        <div class="excert ">
+
+                            <form id="SaveCustomerSignature" name="SaveCustomerSignature" action="SaveSign" method="post" enctype="multipart/form-data">
+
+
+                                <div class="row">
+                                    <div class="col-lg-4">
+
+                                        <div class="excert">
+                                            <h2>Buyer : </h2>
+                                        </div>
+                                        <hr />
+
+                                        <input type="hidden" id="customerId" name="CustomerId" value="@Model.CustomerId" />
+                                        <input type="hidden" id="customerSignature" name="customerSignature" />
+                                        <input type="hidden" id="directorSignature" name="directorSignature" />
+
+                                        <div class="excert">
+                                            <b>By : </b> @Model.FullName
+                                        </div>
+
+                                        <div class="excert">
+                                            <b>Title : </b> @Model.GivenTitle
+                                        </div>
+
+                                        <div class="excert">
+                                            <b>Name of corporation : </b> @Model.Company
+                                        </div>
+
+
+                                        <div class="excert">
+                                            <b>Address : </b> <u>@Model.Address</u>
+                                        </div>
+
+                                        <div class="excert">
+                                            <b>City/State/ZIP : </b> <u>@Model.StateName @Model.City @Model.Zipcode </u> <br />
+
+                                        </div>
+
+                                        <div class="excert">
+                                            <b>Phone : </b> @Model.ContactNumber
+                                        </div>
+
+                                        <div class="excert">
+                                            <b>Cell : </b>@Model.CellNumber
+                                        </div>
+
+                                        <div class="excert">
+                                            <b>Email : </b>@Model.EmailAddress
+                                        </div>
+
+
+
+                                        <img src="@Model.CustomerSignature" style="border: 1px solid black;" />
+
+
+
+
+
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="excert">
+                                            <h2>Seller : </h2>
+                                        </div>
+                                        <hr />
+
+                                        <div class="excert">
+                                            <b>Sam’s Holdings<sup style="font-size: 7px; vertical-align:middle;">SM</sup>, LLC</b>
+                                        </div>
+
+                                        <p class="excert">
+                                            <b>7935 Council Place</b>
+                                        </p>
+
+                                        <p class="excert">
+                                            <b>Matthews, NC 28105</b>
+                                        </p>
+
+                                        <div class="excert">
+
+                                            <span style="font-family: 'Lobster', cursive;">&nbsp;</span>
+                                            <img src="@Model.DirectorSignature" style="border: 1px solid black;" />
+
+                                            <!--
+                                            <script>
+
+                                                var ctx = document.getElementById('c').getContext('2d');
+                                                var kitty = new Image();
+                                                kitty.src = 'http://knowminal.com/sams/images/white_bg.png';
+                                                kitty.onload = function () {
+                                                    ctx.drawImage(this, 0, 0, this.width, this.height);
+                                                    ctx.font = '25px Lobster';
+
+                                                    ctx.textBaseline = 'top';
+                                                    ctx.fillText('Paul Joseph', 0, 0);
+
+                                                    var today = new Date();
+                                                    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+                                                    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                                                    var dateTime = date + ' ' + time;
+
+                                                    ctx.font = '8px Arial';
+                                                    ctx.fillText(dateTime, 50, 30);
+                                                };
+
+                                            </script>
+
+
+                                            <b> <font class="signature_font"><h2>Paul K Joseph</h2></font>  Real Estate Director</b>
+                                            -->
+                                        </div>
+
+                                        <hr />
+
+                                        <div class="excert">
+                                            <b>Date :</b> @DateTime.Now.ToString("dd/MM/yyyy")
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+
+
+
+                    <div class="row">
+                        <div class="col-lg-6">
+
+
+
+                        </div>
+                        <div class="col-lg-4">
+                            <button type="button" class="button button-contactForm boxed-btn" onclick="PrintAgreement()">Print</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="mySignature" role="dialog">
+    <div class="modal-dialog">
+        <style scoped="scoped" onload="showSignatureCanvas();"></style>
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Customer Signature</h2>
+            </div>
+            <div class="modal-body">
+                <form id="RegisterCustomer" name="RegisterCustomer" action="RegisterCustomer" method="post" enctype="multipart/form-data">
+
+
+                    <div id="sig" style="height:200px; width:200px; border:2px, solid, black;"></div>
+                    <p style="clear: both;">
+                        <button id="disable">Disable</button>
+                        <button id="clear">Clear</button>
+                        <button id="json">To JSON</button>
+                        <button id="svg">To SVG</button>
+                    </p>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    //Canvas
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    //Variables
+    var canvasx = $(canvas).offset().left;
+    var canvasy = $(canvas).offset().top;
+    var last_mousex = last_mousey = 0;
+    var mousex = mousey = 0;
+    var mousedown = false;
+    var tooltype = 'draw';
+
+    //Mousedown
+    $(canvas).on('mousedown', function (e) {
+        last_mousex = mousex = parseInt(e.clientX - canvasx);
+        last_mousey = mousey = parseInt(e.clientY - canvasy);
+        mousedown = true;
+    });
+
+    //Mouseup
+    $(canvas).on('mouseup', function (e) {
+        mousedown = false;
+    });
+
+    //Mousemove
+    $(canvas).on('mousemove', function (e) {
+        mousex = parseInt(e.clientX - canvasx);
+        mousey = parseInt(e.clientY - canvasy);
+        if (mousedown) {
+            ctx.beginPath();
+            if (tooltype == 'draw') {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 3;
+            } else {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = 10;
+            }
+            ctx.moveTo(last_mousex, last_mousey);
+            ctx.lineTo(mousex, mousey);
+            ctx.lineJoin = ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+        last_mousex = mousex;
+        last_mousey = mousey;
+        //Output
+        $('#output').html('current: ' + mousex + ', ' + mousey + '<br/>last: ' + last_mousex + ', ' + last_mousey + '<br/>mousedown: ' + mousedown);
+    });
+
+    //Use draw|erase
+    use_tool = function (tool) {
+        tooltype = tool; //update
+    }
+</script>

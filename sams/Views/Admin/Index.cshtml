@@ -1,0 +1,541 @@
+﻿@model sams.Models.DashBoardSummaryViewModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+    <script>
+                function showProperties(propertyType) {
+                var baseUrl = "@Url.Action("Index", "Admin")?propertyType=" + propertyType;
+                location.href = baseUrl;
+                }
+
+
+
+    </script>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Dashboard</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Dashboard </li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-6">
+                    Welcome Admin
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-purple">
+                        <div class="inner">
+                            <h3>@Model.TotalSurplusProperties</h3>
+
+                            <p>Surplus Dashboard</p>
+                        </div>
+                        <div class="icon">
+
+                            <i class="nav-icon fas fa-snowflake"></i>
+                        </div>
+                        <a href="@Url.Action("Dashboard", "SurplusProperties")?s=all" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>@Model.TotalNetleaseProperties</h3>
+
+                            <p>Net Lease Dashboard</p>
+                        </div>
+                        <div class="icon">
+
+                            
+                            <i class="nav-icon fas fa-building"></i>
+                        </div>
+                        <a href="@Url.Action("Dashboard", "NetLeaseProperties")?s=all" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>@Model.TotalCstores</h3>
+
+                            <p>C Stores Dashboard</p>
+                        </div>
+                        <div class="icon">
+
+                            <i class="nav-icon fas fa-cube"></i>
+                        </div>
+                        <a href="@Url.Action("Dashboard", "CStore")?s=all" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>@Model.TotalFromCustomers</h3>
+
+                            <p>New Property Dashboard</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        <a href="@Url.Action("Index", "NewPropertyDashboard")" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+
+            
+
+
+            <div class="row">
+
+
+
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                
+                                <a href="javascript:showProperties('all')" class="btn bg-purple">Show All Properties</a>
+                                <a href="javascript:showProperties('surplus')" class="btn bg-purple">Show Surplus Properties</a>
+                                <a href="javascript:showProperties('net_lease')" class="btn bg-purple">Show Net Lease Properties</a>
+                                <a href="javascript:showProperties('c-store')" class="btn bg-purple">Show C-Store Properties</a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+
+                            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByxJE-OM4Lv77gVdAYJAfKOiDpD6H9ofg&v=3.exp&sensor=false&libraries=places"></script>
+                            @if (@Model.PropertyLocationList != null && @Model.PropertyLocationList.Count > 0)
+                            {
+                                <script>
+                                                    function initialize() {
+                                                        var marker;
+
+
+                                                        var mapOptions = {
+                                                            center: new google.maps.LatLng(@Model.PropertyLocationList[0].PropertyLatitude, @Model.PropertyLocationList[0].PropertyLongitude),
+                                                            zoom: 10,
+                                                            mapTypeId: google.maps.MapTypeId.ROADMAP
+
+                                                        };
+                                                        map = new google.maps.Map(document.getElementById('map-canvas'),
+                                                            mapOptions);
+
+                                                        var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+                                                        var greenPinImage = new google.maps.MarkerImage("http://maps.google.com/mapfiles/ms/icons/orange.png");
+                                                        var redPinImage = new google.maps.MarkerImage("http://maps.google.com/mapfiles/ms/icons/red.png");
+                                                        var bluePinImage = new google.maps.MarkerImage("http://maps.google.com/mapfiles/ms/icons/green.png");
+
+                                                        greenPinImage = new google.maps.MarkerImage("img/map/map_blue.png");
+                                                        redPinImage = new google.maps.MarkerImage("img/map/map_green.png");
+                                                        bluePinImage = new google.maps.MarkerImage("img/map/c_store.png");
+
+
+
+
+
+
+                                                        @foreach(var loc in Model.PropertyLocationList)
+                                                            {
+
+                                                                @if(loc.PropertyType == "surplus" && loc.PropertyLatitude.Trim().Length> 0 && loc.PropertyLongitude.Trim().Length> 0)
+                                                                {
+                                                                    @:marker = new google.maps.Marker({
+                                                                    @:icon: greenPinImage,
+                                                                    @:position: { lat: @loc.PropertyLatitude, lng: @loc.PropertyLongitude },
+                                                                    @:map: map
+                                                                    @:});
+                                                                }
+                                                                else if(loc.PropertyType == "net_lease" && loc.PropertyLatitude.Trim().Length > 0 && loc.PropertyLongitude.Trim().Length > 0)
+                                                                {
+                                                                    @:marker = new google.maps.Marker({
+                                                                    @:icon: redPinImage,
+                                                                    @:position: { lat: @loc.PropertyLatitude, lng: @loc.PropertyLongitude },
+                                                                    @:map: map
+                                                                    @:});
+                                                                }
+                                                                else if(loc.PropertyType == "c-store" && loc.PropertyLatitude.Trim().Length > 0 && loc.PropertyLongitude.Trim().Length > 0)
+                                                                {
+                                                                    @:marker = new google.maps.Marker({
+                                                                    @:icon: bluePinImage,
+                                                                    @:position: { lat: @loc.PropertyLatitude, lng: @loc.PropertyLongitude },
+                                                                    @:map: map
+                                                                    @:});
+                                                                }
+
+
+                                                            @:google.maps.event.addListener(marker, "click", function (e) {
+                                                            @:    placeMarker(map, e.latLng, '@loc.PropertyHeader', '@loc.PropertyId', '@loc.PropertyType', '@loc.PropertySize', '@loc.PropertyPrice', '@loc.CapRate');
+                                                            @:});
+                                                            @:
+                                                            @:
+                                                            @:
+                                                            @:
+                                                            @:
+                                                            @:
+                                                            @:
+                                                            @:
+
+
+                                                        }
+
+
+                                                    }
+
+                                                    google.maps.event.addDomListener(window, 'load', initialize);
+
+                                function placeMarker(map, location, propertyHeader, assetId, propertyType, propertySize, propertyPrice, capRate) {
+                                    var marker = new google.maps.Marker({
+                                        position: location,
+                                        map: map
+                                    });
+
+                                    if (propertyType == 'surplus') {
+                                        var infowindow = new google.maps.InfoWindow({
+                                            content: '<div><h3>' + propertyHeader + '</h3>' +
+                                                '<b>Lot Size</b>: ' + propertySize +
+                                                '<br><b>Price:</b> ' + propertyPrice +
+                                                '<br><a class="btn btn-success" href="SurplusProperties/ViewSurplusProperty?propertyId= ' + assetId + '" target="_blank">View Details</a>' +
+                                                '</div>'
+                                        });
+                                    }
+                                    else if (propertyType == 'c-store') {
+                                        var infowindow = new google.maps.InfoWindow({
+                                            content: '<div><h3>' + propertyHeader + '</h3>' +
+                                                '<b>Land Size</b>: ' + propertySize +
+                                                '<br><b>Asking Price:</b> ' + propertyPrice +
+                                                '<br><a class="btn btn-success" href="CStore/ViewCStore?propertyId=" ' + assetId + ' target="_blank">View Details</a>' +
+                                                '</div>'
+                                        });
+                                    }
+                                    else if (propertyType == 'net_lease') {
+                                        var infowindow = new google.maps.InfoWindow({
+                                            content: '<div><h3>' + propertyHeader + '</h3>' +
+                                                '<br><b>Price:</b> ' + propertyPrice +
+                                                '<br><b>Cap Rate:</b> ' + capRate +
+                                                '<br><a class="btn btn-success" href="NetLeaseProperties/ViewNetLeaseProperties?propertyId=' + assetId + '" target="_blank">View Details</a>' +
+                                                '</div>'
+                                        });
+                                    }
+
+                                    infowindow.open(map, marker);
+
+                                    google.maps.event.addListener(marker, "click", function (e) {
+                                        placeMarker(map, location, propertyHeader, assetId, propertyType, propertySize, propertyPrice, capRate);
+                                    });
+                                }
+
+                                </script>
+
+
+                                <div id="map-canvas" style="height:400px;width:100%;">
+
+                                </div>
+
+                                <input type="hidden" name="Latitude" id="txtLatitude" value="@Model.PropertyLocationList[0].PropertyLatitude" />
+                                <input type="hidden" name="Longitude" id="txtLongitude" value="@Model.PropertyLocationList[0].PropertyLongitude" />
+                            }
+
+
+                        </div>
+                    </div>
+                    <!-- /.card -->
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+            <!-- Main row -->
+
+            
+
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+
+
+<!-- Bootstrap -->
+<script src="~/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="~/admin/dist/js/adminlte.js"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="~/admin/plugins/chart.js/Chart.min.js"></script>
+<script src="~/admin/dist/js/demo.js"></script>
+<script>
+    $(function () {
+        'use strict'
+
+        var ticksStyle = {
+            fontColor: '#495057',
+            fontStyle: 'bold'
+        }
+
+        var mode = 'index'
+        var intersect = true
+
+        var $salesChart = $('#sales-chart')
+        var salesChart = new Chart($salesChart, {
+            type: 'bar',
+            data: {
+                labels: [
+                    @Html.Raw(@Model.MonthNames)
+                ],
+                datasets: [
+                    {
+                    backgroundColor: '#007bff',
+                        borderColor: '#007bff',
+                        data: [
+                            @Model.InStockSurplusData
+                        ]
+                    },
+                    {
+                    backgroundColor: '#ced4da',
+                        borderColor: '#ced4da',
+                        data: [
+                            @Model.SoldSurplusData
+                        ]
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                hover: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        // display: false,
+                        gridLines: {
+                            display: true,
+                            lineWidth: '4px',
+                            color: 'rgba(0, 0, 0, .2)',
+                            zeroLineColor: 'transparent'
+                        },
+                        ticks: $.extend({
+                            beginAtZero: true,
+
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                if (value >= 1000) {
+                                    value /= 1000
+                                    value += 'k'
+                                }
+                                return value
+                            }
+                        }, ticksStyle)
+                    }],
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: ticksStyle
+                    }]
+                }
+            }
+        })
+
+
+
+
+
+
+
+
+
+        var $salesChart = $('#sales-chart-netlease')
+        var salesChart = new Chart($salesChart, {
+            type: 'bar',
+            data: {
+                labels: [
+                    @Html.Raw(@Model.MonthNames)
+                ],
+                datasets: [
+                    {
+                    backgroundColor: '#007bff',
+                        borderColor: '#007bff',
+                        data: [
+                            @Model.InStockNetLeaseData
+                        ]
+                    },
+                    {
+                    backgroundColor: '#ced4da',
+                        borderColor: '#ced4da',
+                        data: [
+                            @Model.SoldNetLeaseData
+                        ]
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                hover: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        // display: false,
+                        gridLines: {
+                            display: true,
+                            lineWidth: '4px',
+                            color: 'rgba(0, 0, 0, .2)',
+                            zeroLineColor: 'transparent'
+                        },
+                        ticks: $.extend({
+                            beginAtZero: true,
+
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                if (value >= 1000) {
+                                    value /= 1000
+                                    value += 'k'
+                                }
+                                return value
+                            }
+                        }, ticksStyle)
+                    }],
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: ticksStyle
+                    }]
+                }
+            }
+        })
+
+
+
+
+        var $salesChart = $('#sales-chart-c-stores')
+        var salesChart = new Chart($salesChart, {
+            type: 'bar',
+            data: {
+                labels: [
+                    @Html.Raw(@Model.MonthNames)
+                ],
+                datasets: [
+                    {
+                    backgroundColor: '#007bff',
+                        borderColor: '#007bff',
+                        data: [
+                            @Model.InStockCStoresData
+                        ]
+                    },
+                    {
+                    backgroundColor: '#ced4da',
+                        borderColor: '#ced4da',
+                        data: [
+                            @Model.SoldCStoresData
+                        ]
+                    }
+                ]
+            },
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                hover: {
+                    mode: mode,
+                    intersect: intersect
+                },
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        // display: false,
+                        gridLines: {
+                            display: true,
+                            lineWidth: '4px',
+                            color: 'rgba(0, 0, 0, .2)',
+                            zeroLineColor: 'transparent'
+                        },
+                        ticks: $.extend({
+                            beginAtZero: true,
+
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                if (value >= 1000) {
+                                    value /= 1000
+                                    value += 'k'
+                                }
+                                return value
+                            }
+                        }, ticksStyle)
+                    }],
+                    xAxes: [{
+                        display: true,
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: ticksStyle
+                    }]
+                }
+            }
+        })
+
+        
+
+
+    })
+
+</script>

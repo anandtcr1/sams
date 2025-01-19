@@ -1,0 +1,1032 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@using sams.Common;
+
+@{
+    Helper.SendCriticalAlertEmail();
+
+    var totalNotifications = "0";
+
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Sam's Holdings | Dashboard</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/admin/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="~/admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="~/admin/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/admin/dist/css/adminlte.css?c=2">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/admin/plugins/daterangepicker/daterangepicker.css">
+
+
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="~/admin/plugins/datepicker/css/bootstrap-datepicker.min.css">
+
+    <!-- summernote -->
+    <link rel="stylesheet" href="~/admin/plugins/summernote/summernote-bs4.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+    <script src="~/js/sams.js"></script>
+
+    <!-- jQuery -->
+    <script src="~/admin/plugins/jquery/jquery.min.js"></script>
+    <script>
+        
+        
+        function doLogout() {
+            if (confirm("Do you want to logout?")) {
+                var baseUrl = "@Url.Action("LogoutUser", "Admin")";
+                location.href = baseUrl;
+            }
+        }
+
+        function showLogoutOnTimeout() {
+            var baseUrl = "@Url.Action("LogoutUser", "Admin")";
+            location.href = baseUrl;
+        }
+
+        function getNotificationList() {
+            $.ajax({
+                url: '@Url.Action("GetTopNotificationList", "SamsNotification")',
+                type: "GET",
+                success: function (result) {
+                    //$("#divList").append(result);
+
+                    $("#divTotalNotifications").append(result);
+                }
+            });
+            $("#divLoading").hide();
+        }
+
+        function showNotification() {
+            var baseUrl = '@Url.Action("GetNotificationList", "SamsNotification")';
+            location.href = baseUrl;
+        }
+
+        function resetPassword() {
+            if (confirm("Do you want to reset your password?")) {
+                var baseUrl = "@Url.Action("SendPasswordLink", "SamsUsers")";
+                location.href = baseUrl;
+            }
+        }
+
+        function numericFilter(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
+        function markDate(ctrlName) {
+            $("#p_MarkStartDate").val('');
+            $("#p_Duration").val('');
+            $("#p_newDate").val('');
+            $("#dateControlName").val(ctrlName);
+            $('#modal-calculate_date').modal('show');
+        }
+    </script>
+    @{
+        if (loggedInUser == null)
+        {
+            @:<script>showLogoutOnTimeout();</script>
+
+
+
+
+
+
+
+
+        }
+    }
+
+    <style>
+        tr:hover {
+            background-color: #c7c9cc;
+        }
+    </style>
+
+    <style>
+        
+    </style>
+</head>
+<!--
+<body class="hold-transition layout-top-nav">
+    -->
+<body class="hold-transition sidebar-mini sidebar-collapse " onload="getNotificationList()" >
+
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand-md navbar-danger navbar-dark ">
+            <div class="container">
+                <!--
+                <a href="@Url.Action("Index", "Admin")?propertyType=all" class="navbar-brand">
+                    <img src="~/img/logo_new.jpg" alt="AdminLTE Logo" class="brand-image elevation-3">
+                </a>
+            -->
+
+                <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+                    <!-- Left navbar links -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item d-none d-sm-inline-block">
+                            <a href="@Url.Action("Index", "Admin")?propertyType=all" class="nav-link"><font color="white"> Dashboard</font></a>
+                        </li>
+
+
+
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 2).CanRead)
+                        {
+                            <li class="nav-item dropdown">
+                                <a id="surplusMenu" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><font color="white">Surplus Properties</font></a>
+                                <ul aria-labelledby="surplusMenu" class="dropdown-menu border-0 shadow">
+
+                                    <li><a href="@Url.Action("Dashboard", "SurplusProperties")?s=all" class="dropdown-item">Surplus Properties Dashboard</a></li>
+                                    <li><a href="@Url.Action("Index", "SurplusProperties")" class="dropdown-item">Surplus Properties List</a></li>
+                                    <li><a href="@Url.Action("EditSurplusProperty", "SurplusProperties")?propertyId=0" class="dropdown-item">Add New Property</a></li>
+
+                                </ul>
+                            </li>
+                        }
+
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 3).CanRead)
+                        {
+                            <li class="nav-item dropdown">
+                                <a id="netLeaseMenu" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><font color="white">Net Lease Properties</font></a>
+                                <ul aria-labelledby="netLeaseMenu" class="dropdown-menu border-0 shadow">
+                                    <li><a href="@Url.Action("Dashboard", "NetLeaseProperties")?s=all" class="dropdown-item">Net Lease Properties Dashboard</a></li>
+                                    <li><a href="@Url.Action("Index", "NetLeaseProperties")" class="dropdown-item">Net Lease Properties List</a></li>
+                                    <li><a href="@Url.Action("EditNetLeaseProperty", "NetLeaseProperties")?propertyId=0" class="dropdown-item">Add New Property</a></li>
+
+                                    <li class="dropdown-divider"></li>
+
+                                    <li>
+                                        <a href="@Url.Action("GetShoppingCenterList", "NetLeaseProperties")" class="dropdown-item">Shopping Centers</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 4).CanRead)
+                        {
+                            <li class="nav-item dropdown">
+
+
+                                <a id="cStoreMenu" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><font color="white">C-Stores</font></a>
+                                <ul aria-labelledby="cStoreMenu" class="dropdown-menu border-0 shadow">
+                                    <li><a href="@Url.Action("Dashboard", "CStore")" class="dropdown-item">C-Store Dashboard</a></li>
+                                    <li><a href="@Url.Action("Index", "CStore")" class="dropdown-item">C-Store List</a></li>
+                                    <li><a href="@Url.Action("EditCStore", "CStore")?propertyId=0" class="dropdown-item">Add New C-Store</a></li>
+
+                                </ul>
+
+                            </li>
+                        }
+
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 5).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "NewPropertyDashboard")" class="nav-link"><font color="white">New Property Dashboard</font></a>
+                            </li>
+                        }
+
+
+
+                        <li class="nav-item dropdown">
+                            <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle"><font color="white">Settings</font></a>
+                            <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 7).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "SamsUsers")" class="dropdown-item">User List</a></li>
+                                }
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 8).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "CStoreRegisteredCustomer")" class="dropdown-item">C-Store/Netlease Customers</a></li>
+                                }
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 9).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "SignUpCustomer")" class="dropdown-item">Signed Up Customers</a></li>
+                                }
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 10).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "CustomerMessage")" class="dropdown-item">Customer Message</a></li>
+                                }
+
+
+                                <li class="dropdown-divider"></li>
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 11).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "AssetType")" class="dropdown-item">Asset Type</a></li>
+                                }
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 12).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "SamsRole")" class="dropdown-item">Role List</a></li>
+                                }
+
+                                <!--
+                            <li><a href="@Url.Action("Index", "SamsRole")" class="dropdown-item">Role List</a></li>
+                            -->
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 13).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "SamsLocation")" class="dropdown-item">SH Asset List</a></li>
+                                }
+
+
+                                <li class="dropdown-divider"></li>
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 14).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "State")" class="dropdown-item">State List</a></li>
+                                    <li><a href="@Url.Action("Index", "Region")" class="dropdown-item">Region List</a></li>
+                                }
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 15).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "MapCompetitor")" class="dropdown-item">MSA Map list</a></li>
+                                }
+
+                                @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 16).CanRead)
+                                {
+                                    <li><a href="@Url.Action("Index", "SamsSettings")" class="dropdown-item">Admin Settings</a></li>
+                                }
+                                <li><a href="@Url.Action("Index", "PageHitStatus")" class="dropdown-item">Page Hit Status</a></li>
+                                <li><a href="javascript:resetPassword()" class="dropdown-item">Reset Password</a></li>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+
+
+                </div>
+
+                <!-- Right navbar links -->
+
+            </div>
+
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Messages Dropdown Menu -->
+                <!-- Notifications Dropdown Menu -->
+                <!--
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="far fa-bell"></i>
+                    <span class="badge badge-warning navbar-badge">15</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="divList">
+                    <span class="dropdown-item dropdown-header">15 Notifications</span>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-envelope mr-2"></i> 4 new messages
+                        <span class="float-right text-muted text-sm">3 mins</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-users mr-2"></i> 8 friend requests
+                        <span class="float-right text-muted text-sm">12 hours</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-file mr-2"></i> 3 new reports
+                        <span class="float-right text-muted text-sm">2 days</span>
+                    </a>
+
+
+
+
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                </div>
+            </li>
+            -->
+
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:showNotification()">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning navbar-badge" id="divTotalNotifications"></span>
+                    </a>
+
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:doLogout()" role="button">
+                        <i class="fas fa fa-power-off" aria-hidden="true"></i>
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+        <!-- /.navbar -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a class="brand-link">
+                <!--
+            <img src="~/img/logo_new.jpg" alt="AdminLTE Logo" class="brand-image elevation-3">
+            -->
+                <img src="~/img/logo_left.png"
+                     alt="Sams Holdings"
+                     class="brand-image  elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light"><font color="white">Sams Holdings</font></span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                    with font-awesome or any other icon font library -->
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 7).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "SamsUsers")" class="nav-link">
+                                    <i class="nav-icon fas fa-user"></i>
+                                    <p>
+                                        User List
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 8).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "CStoreRegisteredCustomer")" class="nav-link ">
+                                    <i class="nav-icon fas fa-user-circle"></i>
+                                    <p>
+                                        C-Store/Netlease Customers
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 9).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "SignUpCustomer")" class="nav-link ">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        Signed Up Customers
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 10).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "CustomerMessage")" class="nav-link ">
+                                    <i class="nav-icon fas fa-comments"></i>
+                                    <p>
+                                        Customer Message
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 11).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "AssetType")" class="nav-link ">
+                                    <i class="nav-icon fas fa-cubes"></i>
+                                    <p>
+                                        Asset Type
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 12).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "SamsRole")" class="nav-link ">
+                                    <i class="nav-icon fas fa-check-circle"></i>
+                                    <p>
+                                        Role List
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 13).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "SamsLocation")" class="nav-link ">
+                                    <i class="nav-icon fas fa-cube"></i>
+                                    <p>
+                                        SH Asset List
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 14).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "State")" class="nav-link ">
+                                    <i class="nav-icon fas fa-th-large"></i>
+                                    <p>
+                                        State List
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 15).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "MapCompetitor")" class="nav-link ">
+                                    <i class="nav-icon fas fa-map"></i>
+                                    <p>
+                                        MSA Map list
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 16).CanRead)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Index", "SamsSettings")" class="nav-link ">
+                                    <i class="nav-icon fas fa-cog"></i>
+                                    <p>
+                                        Admin Settings
+                                    </p>
+                                </a>
+                            </li>
+                        }
+
+
+                        <li class="nav-item">
+                            <a href="@Url.Action("Index", "PageHitStatus")" class="nav-link ">
+                                <i class="nav-icon fas fa-bookmark"></i>
+                                <p>
+                                    Page Hit Status
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="javascript:resetPassword()" class="nav-link ">
+                                <i class="nav-icon fas fa-lock"></i>
+                                <p>
+                                    Reset Password
+                                </p>
+                            </a>
+                        </li>
+
+
+
+
+
+
+
+
+
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @RenderBody()
+
+
+
+
+
+
+        <div class="modal fade" id="modal-calculate_date">
+            <script>
+                function calculateDates() {
+                    if ($("#p_MarkStartDate").val() == '') {
+                        alert("Please Select Date");
+                        return;
+                    }
+                    else if ($("#p_Duration").val() == '') {
+                        alert("Please Add Duration");
+                        return;
+                    }
+                    else {
+                        $("#divLoading").show();
+                        //var strtDate = new Date($("#p_MarkStartDate").val());
+                        var strtDate = $("#p_MarkStartDate").val();
+                        var dtDuration = $("#p_Duration").val();
+
+                        $.getJSON(`@Url.Action("GetRegionByStateId", "Home")?startDate=${strtDate}&duration=${dtDuration}`, function (data) {
+                            $("#p_newDate").val(data);
+                        });
+                        $("#divLoading").hide();
+/*
+                        
+
+
+
+
+                        var resultDate = new Date(strtDate);
+                        resultDate.setDate(strtDate.getDate() + dtDuration);
+
+                        var datestring = (resultDate.getMonth() + 1) + "-" + resultDate.getDate() + "-" + resultDate.getFullYear();
+
+                        $("#p_newDate").val(datestring);
+                        */
+                    }
+                }
+
+                function copyDateToControl() {
+
+                    if ($("#p_MarkStartDate").val() == '') {
+                        alert("Please Select Date");
+                        return;
+                    }
+                    else if ($("#p_Duration").val() == '') {
+                        alert("Please Add Duration");
+                        return;
+                    }
+                    else {
+                        var dateString = $("#p_newDate").val();
+
+                        var ctrlName = $("#dateControlName").val();
+                        if (ctrlName == 'p_DueDiligenceExpairyDate') {
+                            $("#p_DueDiligenceExpairyDate").val(dateString);
+                        }
+                        else if (ctrlName == 'p_DueDiligenceExpairyDate_lease') {
+                            $("#p_DueDiligenceExpairyDate_lease").val(dateString);
+                        }
+                        else if (ctrlName == 'p_DueDiligenceExpairyDate_lease_with_purchase') {
+                            $("#p_DueDiligenceExpairyDate_lease_with_purchase").val(dateString);
+                        }
+                        else if (ctrlName == 'p_DDPExtension') {
+                            $("#p_DDPExtension").val(dateString);
+                        }
+                        else if (ctrlName == 'p_DDPExtension_lease') {
+                            $("#p_DDPExtension_lease").val(dateString);
+                        }
+                        else if (ctrlName == 'p_DDPExtension_lease_with_purchase') {
+                            $("#p_DDPExtension_lease_with_purchase").val(dateString);
+                        }
+                        else if (ctrlName == 'p_ClosingDate') {
+                            $("#p_ClosingDate").val(dateString);
+                        }
+                        else if (ctrlName == 'p_LeaseCommencementDate') {
+                            $("#p_LeaseCommencementDate").val(dateString);
+                        }
+                        else if (ctrlName == 'p_OptionPurchaseDate') {
+                            $("#p_OptionPurchaseDate").val(dateString);
+                        }
+
+                        $('#modal-calculate_date').modal('hide');
+                    }
+
+                }
+            </script>
+
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Mark Date</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="p_MarkStartDate" class="control-label">Start Date</label>
+                                    <input type="text" value="" name="p_MarkStartDate" class="form-control" id="p_MarkStartDate" readonly />
+                                    <a href="javascript:clearMarkStartDate()">Clear Date</a>
+                                    <input type="hidden" id="dateControlName" />
+                                </div>
+                                <script>
+                                    function clearMarkStartDate() {
+                                        $("#p_MarkStartDate").val('');
+                                    }
+                                </script>
+
+                                <div class="form-group">
+                                    <label for="p_Duration" class="control-label">Duration *</label>
+                                    <input type="text" value="" name="p_Duration" class="form-control" id="p_Duration" onkeypress="return isNumberKey(event)" />
+                                    <div id="errP_Duration"></div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" onclick="calculateDates()">Calculate Date</button>
+
+                                </div>
+                                <div id="divLoading"><font color="red">Fetching Date...</font></div>
+                                <div class="form-group">
+                                    <label for="p_Duration" class="control-label">New Date</label>
+                                    <input type="text" value="" name="p_newDate" class="form-control" id="p_newDate" readonly />
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="copyDateToControl()">Use Date</button>
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+
+
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2020 <a>Sam's Holdings, LLC</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                Knowminal Technologies LLP
+            </div>
+        </footer>
+
+    </div>
+
+
+
+
+
+
+
+
+    
+
+
+    <!-- jQuery UI 1.11.4 -->
+    <script src="~/admin/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="~/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="~/admin/plugins/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    <script src="~/admin/plugins/sparklines/sparkline.js"></script>
+    <!-- JQVMap -->
+    <script src="~/admin/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="~/admin/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="~/admin/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="~/admin/plugins/moment/moment.min.js"></script>
+    <script src="~/admin/plugins/daterangepicker/daterangepicker.js"></script>
+
+    <!-- bootstrap datepicker -->
+    <script src="~/admin/plugins/datepicker/js/bootstrap-datepicker.min.js"></script>
+
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/admin/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="~/admin/plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="~/admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/admin/dist/js/adminlte.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="~/admin/dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/admin/dist/js/demo.js"></script>
+
+
+    <script src="~/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+
+
+    <script>
+        $(function () {
+            $("#example1").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+
+            $("#example3").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+            $("#example4").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+            $("#example5").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+            $("#example6").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+            $("#example7").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+
+            $("#example8").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+
+            $("#example9").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+            $("#example10").DataTable({
+                "responsive": true,
+                "autoWidth": false,
+            });
+
+            //Date picker - format: 'yyyy-m-d',
+            $('#p_StartDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_EndDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_UnderContractDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_UnderContractDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_DueDiligenceExpairyDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_DueDiligenceExpairyDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_DDPExtension').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_UnderContractDate_lease').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_DueDiligenceExpairyDate_lease').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_DDPExtension_lease').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_ListingExpiry').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_UnderContractDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_LeaseCommencementDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_LeaseExpirationDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_CoiExpire').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+
+            $('#p_DateClosed').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_DateRentChanges').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_StatusUpdateDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_DispositionTerminatedDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_DispositionClosedDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_SelectedTransactionDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_HitFromDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_HitToDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_LeaseCommencementDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_OptionPurchaseDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_UnderContractDate_lease_with_purchase').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_DueDiligenceExpairyDate_lease_with_purchase').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_DDPExtension_lease_with_purchase').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_LeaseCommencementDate_with_purchase').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_LeaseCommencementDate_with_purchase').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_LeaseDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_ClosingDate').datepicker({
+                format: 'm-d-yyyy',
+                daysOfWeekDisabled: [0, 6],
+                autoclose: true
+            });
+            $('#p_AlertDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            $('#p_MarkStartDate').datepicker({
+                format: 'm-d-yyyy',
+                autoclose: true
+            });
+            
+
+        });</script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+

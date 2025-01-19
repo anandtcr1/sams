@@ -1,0 +1,111 @@
+﻿@model sams.Models.RegionViewModel
+
+@{
+    ViewData["Title"] = "ManageRegion";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+<script>
+    function saveData() {
+        var txtRegionName = $("#RegionName").val();
+        if (txtRegionName == '') {
+            canSave = false;
+            $("#errRegionName").html("<font color='red'>Please enter Code</font>");
+            $("#RegionName").focus();
+            return;
+        }
+        else {
+            $("#errRegionName").html("");
+        }
+
+        $("#SaveRegion").submit();
+    }
+
+    function viewList() {
+        var baseUrl = "@Url.Action("Index", "Region")";
+        location.href = baseUrl;
+    }
+</script>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Add Region</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form id="SaveRegion" name="SaveRegion" action="@Url.Action("SaveRegion", "Region")" method="post">
+                            <div class="row">
+                                <div class="col-lg-6">
+
+
+                                    <div class="form-group">
+                                        <input type="hidden" asp-for="RegionId" class="form-control" />
+                                        <label for="selState" class="control-label">Select State</label>
+                                        <select id="selState" name="StateId" class="form-select form-control">
+                                            <option value="0">--- Select ---</option>
+                                            @if (Model != null)
+                                            {
+                                                foreach (var itemSel in Model.StateList)
+                                                {
+                                                    if (Model.StateId == itemSel.StateId)
+                                                    {
+                                                        <option selected value="@itemSel.StateId">@itemSel.StateName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                                    }
+
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="RegionName" class="control-label">Region Name *</label>
+                                        <input asp-for="RegionName" class="form-control" />
+                                        <div id="errRegionName"></div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 14).CanEdit)
+                                        {
+                                            <input type="button" id="btnSave" value="Submit" class="btn btn-primary" onclick="saveData();" />
+                                        }
+
+                                        <input type="button" id="btnSave" value="View List" class="btn btn-success" onclick="viewList();" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+</div>
+
+

@@ -1,0 +1,489 @@
+﻿@model sams.Models.SiteDetails
+
+@{
+    ViewData["Title"] = "EditProperty";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+
+    function saveData() {
+        var canSave = true;
+        var txtSiteDetailsId = $("#SiteDetailsId").val();
+
+        var txtPrefix = $("#selPrefix").val();
+
+        var txtFirstName = $("#FirstName").val();
+        if (txtFirstName == '') {
+            canSave = false;
+            $("#errFirstName").html("<font color='red'>Please enter First name</font>");
+            $("#FirstName").focus();
+            return;
+        }
+        else {
+            $("#errFirstName").html("");
+        }
+
+        var txtLastName = $("#LastName").val();
+        if (txtLastName == '') {
+            canSave = false;
+            $("#errLastName").html("<font color='red'>Please enter Last name</font>");
+            $("#LastName").focus();
+            return;
+        }
+        else {
+            $("#errLastName").html("");
+        }
+
+        var txtCompanyName = $("#CompanyName").val();
+        if (txtCompanyName == '') {
+            canSave = false;
+            $("#errCompanyName").html("<font color='red'>Please enter Company name</font>");
+            $("#CompanyName").focus();
+            return;
+        }
+        else {
+            $("#errCompanyName").html("");
+        }
+
+
+
+        var txtEmailAddress = $("#EmailAddress").val();
+        if (txtEmailAddress == '') {
+            canSave = false;
+            $("#errEmailAddress").html("<font color='red'>Please enter Email Address</font>");
+            $("#EmailAddress").focus();
+            return;
+        }
+        else {
+            $("#errEmailAddress").html("");
+        }
+
+        var txtAddress = $("#Address").val();
+        var txtCityName = $("#CityName").val();
+        if (txtCityName == '') {
+            canSave = false;
+            $("#errCityName").html("<font color='red'>Please enter City Name</font>");
+            $("#CityName").focus();
+            return;
+        }
+        else {
+            $("#errCityName").html("");
+        }
+
+        var selStateId = $("#selState").val();
+
+        var txtZipCode = $("#ZipCode").val();
+        var txtContactNumber = $("#ContactNumber").val();
+
+        if (txtContactNumber == '') {
+            canSave = false;
+            $("#errContactNumber").html("<font color='red'>Please enter City Name</font>");
+            $("#ContactNumber").focus();
+            return;
+        }
+        else {
+            $("#errContactNumber").html("");
+        }
+
+        var txtSamsHoldingEmployee = 0;//$("#SamsHoldingEmployee").val();
+
+        //var marketNameList = $("#MarketName");
+        var selectedmarketId = $('input[name="MarketName"]:checked').val();
+        if (selectedmarketId == "undefined") {
+            canSave = false;
+            $("#errMarketNameList").html("<font color='red'>Please select a market</font>");
+
+            return;
+        }
+        else {
+            $("#errMarketNameList").html("");
+        }
+
+
+
+        //var selMarketId = $("#MarketName").val();
+
+        var txtSiteAddress = $("#SiteAddress").val();
+        if (txtSiteAddress == '') {
+            canSave = false;
+            $("#errSiteAddress").html("<font color='red'>Please enter Address</font>");
+            $("#SiteAddress").focus();
+            return;
+        }
+        else {
+            $("#errSiteAddress").html("");
+        }
+
+        var txtSiteCity = $("#SiteCity").val();
+        if (txtSiteCity == '') {
+            canSave = false;
+            $("#errSiteCity").html("<font color='red'>Please enter City</font>");
+            $("#SiteCity").focus();
+            return;
+        }
+
+        var selSiteState = $("#selSiteState").val();
+        var txtSiteCounty = $("#SiteCounty").val();
+
+        var txtSiteCrossStreetName = $("#SiteCrossStreetName").val();
+        var txtIsPropertyAvailable = 0;//$("#IsPropertyAvailable").val();
+        var txtZoning = $("#Zoning").val();
+
+        var txtLotSize = $("#LotSize").val();
+        if (txtLotSize == '') {
+            canSave = false;
+            $("#errLotSize").html("<font color='red'>Please enter Lotsize</font>");
+            $("#LotSize").focus();
+            return;
+        }
+        else {
+            $("#errLotSize").html("");
+        }
+
+        var txtSalesPrice = $("#SalesPrice").val();
+        if (txtSalesPrice == 0) {
+            canSave = false;
+            $("#errSalesPrice").html("<font color='red'>Please enter Sales Price</font>");
+            $("#SalesPrice").focus();
+            return;
+        }
+        else {
+            $("#errSalesPrice").html("");
+        }
+
+        var txtComments = $("#Comments").val();
+
+        var siteDetails = {
+            SiteDetailsId: txtSiteDetailsId,
+            NamePrefix: txtPrefix,
+            FirstName: txtFirstName,
+            LastName: txtLastName,
+            CompanyName: txtCompanyName,
+            EmailAddress: txtEmailAddress,
+            Address: txtAddress,
+            CityName: txtCityName,
+            StateId: selStateId,
+            StateName: "",
+            ZipCode: txtZipCode,
+            ContactNumber: txtContactNumber,
+            SamsHoldingEmployee: txtSamsHoldingEmployee,
+            MarketId: selectedmarketId,
+            MarketName: "",
+            SiteAddress: txtSiteAddress,
+            SiteCity: txtSiteCity,
+            SiteStateId: selSiteState,
+            SiteStateName: "",
+            SiteCounty: txtSiteCounty,
+            SiteCrossStreetName: txtSiteCrossStreetName,
+            IsPropertyAvailable: txtIsPropertyAvailable,
+            Zoning: txtZoning,
+            LotSize: txtLotSize,
+            SalesPrice: txtSalesPrice,
+            Comments: txtComments
+        };
+
+
+
+        /*
+        if (canSave == true) {
+            var url = "submit_site";
+            alert("s");
+            $.ajax({
+                type: "POST",
+                data: siteDetails,
+                url: url,
+                dataType: "json"
+            }).done(function (res) {
+                // $("#SomeDivToShowTheResult").html(res);
+                alert(res);
+            });
+            */
+
+
+
+
+        $.ajax({
+            type: 'POST',
+            url: 'EditProperty',
+            data: siteDetails,
+            success: function (data) {
+                location.href = "Index";
+            },
+            error: function (xhr, textStatus, error) {
+                alert(error);
+            }
+        });
+
+
+
+
+    }
+
+
+
+
+</script>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Property</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <form asp-action="EditSurplusProperty">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="selPrefix" class="control-label">Prefix</label>
+                                        <select id="selPrefix" name="selPrefix" class="form-select form-control">
+                                            <option value="Mr">Mr.</option>
+                                            <option value="Mrs">Mrs.</option>
+                                            <option value="Ms">Ms.</option>
+                                        </select>
+
+                                        <input type="hidden" asp-for="SiteDetailsId" class="form-control" />
+
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label asp-for="FirstName" class="control-label">First Name</label>
+                                        <input asp-for="FirstName" class="form-control" />
+                                        <div id="errFirstName"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="LastName" class="control-label">Last Name</label>
+                                        <input asp-for="LastName" class="form-control" />
+                                        <div id="errLastName"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="CompanyName" class="control-label">Company Name</label>
+                                        <input asp-for="CompanyName" class="form-control" />
+                                        <div id="errCompanyName"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="EmailAddress" class="control-label">Email Address</label>
+                                        <input asp-for="EmailAddress" class="form-control" />
+                                        <div id="errEmailAddress"></div>
+                                    </div>
+
+                                    <!--
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="SamsHoldingEmployee" /> Sam's Holdings Employee
+                                        </label>
+                                    </div>
+                                    -->
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <!---->
+                                    <div class="form-group">
+                                        <label asp-for="Address" class="control-label"></label>
+                                        <input asp-for="Address" class="form-control" />
+                                        <div id="errAddress"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="CityName" class="control-label">City Name</label>
+                                        <input asp-for="CityName" class="form-control" />
+                                        <div id="errCityName"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="selState" class="control-label">Select State</label>
+                                        <select id="selState" name="selState" class="form-select form-control">
+                                            <option value="0">--- Select ---</option>
+                                            @if (Model != null)
+                                            {
+                                                foreach (var itemSel in Model.StateList)
+                                                {
+                                                    if (Model.StateId == itemSel.StateCode)
+                                                    {
+                                                        <option selected value="@itemSel.StateCode">@itemSel.StateName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@itemSel.StateCode">@itemSel.StateName</option>
+                                                    }
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="ZipCode" class="control-label">Zip code</label>
+                                        <input asp-for="ZipCode" class="form-control" />
+                                        <div id="errZipCode"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="ContactNumber" class="control-label">Contact Number</label>
+                                        <input asp-for="ContactNumber" class="form-control" />
+                                        <div id="errContactNumber"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <hr />
+                            <h3>Site Location</h3>
+                            <hr />
+
+                            <div class="row">
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model.MarketList)
+                                    {
+                                        <div class="col-lg-3">
+                                            <div class="form-group form-check">
+                                                <label class="form-check-label">
+                                                    @if (item.MarketId == Model.MarketId)
+                                                    {
+                                                        <input type="radio" checked class="form-check-input" value=@item.MarketId asp-for="MarketName" /> @item.MarketName
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="radio" class="form-check-input" value=@item.MarketId asp-for="MarketName" /> @item.MarketName
+                                                    }
+                                                </label>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                                <div id="errMarketNameList"></div>
+                            </div>
+
+                            <div class="row">
+                                <!-- <div class="col-lg-3"></div> -->
+                                <div class="col-lg-12">
+
+                                </div>
+
+                                <div class="col-lg-6">
+
+
+                                    <div class="form-group">
+                                        <label asp-for="SiteAddress" class="control-label">Address</label>
+                                        <input asp-for="SiteAddress" class="form-control" />
+                                        <div id="errSiteAddress"></div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="SiteCity" class="control-label">City</label>
+                                        <input asp-for="SiteCity" class="form-control" />
+                                        <div id="errSiteCity"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="selSiteState" class="control-label">Select State</label>
+                                        <select id="selSiteState" name="selSiteState" class="form-select form-control">
+                                            <option value="0">--- Select ---</option>
+                                            @if (Model != null)
+                                            {
+                                                foreach (var itemSel in Model.StateList)
+                                                {
+                                                    if (Model.SiteStateId == itemSel.StateId)
+                                                    {
+                                                        <option selected value="@itemSel.StateId">@itemSel.StateName</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                                    }
+
+                                                }
+                                            }
+
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label asp-for="SiteCounty" class="control-label">County</label>
+                                        <input asp-for="SiteCounty" class="form-control" />
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="SiteCrossStreetName" class="control-label">Cross Street Name</label>
+                                        <input asp-for="SiteCrossStreetName" class="form-control" />
+
+                                    </div>
+
+                                    <!--
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="IsPropertyAvailable" /> Is property available for sale
+
+
+                                        </label>
+                                    </div>
+                                    -->
+
+                                </div>
+                            </div>
+
+                            <hr />
+                            <h3>Zoning</h3>
+                            <hr />
+
+                            <div class="row">
+                                <div class="col-lg-6">
+
+
+
+                                    <div class="form-group">
+                                        <label asp-for="Zoning" class="control-label">Zoning :</label>
+                                        <input asp-for="Zoning" class="form-control" />
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="LotSize" class="control-label">Lot Size</label>
+                                        <input asp-for="LotSize" class="form-control" />
+                                        <div id="errLotSize"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="SalesPrice" class="control-label">Sales Price</label>
+                                        <input asp-for="SalesPrice" class="form-control" />
+                                        <div id="errSalesPrice"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label asp-for="Comments" class="control-label"></label>
+                                        <textarea rows="4" asp-for="Comments" class="form-control"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+
+                                        <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpired" data-sitekey="6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="button" id="btnSave" value="SUBMIT" class="btn btn-primary" onclick="saveData();" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </section>
+</div>
+

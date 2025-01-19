@@ -1,0 +1,137 @@
+﻿@model IEnumerable<sams.Models.ShoppingCenterViewModel>
+
+@{
+    ViewData["Title"] = "GetSoleoutCenters";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+    <script>
+    function ViewSoldOutProperty() {
+        var baseUrl = "@Url.Action("Index", "ShoppingCenter")";
+        location.href = baseUrl;
+    }
+    </script>
+
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Shopping Center List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" onclick="ViewSoldOutProperty()">
+                                        <label for="customRadio2" class="custom-control-label">Available Shopping Centers</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <!-- radio -->
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" checked>
+                                        <label for="customRadio1" class="custom-control-label">Sold Out Shopping Centers</label>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Center Name</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Asset Type</th>
+                                    <th>Rent</th>
+                                    <th>Buiiding Size</th>
+                                    <th>Created</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.ShoppingCenterName</td>
+                                        <td>@item.CityName</td>
+                                        <td>@item.StateName</td>
+                                        <td>@item.AssetStatusName</td>
+                                        <td>$ @item.RentAmount</td>
+                                        <td>@item.BuildingSize</td>
+                                        <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="editProperty(@item.ShoppingCenterId)"><i class="fas fa-edit"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="deleteProperty(@item.ShoppingCenterId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Center Name</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Asset Type</th>
+                                    <th>Rent</th>
+                                    <th>Buiiding Size</th>
+                                    <th>Created</th>
+                                    <th>Action</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" onclick="addProperty()">Add New Center</button>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

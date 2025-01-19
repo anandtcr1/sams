@@ -1,0 +1,178 @@
+﻿@model sams.Models.NewPropertyDashboardViewModel
+@using sams.Common;
+@{
+    UserViewModel loggedInUser = Context.Session.GetObjectFromJson<UserViewModel>("LoggedInAdmin");
+}
+
+@{
+    ViewData["Title"] = "GetInProgressList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<script>
+    function deleteProperty(propertyId) {
+        if (confirm("Do you want to delete?")) {
+            var baseUrl = "@Url.Action("MarkAsClosed", "NewPropertyDashboard")?propertyId=" + propertyId;
+            location.href = baseUrl;
+        }
+    }
+
+        function viewProperty(propertyId) {
+            var baseUrl = "@Url.Action("ViewNewProperty", "NewPropertyDashboard")?propertyId=" + propertyId;
+            location.href = baseUrl;
+    }
+</script>
+
+
+
+
+<script>
+        function showAllProperties() {
+        var baseUrl = "@Url.Action("Index", "NewPropertyDashboard")";
+        location.href = baseUrl;
+    }
+
+        function showInProgressProperties() {
+            var baseUrl = "@Url.Action("GetInProgressList", "NewPropertyDashboard")";
+            location.href = baseUrl;
+    }
+
+        function showClosedProperties() {
+            var baseUrl = "@Url.Action("GetClosedList", "NewPropertyDashboard")";
+            location.href = baseUrl;
+        }
+
+</script>
+
+
+
+<div class="content-wrapper">
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+
+
+                <div class="card">
+
+
+                    <div class="content-header">
+                        <div class="container-fluid">
+                            <div class="row mb-2">
+                                <div class="col-sm-6">
+                                    <h1 class="m-0 text-dark">In-Progress List</h1>
+                                </div><!-- /.col -->
+                                <div class="col-sm-6">
+                                    <ol class="breadcrumb float-sm-right">
+                                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+
+                                    </ol>
+                                </div><!-- /.col -->
+                            </div><!-- /.row -->
+                        </div><!-- /.container-fluid -->
+                    </div>
+
+                    
+
+
+
+
+
+
+
+                    <div class="row">
+
+
+                        <div class="card-body">
+                            <table id="example1" class="table table-sm text-sm">
+                                <thead>
+                                    <tr>
+                                        <th data-orderable="false">Asset #</th>
+                                        <th data-orderable="false">First Name</th>
+                                        <th data-orderable="false">Last Name</th>
+                                        <th data-orderable="false">Email</th>
+                                        <th data-orderable="false">Contact No</th>
+                                        <th data-orderable="false">Site Address</th>
+                                        <th data-orderable="false">County</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                        <th data-orderable="false">Lot Size</th>
+                                        <th data-orderable="false">Asking Price</th>
+                                        <th>Created/ Submited Date</th>
+                                        <th data-orderable="false">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model.PropertyList)
+                                    {
+                                    <tr>
+                                        <td>@item.AssetId</td>
+                                        <td>@item.FirstName</td>
+                                        <td>@item.LastName</td>
+                                        <td>@item.EmailAddress</td>
+                                        <td>@item.ContactNumber</td>
+                                        <td>@item.SiteAddress</td>
+                                        <td>$ @item.SiteCounty</td>
+
+                                        <td>$ @item.SiteCity</td>
+                                        <td>$ @item.SiteStateName</td>
+                                        <td>$ @item.LotSize</td>
+                                        <td>$ @item.SalesPrice</td>
+
+                                        <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="viewProperty(@item.SiteDetailsId)"><i class="fas fa-edit"></i></button>
+                                            @if (loggedInUser.RolePermission.RolePermissionList.FirstOrDefault(p => p.ModuleId == 5).CanDelete)
+                                            {
+                                                <button type="button" class="btn btn-danger" onclick="deleteProperty(@item.SiteDetailsId)"><i class="fas fa-minus-square"></i></button>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                    }
+
+
+
+                                </tbody>
+
+                            </table>
+
+
+
+                        </div>
+
+
+
+
+
+
+
+
+                    </div>
+
+
+
+
+
+
+
+                </div>
+                <!-- /.card -->
+
+
+
+
+
+
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

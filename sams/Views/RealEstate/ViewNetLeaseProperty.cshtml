@@ -1,0 +1,792 @@
+﻿@model sams.Models.NetleasePropertiesViewModel
+@using sams.Common;
+@{
+    ViewData["Title"] = "ViewNetLeaseProperty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var propertyLati = sams.Common.Helper.SamsLatitude;
+    var propertyLong = sams.Common.Helper.SamsLongitude;
+
+    if (Model.Latitude.Trim().Length > 0)
+    {
+        propertyLati = Model.Latitude.Trim();
+    }
+
+    if (Model.Longitude.Trim().Length > 0)
+    {
+        propertyLong = Model.Longitude.Trim();
+    }
+
+    string numericPropertyPrice = new String(Model.PropertyPrice.Where(Char.IsDigit).ToArray());
+    string numericAskingRent = new String(Model.AskingRent.Where(Char.IsDigit).ToArray());
+    string numericRentalIncome = new String(Model.RentalIncome.Where(Char.IsDigit).ToArray());
+    string numericCapRate = new String(Model.CapRate.ToString().Where(Char.IsDigit).ToArray());
+}
+
+
+
+
+
+
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByxJE-OM4Lv77gVdAYJAfKOiDpD6H9ofg&v=3.exp&sensor=false&libraries=places"></script>
+<script>
+                                                    function initialize() {
+                                                        var marker;
+
+
+
+
+
+                                                        var mapOptions = {
+                                                            center: new google.maps.LatLng(@propertyLati, @propertyLong),
+                                                            zoom: 10,
+                                                            mapTypeId: google.maps.MapTypeId.ROADMAP
+
+                                                        };
+                                                        map = new google.maps.Map(document.getElementById('map_canvas'),
+                                                            mapOptions);
+
+                                                        var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+                                                        var ig = '../img/map/map_red.png';
+                                                        marker = new google.maps.Marker({
+                                                            // The below line is equivalent to writing:
+                                                            // position: new google.maps.LatLng(-34.397, 150.644)
+
+                                                            /*
+                                                            icon: {
+                                                                path: google.maps.SymbolPath.CIRCLE,
+                                                                scale: 10,
+                                                                strokeColor: '#939'
+                                                            },
+*/
+                                                            icon: ig,
+                                                            
+                                                            position: { lat: @propertyLati, lng: @propertyLong },
+                                                            map: map
+                                                        });
+
+
+
+                                                        autocomplete.bindTo('bounds', map);
+
+
+
+                                                        var infowindow = new google.maps.InfoWindow();
+                                                        marker = new google.maps.Marker({
+                                                            map: map
+                                                        });
+
+
+
+
+
+
+
+                                                        // Sets a listener on a radio button to change the filter type on Places
+                                                        // Autocomplete.
+                                                        function setupClickListener(id, types) {
+                                                            var radioButton = document.getElementById(id);
+                                                            google.maps.event.addDomListener(radioButton, 'click', function () {
+
+
+                                                                autocomplete.setTypes(types);
+                                                            });
+                                                        }
+
+                                                        setupClickListener('changetype-all', []);
+                                                        setupClickListener('changetype-establishment', ['establishment']);
+                                                        setupClickListener('changetype-geocode', ['geocode']);
+
+                                                    }
+
+                                                    google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+</script>
+
+<div class="bradcam_area" id="map_canvas" style="height:350px;">
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="recent_trip_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="footer_title" style="margin-top: 0px; color: #57328E;">
+                    <b>@Model.AssetName @Model.PropertyHeaderLine2</b>
+                </h1>
+                <hr style="border-top: 1px solid #c31425;" />
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="single_trip">
+
+                    <!--
+        @foreach (var imgItem in Model.ImageList)
+        {
+            <div class="thumb" style="margin-top:5px; margin-bottom:5px;">
+                <img src="@Url.Content("~/" +imgItem.ImageName)" alt="@Model.AssetName">
+            </div>
+        }-->
+                    <!--
+                            <div class="thumb" style="margin-top:5px; margin-bottom:5px;">
+                                <img src="@Url.Content("~/" +Model.ImageList[0].ImageName)" alt="@Model.AssetName">
+                            </div>
+        -->
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h4 class="footer_title" style="color:#ffffff;">
+                                Contact For Additional Information
+                            </h4>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+                            <p>
+                                @Model.MySettings.RealEstateDirectorName
+                            </p>
+                            <p>
+                                Real Estate Director
+                            </p>
+                            <p>
+                                Direct: @Model.MySettings.DirectorPhoneNumber
+                            </p>
+                            <p>
+                                <a href="mailto:@Model.MySettings.DirectorEmailAddress">@Model.MySettings.DirectorEmailAddress</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function goBack() {
+                        window.history.back();
+                    }
+                </script>
+                <a href="javascript:goBack()" class="boxed-btn4" style="color:white;">Back To List</a>
+
+            </div>
+            <div class="col-lg-8 col-md-12">
+
+
+
+
+                <div class="section-top-border" style="border-top: 1px dotted #fff;">
+                    
+                    <div class="row gallery-item">
+
+                        @foreach (var imgItem in Model.ImageList)
+                        {
+
+                            <div class="col-md-3 " style="padding-left:1px; padding-right:1px;">
+                                <a href="@Url.Content("~/" +imgItem.ImageName)" class="img-pop-up">
+                                    <div class="single-gallery-image  roundbox boxshadow" style="background: url(@Url.Content("~/" +imgItem.ImageName)); margin: 4px; height:100px;"></div>
+                                </a>
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
+
+
+
+                <div class="single_trip">
+
+
+
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>SH Asset # : </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.AssetId
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Asset Name :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.NetleaseAssetName
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Address : </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.Address
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>City : </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.City
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>State :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.StateName
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>ZIP Code :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.ZipCode
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Asset Type : </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.AssetTypeName
+                        </div>
+
+                    </div>
+
+                    @{
+                        if (Model.AssetTypeId == 1)
+                        {
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Term : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.Term
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Asking Rent :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.AskingRent
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Lease Type : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.LeaseTypeName
+                                </div>
+
+                            </div>
+                        }
+                        else if (Model.AssetTypeId == 2)
+                        {
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Asking Price : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.PropertyPrice
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Cap Rate :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.CapRate
+                                </div>
+
+                            </div>
+                        }
+                        else if (Model.AssetTypeId == 4)
+                        {
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Term Remaining : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.TermRemaining
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Rental Income :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.RentalIncome
+                                </div>
+
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Lease Type :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.LeaseTypeLeaseAndFeeName
+                                </div>
+
+                            </div>
+                        }
+                        else if (Model.AssetTypeId == 5)
+                        {
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Term : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.TermOptionPurchase
+                                </div>
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Asking Rent : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.AskingRentOptionPurchase
+                                </div>
+                            </div>
+
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Lease Type : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @if (Model != null)
+                                    {
+                                        foreach (var itemSel in Model.LeaseTypeList)
+                                        {
+                                            if (Model.LeaseTypePurchase == itemSel.LeaseTypeId)
+                                            {
+                                                @itemSel.LeaseType
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Option Purchase Price : </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    @Model.OptionPurchasePrice
+                                </div>
+                            </div>
+                        }
+
+                    }
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Status : </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.SelectedPropertyStatus
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Description :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.Details
+                        </div>
+                    </div>
+
+
+
+
+                    @if (Model.PdfFileName.Trim().Length > 0)
+                    {
+                        var pdfFileLogo = "~/../../property_files/file.png";
+                        if (Model.PdfFileName.Contains("pdf"))
+                        {
+                            pdfFileLogo = "~/../../property_files/pdf_logo.jpg";
+                        }
+                        else if (Model.PdfFileName.Contains("jpg"))
+                        {
+                            pdfFileLogo = "~/../../property_files/image_icon.png";
+                        }
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="footer_title" style="color: #57328E;">
+                                    <b>Additional Details</b>
+                                </h3>
+                                <hr style="border-top: 1px solid #57328E;" />
+
+                                <div class="col-xl-3 col-md-6 col-lg-3" style="text-align:center;">
+                                    <div class="footer_widget">
+                                        <div class="instagram_feed">
+                                            <a href="@Url.Content("~/" + Model.PdfFileName)" target="_blank">
+                                                <div class="single_insta">
+                                                    <img src="@Url.Content(pdfFileLogo)" style="width:100px;" />
+                                                </div>
+                                                <div style="text-align:center;">
+                                                    @{
+                                                        if (Model.SelectedPdfFileName.Length <= 15)
+                                                        {
+                                                            <label class="control-label" style="color:#c31425; ">@Model.SelectedPdfFileName</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="control-label" style="color:#c31425; ">@Model.SelectedPdfFileName.Substring(0, 15) ..</label>
+                                                        }
+                                                    }
+
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+
+                    @if (Model.AdditionalFilesList.Count > 0)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="footer_title" style="color: #57328E;">
+                                    <b>Additional Files</b>
+                                </h3>
+                                <hr style="border-top: 1px solid #57328E;" />
+
+                                @foreach (var pdfItem in Model.AdditionalFilesList)
+                                {
+                                    <div class="col-xl-3 col-md-6 col-lg-3" style="text-align:center;">
+                                        <div class="footer_widget">
+
+                                            @{
+                                                var fileLogo = "~/../../property_files/file.png";
+                                                if (pdfItem.FileName.Contains("pdf"))
+                                                {
+                                                    fileLogo = "~/../../property_files/pdf_logo.jpg";
+                                                }
+                                                else if (pdfItem.FileName.Contains("jpg"))
+                                                {
+                                                    fileLogo = "~/../../property_files/image_icon.png";
+                                                }
+                                                else
+                                                {
+                                                    fileLogo = "~/../../property_files/pdf_logo.jpg";
+                                                }
+                                            }
+
+                                            <div class="instagram_feed">
+                                                <a href="@Url.Content("~/" + pdfItem.FileName)" target="_blank">
+                                                    <div class="single_insta">
+                                                        <img src="@Url.Content(fileLogo)" style="width:100px;" />
+                                                    </div>
+                                                    <div style="text-align:center;">
+                                                        @{
+                                                            if (pdfItem.FileType.Length <= 15)
+                                                            {
+                                                                <label class="control-label" style="color:#c31425; ">@pdfItem.FileType</label>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label class="control-label" style="color:#c31425; ">@pdfItem.FileType.Substring(0, 15) ..</label>
+                                                            }
+                                                        }
+
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                }
+                            </div>
+
+                        </div>
+                    }
+
+
+
+
+                    @if (Model.SavedShoppingMartPlanFileName != null && Model.SavedShoppingMartPlanFileName.Length > 0 && Model.IsShoppingCenter)
+                    {
+                        var pdfFileLogo = "~/../../property_files/file.png";
+                        if (Model.SavedShoppingMartPlanFileName.Contains("pdf"))
+                        {
+                            pdfFileLogo = "~/../../property_files/pdf_logo.jpg";
+                        }
+                        else if (Model.SavedShoppingMartPlanFileName.Contains("jpg"))
+                        {
+                            pdfFileLogo = "~/../../property_files/image_icon.png";
+                        }
+
+                        <div class="row">
+                            <div class="col-12">
+                                <h3 class="footer_title" style="color: #57328E;">
+                                    <b>Shopping Center Layout</b>
+                                </h3>
+                                <hr style="border-top: 1px solid #57328E;" />
+
+                                <div class="col-xl-3 col-md-6 col-lg-3" style="text-align:center;">
+                                    <div class="footer_widget">
+                                        <div class="instagram_feed">
+                                            <a href="@Url.Content("~/" + Model.SavedShoppingMartPlanFileName)" target="_blank">
+                                                <div class="single_insta">
+                                                    <img src="@Url.Content(pdfFileLogo)" style="width:100px;" />
+                                                </div>
+                                                <div style="text-align:center;">
+                                                    @{
+                                                        if (Model.SavedShoppingMartPlanFileName.Length <= 15)
+                                                        {
+                                                            <label class="control-label" style="color:#c31425; ">@Model.SavedShoppingMartPlanFileName</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="control-label" style="color:#c31425; ">@Model.SavedShoppingMartPlanFileName.Substring(0, 15) ..</label>
+                                                        }
+                                                    }
+
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.LoggedInUser.CustomerId == 0 && !Model.IsShoppingCenter)
+                    {
+                        <div class="row_inner">
+                            <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                                <div class="gridheader">
+
+                                    <h3 class="footer_title" style="color:#ffffff;">
+                                        Login to get more details
+                                    </h3>
+
+                                </div>
+
+                                <div class="boxcontenttext" style="">
+                                    <form id="UserLogin" name="UserLogin" asp-action="DoLoginFromNetlease" method="post">
+
+                                        <p>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group" style="text-align:right;">
+                                                        User Name :
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <input class="form-control valid" name="UserName" id="UserName" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'User Name'" placeholder="User Name">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group" style="text-align:right;">
+                                                        Password :
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <input class="form-control valid" name="Password" id="Password" type="password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" placeholder="Password">
+                                                        <input type="hidden" id="LoginPropertyId" name="LoginPropertyId" value="@Model.NetleasePropertyId" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <font color='red'>@ViewBag.ErrorMessage</font>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="form-group">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <button type="button" class="boxed-btn4" onclick="doLogin()">Login</button>
+                                                        <button type="button" class="boxed-btn4" style="margin-top:3px;" onclick="forgotPassword()">Forgot password?</button>
+
+                                                        <!--
+                                        <button type="button" class="boxed-btn4"
+                                                style="background-color:#57328E; margin-top:3px;" onclick="doRegisterNow(@Model.NetleasePropertyId)">
+                                            New user? Please register
+                                        </button>
+                                                                                                -->
+                                                        <br />
+                                                        <a href="javascript:doRegisterNow(@Model.NetleasePropertyId)">New user? Please register</a>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+
+                    @if (Model.LoggedInUser != null && Model.LoggedInUser.CustomerId > 0 && Model.NDAComplaintsFilesList.Count > 0)
+                    {
+
+                        <div class="row_inner">
+                            <h3 class="footer_title" style="color: #57328E;">
+                                <b>Confidential Data</b>
+                            </h3>
+                            <hr style="border-top: 1px solid #57328E;" />
+
+                            @foreach (var pdfItem in Model.NDAComplaintsFilesList)
+                            {
+                                <div class="col-xl-3 col-md-6 col-lg-3" style="text-align:center;">
+                                    <div class="footer_widget">
+
+                                        @{
+                                            var fileLogo = "~/../../property_files/file.png";
+                                            if (pdfItem.FileName.Contains("pdf"))
+                                            {
+                                                fileLogo = "~/../../property_files/pdf_logo.jpg";
+                                            }
+                                            else if (pdfItem.FileName.Contains("jpg"))
+                                            {
+                                                fileLogo = "~/../../property_files/image_icon.png";
+                                            }
+                                            else
+                                            {
+                                                fileLogo = "~/../../property_files/pdf_logo.jpg";
+                                            }
+                                        }
+
+                                        <div class="instagram_feed">
+                                            <a href="@Url.Content("~/" + pdfItem.FileName)" target="_blank">
+                                                <div class="single_insta">
+                                                    <img src="@Url.Content(fileLogo)" style="width:100px;" />
+                                                </div>
+                                                <div style="text-align:center;">
+                                                    @{
+                                                        if (pdfItem.FileType.Length <= 15)
+                                                        {
+                                                            <label class="control-label" style="color:#c31425; ">@pdfItem.FileType</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="control-label" style="color:#c31425; ">@pdfItem.FileType.Substring(0, 15) ..</label>
+                                                        }
+
+                                                    }
+
+                                                </div>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+
+
+
+                    }
+
+
+                </div>
+                    </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function doLogin() {
+        var uName = $("#UserName").val();
+        var pWrod = $("#Password").val();
+
+        if (uName.trim() == '') {
+            alert("Please enter user name");
+            return;
+        }
+        if (pWrod.trim() == '') {
+            alert("Please enter password");
+            return;
+        }
+
+        $("#UserLogin").submit();
+
+    }
+
+    function forgotPassword() {
+        var baseUrl = "@Url.Action("ForgotPassword", "RealEstate")";
+        location.href = baseUrl;
+    }
+
+    function doRegisterNow(propertyId) {
+        location.href = "RegisterNewCustomer?propertyId=" + propertyId;
+    }
+</script>

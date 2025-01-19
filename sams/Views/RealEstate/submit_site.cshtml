@@ -1,0 +1,595 @@
+﻿
+@model sams.Models.SiteDetails
+
+@{
+    ViewData["Title"] = "submit_site";
+}
+
+
+
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+<script>
+    var isValidCaptcha = false;
+    function saveData() {
+        var canSave = true;
+        var txtFirstName = $("#FirstName").val();
+        if (txtFirstName == '') {
+            canSave = false;
+            $("#errFirstName").html("<p style='color:red; font-size:12px;'>Please Enter First Name</p>");
+            $("#FirstName").focus();
+            return;
+        }
+        else {
+            $("#errFirstName").html("");
+        }
+
+        var txtLastName = $("#LastName").val();
+        if (txtLastName == '') {
+            canSave = false;
+            $("#errLastName").html("<p style='color:red; font-size:12px;'>Please enter Last name</p>");
+            $("#LastName").focus();
+            return;
+        }
+        else {
+            $("#errLastName").html("");
+        }
+
+        var txtEmailAddress = $("#EmailAddress").val();
+        if (txtEmailAddress == '') {
+            canSave = false;
+            $("#errEmailAddress").html("<p style='color:red; font-size:12px;'>Please enter Email Address</p>");
+            $("#EmailAddress").focus();
+            return;
+        }
+        else {
+            if (!emailIsValid(txtEmailAddress)) {
+                canSave = false;
+                $("#errEmailAddress").html("<p style='color:red; font-size:12px;'>Wrong Email Format</p>");
+                $("#EmailAddress").focus();
+                return;
+            }
+            $("#errEmailAddress").html("");
+        }
+
+        if ($("ContactNumber1").val() == '' || $("ContactNumber2").val() == '' || $("ContactNumber3").val() == '') {
+            $("#errContactNumber").html("<p style='color:red; font-size:12px;'>Please Enter Contact Number</p>");
+            $("#ContactNumber1").focus();
+            return;
+        }
+
+        var txtContactNumber = $("#ContactNumber1").val().trim() + "-" + $("#ContactNumber2").val().trim() + "-" + $("#ContactNumber3").val().trim();
+        var lastFour = "";
+        if (txtContactNumber == '') {
+            canSave = false;
+            $("#errContactNumber").html("<p style='color:red; font-size:12px;'>Please Enter Contact Number</p>");
+            $("#ContactNumber1").focus();
+            return;
+        }
+        else {
+
+            
+            if (txtContactNumber.length != 12) {
+                $("#errContactNumber").html("<p style='color:red; font-size:12px;'>Please Enter A Valid Contact Number</p>");
+                $("#ContactNumber1").focus();
+                return;
+            }
+            $("#errContactNumber").html("");
+
+            if (txtContactNumber.length == 12) {
+                lastFour = txtContactNumber.substr(txtContactNumber.length - 4);   
+            }
+        }
+
+        $("#ContactNumber").val(txtContactNumber);
+        
+
+        
+
+        if (isValidCaptcha == false) {
+            canSave = false;
+            alert("Please do captcha check");
+            return;
+        }
+
+        var txtLastFourDigit = $("#LastFourDigitNumber").val();
+        if (txtLastFourDigit == '') {
+            $("#errLastFourDigitNumber").html("<p style='color:red; font-size:12px;'>Entry Must Match With Your Contact Number</p>");
+            $("#LastFourDigitNumber").focus();
+            return;
+        }
+        else {
+            if (lastFour != '') {
+                if (lastFour != txtLastFourDigit) {
+                    $("#errLastFourDigitNumber").html("<p style='color:red; font-size:12px;'>Entry Must Match With Your Contact Number</p>");
+                    $("#LastFourDigitNumber").focus();
+                    return;
+                }
+            }
+            $("#errLastFourDigitNumber").html("");
+        }
+
+        $("#submit_site").submit();
+
+        
+    }
+
+    function recaptchaCallback() {
+        
+        //$("#btnSave").disabled = false;
+        //$("#btnSave").removeAttr('disabled');
+
+        //$("#btnSave").removeClass("genric-btn");
+        //$("#btnSave").removeClass("default-border");
+
+         
+        //$("#btnSave").addClass('btn');
+        //$("#btnSave").addClass('btn-primary');
+
+        isValidCaptcha = true;
+
+        //alert("verified");
+    }
+
+    function recaptchaExpired() {
+        isValidCaptcha = false;
+    }
+
+    
+
+    $(function () {
+
+        /*
+        $('#ContactNumber').keydown(function (e) {
+            var key = e.charCode || e.keyCode || 0;
+            $text = $(this);
+            if (key !== 8 && key !== 9) {
+                if ($text.val().length === 3) {
+                    $text.val($text.val() + '-');
+                }
+                if ($text.val().length === 7) {
+                    $text.val($text.val() + '-');
+                }
+
+            }
+
+            return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+        });
+        */
+
+        $('#ContactNumber1').keydown(function (e) {
+            var key = e.charCode || e.keyCode || 0;
+            return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+        });
+
+        $('#ContactNumber2').keydown(function (e) {
+            var key = e.charCode || e.keyCode || 0;
+            return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+        });
+
+        $('#ContactNumber3').keydown(function (e) {
+            var key = e.charCode || e.keyCode || 0;
+            return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+        });
+
+        $('#LastFourDigitNumber').keydown(function (e) {
+            var key = e.charCode || e.keyCode || 0;
+            return (key == 8 || key == 9 || key == 46 || (key >= 48 && key <= 57) || (key >= 96 && key <= 105));
+        });
+
+    });
+
+    function emailIsValid(email) {
+        return /\S+@@\S+\.\S+/.test(email)
+    }
+</script>
+
+<!-- bradcam_area  -->
+<div class="bradcam_area bradcam_bg_7">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="bradcam_text text-center">
+                    <h3 style="text-transform: uppercase;">Submit Your Site</h3>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/ bradcam_area <div class="row"></div> <div class="col-lg-6"></div>   -->
+
+<div class="popular_places_area">
+    <div class="container">
+
+        <div class="row">
+            
+            <div class="col-lg-12">
+
+                <div>
+                    <h3 class="footer_title text-center">
+                        <b>Have a property that you think we might love? Let us know about it!</b>
+                    </h3>
+
+                    <p>
+                            As a C-Store and car wash pioneer, we are always looking for great sites in the markets where we want to expand.  Could your area be next?
+                        </p>
+
+                        <p>
+                            Sam’s Holdings<sup style="font-size: 7px; vertical-align:middle;">SM</sup>, LLC currently owns over 30 state-of-the-art car washes and more than 100 gasoline sites all over the
+                            Carolinas, Georgia, and Virginia, but we are still expanding aggressively in North Carolina and Virginia.
+                            Our Sam’s Xpress® Car Wash has been voted best car wash for several years, and we want to keep growing to
+                            serve even more communities.
+                        </p>
+
+                        <p>
+                            Do you have or know of an available location?  Check out our criteria below to see if it is a good fit!  If it is, we would love to know more.
+                        </p>
+
+                        <p>
+                            <b>Property criteria:</b>
+
+                            <ul class="unordered-list">
+                                <li>
+                                    1.25 – 3.00 acres of commercially zoned (for retail/gas/car wash) land parcels, preferably located at a signalized, full access intersection
+                                </li>
+                                <li>
+                                    Minimum traffic counts of 22,000 cars per day
+                                </li>
+                                <li>
+                                    Dense population and good demographics
+                                </li>
+                                <li>
+                                    Located near shopping and community centers.
+                                </li>
+                            </ul>
+                        </p>
+                        <p>
+                            Think it’s a good fit?  Fill in the information below so we can talk with you further about your site.  Thanks!
+                        </p>
+
+                </div>
+
+
+                
+
+
+
+
+
+            </div>
+            
+        </div>
+
+        <hr />
+        
+        <form id="submit_site" name="submit_site" asp-action="submit_site" method="post" enctype="multipart/form-data">
+
+
+
+            <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                <div class="gridheader">
+
+                    <h3 class="footer_title" style="color:#ffffff;">
+                        Personal Information
+                    </h3>
+
+                </div>
+                <div class="boxcontenttext" style="">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="NamePrefix" class="control-label">Prefix</label>
+                                <select id="NamePrefix" name="NamePrefix" class="form-select form-control">
+                                    <option value="Mr">Mr.</option>
+                                    <option value="Mrs">Mrs.</option>
+                                    <option value="Ms">Ms.</option>
+                                </select>
+
+
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="FirstName" class="control-label">First Name * </label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <div id="errFirstName"></div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="LastName" class="control-label">Last Name * </label>
+                                <input asp-for="LastName" class="form-control" />
+                                <div id="errLastName"></div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CompanyName" class="control-label">Company Name</label>
+                                <input asp-for="CompanyName" class="form-control" />
+                                <div id="errCompanyName"></div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EmailAddress" class="control-label">Email Address * </label>
+                                <input asp-for="EmailAddress" class="form-control" />
+                                <div id="errEmailAddress"></div>
+                            </div>
+
+                            <!--
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="SamsHoldingEmployee" /> Sam's Holdings Employee
+                        </label>
+                    </div>
+                    -->
+
+                        </div>
+                        <div class="col-lg-6">
+                            <!---->
+                            <div class="form-group">
+                                <label asp-for="Address" class="control-label"></label>
+                                <input asp-for="Address" class="form-control" />
+                                <div id="errAddress"></div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CityName" class="control-label">City Name</label>
+                                <input asp-for="CityName" class="form-control" />
+                                <div id="errCityName"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="StateId" class="control-label">Select State</label>
+                                <select id="StateId" name="StateId" class="form-select form-control">
+                                    <option value="0">--- Select ---</option>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var itemSel in Model.AllStateList)
+                                        {
+                                            <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                        }
+                                    }
+
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="ZipCode" class="control-label">ZIP Code</label>
+                                <input asp-for="ZipCode" class="form-control" />
+                                <div id="errZipCode"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="ContactNumber" class="control-label">Contact Number * </label>
+                                <input asp-for="ContactNumber" type="hidden" />
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input asp-for="ContactNumber1" class="form-control" maxlength="3" placeholder="###" style="width:100px;"  />
+                                        </td>
+                                        <td>
+                                            <input asp-for="ContactNumber2" class="form-control" maxlength="3" placeholder="###" style="width:100px; margin-left:15px;" />
+                                        </td>
+                                        <td>
+                                            <input asp-for="ContactNumber3" class="form-control" maxlength="4" placeholder="####" style="width:100px; margin-left:15px;" />
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div id="errContactNumber"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                <div class="gridheader">
+
+                    <h3 class="footer_title" style="color:#ffffff;">
+                        Property information
+                    </h3>
+
+                </div>
+                <div class="boxcontenttext" style="">
+
+                    <div class="row">
+                        <input type="hidden" name="MarketName" id="MarketName" />
+
+                    </div>
+
+                    <div class="row">
+                        <!-- <div class="col-lg-3"></div> -->
+                        <div class="col-lg-12">
+
+                        </div>
+
+                        <div class="col-lg-6">
+
+
+                            <div class="form-group">
+                                <label asp-for="SiteAddress" class="control-label">Address</label>
+                                <input asp-for="SiteAddress" class="form-control" />
+                                <div id="errSiteAddress"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="SiteCity" class="control-label">City</label>
+                                <input asp-for="SiteCity" class="form-control" />
+                                <div id="errSiteCity"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="SiteStateId" class="control-label">Select State</label>
+                                <select id="SiteStateId" name="SiteStateId" class="form-select form-control">
+                                    <option value="0">--- Select ---</option>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var itemSel in Model.StateList)
+                                        {
+                                            <option value="@itemSel.StateId">@itemSel.StateName</option>
+                                        }
+                                    }
+
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="SiteCounty" class="control-label">County</label>
+                                <input asp-for="SiteCounty" class="form-control" />
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SiteCrossStreetName" class="control-label">Cross Street Name</label>
+                                <input asp-for="SiteCrossStreetName" class="form-control" />
+
+                            </div>
+
+                            <!--
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="IsPropertyAvailable" /> Is property available for sale
+
+
+                        </label>
+                    </div>
+                    -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                <div class="gridheader">
+
+                    <h3 class="footer_title" style="color:#ffffff;">
+                        Additional information
+                    </h3>
+
+                </div>
+                <div class="boxcontenttext" style="">
+                    <div class="row">
+                        <div class="col-lg-6">
+
+
+
+                            <div class="form-group">
+                                <label asp-for="Zoning" class="control-label">Zoning :</label>
+                                <input asp-for="Zoning" class="form-control" />
+
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="LotSize" class="control-label">Lot Size</label>
+                                <input asp-for="LotSize" class="form-control" />
+                                <div id="errLotSize"></div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SalesPrice" class="control-label">Asking Price</label>
+                                <input asp-for="SalesPrice" class="form-control" />
+                                <div id="errSalesPrice"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label asp-for="Comments" class="control-label"></label>
+                                <textarea rows="4" asp-for="Comments" class="form-control"></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                <div class="gridheader">
+
+                    <h3 class="footer_title" style="color:#ffffff;">
+                        Upload Files
+                    </h3>
+
+                </div>
+                <div class="boxcontenttext" style="">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="SelectedImage" class="control-label">Select Image : </label>
+                                <input type="file" name="SelectedImage" id="SelectedImage" class="form-control" accept="image/x-png,image/gif,image/jpeg" onchange="postImage()" />
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="SelectedPdf" class="control-label">Select Any other File : </label>
+                                <input type="file" name="SelectedPdf" id="SelectedPdf" class="form-control" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                <div class="gridheader">
+
+                    <h3 class="footer_title" style="color:#ffffff;">
+                        Captcha
+                    </h3>
+
+                </div>
+                <div class="boxcontenttext" style="">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+
+                                <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpired" data-sitekey="6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="LastFourDigitNumber" class="control-label">Please Enter Last Four Digits Of Your Contact Number</label>
+                                <input asp-for="LastFourDigitNumber" class="form-control" maxlength="4" style="width:100px;" placeholder="####" />
+                                <div id="errLastFourDigitNumber"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="button" id="btnSave" value="Submit Your Site" class="boxed-btn4" onclick="saveData();" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            @section scripts{
+                <script src="https://www.google.com/recaptcha/api.js?render=6LfvxeoUAAAAACsNl3jhrj7nuYoWLcRjKfJzG4FL" async defer></script>
+            }
+
+
+        </form>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+

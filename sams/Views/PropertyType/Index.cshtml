@@ -1,0 +1,78 @@
+﻿@model IEnumerable<sams.Models.PropertyTypeViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<script>
+    function addPropertyType(propertyTypeId) {
+        location.href = "/PropertyType/AddPropertyType?propertyTypeId=" + propertyTypeId;
+    }
+
+    function deletePropertyType(propertyTypeId) {
+        if (confirm("Do you want to delete Property Type?")) {
+            location.href = "/PropertyType/DeletePropertyType?propertyTypeId=" + propertyTypeId;
+        }
+    }
+</script>
+
+    <div class="content-wrapper">
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Property Type List</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+                            <table id="example1" class="table table-sm text-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Property Type Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.PropertyTypeId</td>
+                                            <td>@item.PropertyTypeName</td>
+
+                                            <td>
+                                                <button type="button" class="btn btn-success" onclick="addPropertyType(@item.PropertyTypeId)"><i class="fas fa-edit"></i></button>
+                                                <button type="button" class="btn btn-danger" onclick="deletePropertyType(@item.PropertyTypeId)"><i class="fas fa-minus-square"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+
+
+
+                                </tbody>
+
+                            </table>
+
+                            <div class="form-group">
+                                <button type="button" class="btn btn-success" onclick="addPropertyType(0)">Add New AssetType</button>
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+
+
+
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+        </section>
+        <!-- /.content -->
+
+    </div>

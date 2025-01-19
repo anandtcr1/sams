@@ -1,0 +1,301 @@
+﻿@model sams.Models.ShoppingCenterDashboardModel
+@using sams.Common;
+ 
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+    <script>
+    function editProperty(siteDetailsId) {
+        //location.href = "../NetLeaseProperties/ViewNetLeaseProperties?propertyId=" + siteDetailsId;
+
+        var baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + siteDetailsId;
+        location.href = baseUrl;
+    }
+
+    function addProperty() {
+        //location.href = "AddNetLeaseProperties";
+        //location.href = "EditNetLeaseProperty?propertyId=0";
+
+         var baseUrl = "@Url.Action("EditNetLeaseProperty", "NetLeaseProperties")?propertyId=0";
+        location.href = baseUrl;
+    }
+
+        function deleteProperty(pId) {
+        if (confirm("Do you want to delete the property?")) {
+
+            //location.href = "../NetLeaseProperties/DeleteProperty?propertyId=" + propertyId;
+
+            var baseUrl = "@Url.Action("DeleteProperty", "NetLeaseProperties")?propertyId=" + pId;
+            location.href = baseUrl;
+
+        }
+    }
+
+    function ViewSoldOutProperty() {
+        var baseUrl = "@Url.Action("GetSoldoutShoppingCenters", "NetLeaseProperties")";
+        //location.href = "../../SurplusProperties/GetSoldoutProperties/";
+        //location.href = location.pathname + "GetSoldoutProperties/";
+        location.href = baseUrl;
+    }
+
+        function viewPropertyDetails(siteDetailsId) {
+            var baseUrl = "@Url.Action("ViewNetLeaseProperties", "NetLeaseProperties")?propertyId=" + siteDetailsId;
+            location.href = baseUrl;
+        }
+
+        function hideTenantNotification(tenanatId) {
+            if (confirm("Do You want to remove this?")) {
+                var baseUrl = "@Url.Action("HideTenantNotification", "NetLeaseProperties")?shoppingCenterClientId=" + tenanatId;
+                location.href = baseUrl;
+            }
+        }
+
+        function removeNotification(periodId) {
+            if (confirm("Do You want to remove this?")) {
+                baseUrl = "@Url.Action("HideNotification", "SamsNotification")?periodId=" + periodId;
+                location.href = baseUrl;
+            }
+        }
+
+
+    </script>
+<div class="content-wrapper">
+
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Shopping Center List</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="Index">All List</a></li>
+                        <li class="breadcrumb-item active">View Details</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="row">
+
+                        <div class="card-body">
+                            <div class="card">
+                                <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                    <h3 class="card-title">Shopping Center Critical Item Alert/Notification</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="example1" class="table table-sm text-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Asset Id</th>
+                                                <th>Critical Item</th>
+                                                <th>Status</th>
+                                                <th>Address</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Duration</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.ShoppingCenterNotificationList)
+                                            {
+                                                <tr>
+                                                    <td>@item.AssetId</td>
+                                                    <td>@item.PeriodMaster</td>
+                                                    <td>
+                                                        @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                                        {
+                                                            <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                                        }
+                                                        else if (item.DaysToExpire < 0)
+                                                        {
+                                                            <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                                        }
+                                                        else
+                                                        {
+                                                            <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                                        }
+                                                    </td>
+                                                    <td title="@item.PropertyAddress">@item.PropertyAddressShort</td>
+                                                    <td>@item.StartDate.ToString("MM-dd-yyyy")</td>
+                                                    <td>@item.EndDate.ToString("MM-dd-yyyy")</td>
+                                                    <td>@item.Duration</td>
+                                                    <td>
+
+                                                        <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.SitePropertyId, '@item.AssetType')"><i class="fas fa-eye"></i></button>
+                                                        <button type="button" class="btn btn-danger" onclick="removeNotification(@item.PeriodId)"><i class="fas fa-minus-square"></i></button>
+                                                    </td>
+                                                </tr>
+                                            }
+
+
+
+                                        </tbody>
+
+                                    </table>
+
+
+                                </div>
+                                <!-- /.card-body -->
+
+
+
+                            </div>
+                            <!-- /.card -->
+                        </div>
+
+                    </div>
+
+
+
+
+
+
+                    <div class="row">
+
+                        <div class="card-body">
+                            <div class="card">
+                                <div class="card-header @sams.Common.Helper.PrimaryColor">
+                                    <h3 class="card-title">Tenant Critical Item Alert/Notification</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table id="example1" class="table table-sm text-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Unit #</th>
+                                                <th>Tenant Name</th>
+                                                <th>Date Rent Changes</th>
+                                                <th>Status</th>
+                                                <th>COI Expires</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.TenantCriticalItemList)
+                                            {
+                                            <tr>
+                                                <td>@item.UnitSelected</td>
+                                                <td>@item.TenantName</td>
+                                                <td>@item.DateRentChanged.Value.ToString("MM/dd/yyyy")</td>
+                                                <td>
+                                                    @if (item.DaysToExpire <= 7 && item.DaysToExpire >= 0)
+                                                    {
+                                                        <small class="badge badge-warning"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                                    }
+                                                    else if (item.DaysToExpire < 0)
+                                                    {
+                                                        <small class="badge badge-danger"><i class="far fa-clock"></i> @item.DaysToExpire days</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="badge badge-success"><i class="far fa-clock"></i> @item.DaysToExpire days to expire</small>
+                                                    }
+                                                </td>
+                                                <td>@item.CoiExpire.Value.ToString("MM/dd/yyyy")</td>
+                                                
+                                                <td>
+
+                                                    <button type="button" class="btn btn-success" onclick="viewPropertyDetails(@item.ShoppingCenterId)"><i class="fas fa-eye"></i></button>
+                                                    <button type="button" class="btn btn-danger" onclick="hideTenantNotification(@item.ShoppingCenterClientId)"><i class="fas fa-minus-square"></i></button>
+                                                </td>
+                                            </tr>
+                                            }
+
+
+
+                                        </tbody>
+
+                                    </table>
+
+
+                                </div>
+                                <!-- /.card-body -->
+
+
+
+                            </div>
+                            <!-- /.card -->
+                        </div>
+
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example1" class="table table-sm text-sm">
+                            <thead>
+                                <tr>
+
+                                    <th>Asset Id</th>
+                                    <th>Asset Name</th>
+                                    <th data-orderable="false">Asset Type</th>
+                                    <th>State</th>
+                                    <th>City</th>
+                                    <th data-orderable="false">Price</th>
+                                    <th data-orderable="false">Cap Rate</th>
+                                    <th data-orderable="false">Type</th>
+                                    <th>Created</th>
+                                    <th data-orderable="false">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model.NetLeasePropertiesList)
+                                {
+                                    <tr>
+
+
+                                        <td>@item.AssetId</td>
+                                        <td>@item.AssetName</td>
+                                        <td>@item.AssetTypeName</td>
+                                        <td>@item.StateName</td>
+                                        <td>@item.City</td>
+                                        <td>@item.PropertyPrice</td>
+                                        <td>@item.CapRate</td>
+                                        <td>@item.ShoppingCenterOrNetlease</td>
+                                        <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success" onclick="editProperty(@item.NetleasePropertyId)"><i class="fas fa-edit"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="deleteProperty(@item.NetleasePropertyId)"><i class="fas fa-minus-square"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+
+
+
+                            </tbody>
+
+                        </table>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success" onclick="addProperty()">Add New Property</button>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+</div>
+

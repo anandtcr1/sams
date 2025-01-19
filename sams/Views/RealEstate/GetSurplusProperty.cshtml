@@ -1,0 +1,788 @@
+﻿@model sams.Models.SiteDetails
+@using sams.Common;
+ 
+@{
+    ViewData["Title"] = "GetSurplusProperty";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var propertyLati = sams.Common.Helper.SamsLatitude;
+    var propertyLong = sams.Common.Helper.SamsLongitude;
+
+    if(Model.Latitude.Trim().Length > 0)
+    {
+        propertyLati = Model.Latitude.Trim();
+    }
+
+    if(Model.Longitude.Trim().Length > 0)
+    {
+        propertyLong = Model.Longitude.Trim();
+    }
+
+    string numericSalesPrice = new String(Model.SalesPrice.Where(Char.IsDigit).ToArray());
+    string numericAskingRent = new String(Model.AskingRent.Where(Char.IsDigit).ToArray());
+}
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByxJE-OM4Lv77gVdAYJAfKOiDpD6H9ofg&v=3.exp&sensor=false&libraries=places"></script>
+<script>
+                                                    function initialize() {
+                                                        var marker;
+
+
+                                                        var icon = new google.maps.MarkerImage("img/map/green_pointer.png");
+
+
+                                                        var mapOptions = {
+                                                            center: new google.maps.LatLng(@propertyLati, @propertyLong),
+                                                            zoom: 10,
+                                                            mapTypeId: google.maps.MapTypeId.ROADMAP
+
+                                                        };
+                                                        map = new google.maps.Map(document.getElementById('map_canvas'),
+                                                            mapOptions);
+
+                                                        var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+                                                        var ig = '../img/map/map_red.png';
+
+                                                        marker = new google.maps.Marker({
+                                                            // The below line is equivalent to writing:
+                                                            // position: new google.maps.LatLng(-34.397, 150.644)
+
+                                                            /*
+                                                            icon: {
+                                                                path: google.maps.SymbolPath.CIRCLE,
+                                                                scale: 10,
+                                                                strokeColor: '#939'
+                                                            },
+                                                            
+                                                            icon: image,
+                                                            */
+                                                            position: { lat: @propertyLati, lng: @propertyLong },
+                                                            icon: ig,
+                                                            map: map
+                                                        });
+
+                                                        
+
+                                                        autocomplete.bindTo('bounds', map);
+
+
+
+                                                        var infowindow = new google.maps.InfoWindow();
+                                                        marker = new google.maps.Marker({
+                                                            map: map
+                                                        });
+
+
+
+
+
+
+
+                                                        // Sets a listener on a radio button to change the filter type on Places
+                                                        // Autocomplete.
+                                                        function setupClickListener(id, types) {
+                                                            var radioButton = document.getElementById(id);
+                                                            google.maps.event.addDomListener(radioButton, 'click', function () {
+
+
+                                                                autocomplete.setTypes(types);
+                                                            });
+                                                        }
+
+                                                        setupClickListener('changetype-all', []);
+                                                        setupClickListener('changetype-establishment', ['establishment']);
+                                                        setupClickListener('changetype-geocode', ['geocode']);
+
+                                                    }
+
+                                                    google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+</script>
+
+<div class="bradcam_area" id="map_canvas" style="height:350px;">
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="recent_trip_area">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="footer_title" style="margin-top: 0px; color: #57328E;">
+                    <b>@Model.PropertyHeader @Model.PropertyHeaderLine2</b>
+                </h1>
+                <hr style="border-top: 1px solid #c31425;" />
+            </div>
+            
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4 col-md-6">
+                <div class="single_trip">
+
+                    <!--
+        @foreach (var imgItem in Model.PropertyImageList)
+        {
+            <div class="thumb" style="margin-top:5px; margin-bottom:5px;">
+                <img src="@Url.Content("~/" +imgItem.ImageName)" alt="@Model.SiteStateName">
+            </div>
+        }
+        -->
+                    <!--
+                            <div class="thumb" style="margin-top:5px; margin-bottom:5px;">
+                                <img src="@Url.Content("~/" +Model.PropertyImageList[0].ImageName)" alt="@Model.SiteStateName">
+                            </div>
+        -->
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h4 class="footer_title" style="color:#ffffff;">
+                                Contact For Additional Information
+                            </h4>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+                            <p>
+                                @Model.MySettings.RealEstateDirectorName
+                            </p>
+                            <p>
+                                Real Estate Director
+                            </p>
+                            <p>
+                                Direct: @Model.MySettings.DirectorPhoneNumber
+                            </p>
+                            <p>
+                                <a href="mailto:@Model.MySettings.DirectorEmailAddress">@Model.MySettings.DirectorEmailAddress</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function goBack() {
+                        window.history.back();
+                    }
+                </script>
+                <a href="javascript:goBack()" class="boxed-btn4" style="color:white;">Back To List</a>
+
+            </div>
+            <div class="col-lg-8 col-md-12">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="section-top-border" style="border-top: 1px dotted #fff;">
+                    
+                    <div class="row gallery-item">
+
+                        @foreach (var imgItem in Model.PropertyImageList)
+                        {
+
+                            <div class="col-md-3" style="padding-left:1px; padding-right:1px;" >
+                                <a href="@Url.Content("~/" +imgItem.ImageName)" class="img-pop-up ">
+                                    <div class="single-gallery-image roundbox boxshadow" style="background: url(@Url.Content("~/" +imgItem.ImageName)); margin: 4px; height:100px; "></div>
+                                </a>
+                            </div>
+                        }
+
+
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="single_trip">
+
+
+                    <!--
+                <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                    <div class="boxcontenttext" style="">
+                        <p>
+                            <h3>@Model.PropertyHeader</h3>
+                        </p>
+
+                        <hr />
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <h3><b>Price : $ </b></h3>
+                            </div>
+                            <div class="column_inner_right">
+                                <h3>@Model.SalesPrice</h3>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                -->
+                    <!--
+                                    <h3 class="footer_title">
+                                        @Model.PropertyHeader
+                                    </h3>
+                -->
+
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Asset #: </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.AssetId
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Asking Price : </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.SalesPrice
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Lot Size : </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.LotSize
+                        </div>
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Asset Type :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.AssetTypeName
+                            @if (Model.AssetTypeId == 1 || Model.AssetTypeId == 6)
+                            {
+                                <div class="card card-info">
+                                    <div class="card-body" id="divAssetType">
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="Term" class="control-label">Term : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.Term
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                @if (Model.AssetTypeId == 1)
+                                                {
+                                                    <label asp-for="AskingRent" class="control-label">Asking Rent : </label>
+                                                }
+                                                else
+                                                {
+                                                    <label asp-for="AskingRent" class="control-label">Rent : </label>
+                                                }
+
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.AskingRent
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label class="control-label">Lease Type : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @if (Model != null)
+                                                {
+                                                    foreach (var itemSel in Model.LeaseTypeList)
+                                                    {
+                                                        if (Model.LeaseType == itemSel.LeaseTypeId)
+                                                        {
+                                                            @itemSel.LeaseType
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            }
+                            else if (Model.AssetTypeId == 5)
+                            {
+                                <div class="card card-info">
+                                    <div class="card-body" id="divAssetType">
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="TermOptionPurchase" class="control-label">Term : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.TermOptionPurchase
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="AskingRentOptionPurchase" class="control-label">Asking Rent : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.AskingRentOptionPurchase
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label class="control-label">Lease Type : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @if (Model != null)
+                                                {
+                                                    foreach (var itemSel in Model.LeaseTypeList)
+                                                    {
+                                                        if (Model.LeaseTypePurchase == itemSel.LeaseTypeId)
+                                                        {
+                                                            @itemSel.LeaseType
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label asp-for="OptionPurchasePrice" class="control-label">Option Purchase Price : </label>
+                                            </div>
+                                            <div class="col-8">
+                                                @Model.OptionPurchasePrice
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            }
+
+
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Zoning : </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.Zoning
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Address :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.SiteAddress
+                        </div>
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>City :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.SiteCity
+                        </div>
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>State :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.SiteStateName
+                        </div>
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>ZIP Code :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.ZipCode
+                        </div>
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>County :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.SiteCounty
+                        </div>
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Cross Street Name :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.SiteCrossStreetName
+                        </div>
+                    </div>
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Status :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.SelectedPropertyStatus
+                        </div>
+                    </div>
+
+
+                    
+
+                    <div class="row_inner">
+                        <div class="column_inner_left">
+                            <b>Description :  </b>
+                        </div>
+                        <div class="column_inner_right">
+                            @Model.Comments
+                        </div>
+                    </div>
+
+
+
+                    @if (Model.AdditionalFiles.Count > 0)
+                    {
+                        <h3 class="footer_title" style="color: #57328E;">
+                            <b>Additional Files</b>
+                        </h3>
+                        <hr style="border-top: 1px solid #57328E;" />
+
+                        @foreach (var pdfItem in Model.AdditionalFiles)
+                        {
+
+                            var fileLogo = "~/../../property_files/file.png";
+                            if (pdfItem.FileName.Contains("pdf"))
+                            {
+                                fileLogo = "~/../../property_files/pdf_logo.jpg";
+                            }
+                            else if (pdfItem.FileName.Contains("jpg") || pdfItem.FileName.Contains("png") || pdfItem.FileName.Contains("jpeg"))
+                            {
+                                fileLogo = "~/../../property_files/image_icon.png";
+                            }
+                            else
+                            {
+                                fileLogo = "~/../../property_files/pdf_logo.jpg";
+                            }
+
+
+                <div class="col-xl-3 col-md-6 col-lg-3" style="text-align:center;">
+                    <div class="footer_widget">
+
+                        <div class="instagram_feed">
+                            <a href="@Url.Content("~/" + pdfItem.FileName)" target="_blank">
+                                <div class="single_insta">
+                                    <img src="@Url.Content(fileLogo)" style="width:100px;" />
+                                </div>
+                                <div style="text-align:center;">
+
+
+                                    @{
+                                        if (pdfItem.FileType.Length <= 15)
+                                        {
+                                            <label class="control-label" style="color:#c31425; ">
+                                                @pdfItem.FileType
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                <label class="control-label" style="color:#c31425; ">
+                                    @pdfItem.FileType.Substring(0, 15) ..
+                                </label>
+                                        }
+                                    }
+                                </div>
+
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+                                        }
+
+
+                                        }
+
+                    <!--
+
+                <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                    <div class="gridheader">
+
+                        <h3 class="footer_title" style="color:#ffffff;">
+                            @Model.PropertyHeader
+                        </h3>
+
+                    </div>
+                    <div class="boxcontenttext" style="">
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>Price : </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.SalesPrice
+                            </div>
+
+                        </div>
+
+
+
+
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>Lot Size : </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.LotSize
+                            </div>
+
+                        </div>
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>Asset Type :  </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.AssetTypeName
+                            </div>
+
+                        </div>
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>Zoning : </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.Zoning
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr />
+
+
+                <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                    <div class="gridheader">
+
+                        <h3 class="footer_title" style="color:#ffffff;">
+                            Address Details
+                        </h3>
+
+                    </div>
+                    <div class="boxcontenttext" style="">
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>Address :  </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.SiteAddress
+                            </div>
+                        </div>
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>City :  </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.SiteCity
+                            </div>
+                        </div>
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>State :  </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.SiteStateName
+                            </div>
+                        </div>
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>ZipCode :  </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.ZipCode
+                            </div>
+                        </div>
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>County :  </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.SiteCounty
+                            </div>
+                        </div>
+
+                        <div class="row_inner">
+                            <div class="column_inner_left">
+                                <b>Street Name :  </b>
+                            </div>
+                            <div class="column_inner_right">
+                                @Model.SiteCrossStreetName
+                            </div>
+                        </div>
+
+                        @if (Model.IsPropertyAvailable)
+                        {
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Availability :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    Yes
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row_inner">
+                                <div class="column_inner_left">
+                                    <b>Availability :  </b>
+                                </div>
+                                <div class="column_inner_right">
+                                    No
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+
+                <hr />
+
+                <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                    <div class="gridheader">
+
+                        <h3 class="footer_title" style="color:#ffffff;">
+                            Comments
+                        </h3>
+
+                    </div>
+                    <div class="boxcontenttext" style="">
+                        <p>
+                            @Model.Comments
+                        </p>
+                    </div>
+                </div>
+
+                @if (Model.AdditionalFiles.Count > 0)
+                {
+                    <hr />
+
+                    <div class="roundbox boxshadow" style="width: 100%; border: solid 1px #1c1c1c">
+                        <div class="gridheader">
+
+                            <h3 class="footer_title" style="color:#ffffff;">
+                                Additional Files
+                            </h3>
+
+                        </div>
+                        <div class="boxcontenttext" style="">
+                            <div class="row">
+
+                                @foreach (var pdfItem in Model.AdditionalFiles)
+                                {
+                                    <div class="col-xl-3 col-md-6 col-lg-3">
+                                        <div class="footer_widget">
+
+                                            <div class="instagram_feed">
+                                                <a href="@Url.Content("~/" + pdfItem.FileName)" target="_blank">
+                                                    <div class="single_insta">
+                                                        <img src="@Url.Content("~/../../property_files/file.png")" style="width:100px;" />
+                                                    </div>
+                                                    <label class="control-label">@pdfItem.FileType</label>
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                -->
+
+
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+
